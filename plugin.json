@@ -1,0 +1,14 @@
+{
+  "name": "GroupON plugin",
+  "description": "GroupON plugin for Plenty Market 7",
+  "namespace": "GroupON",
+  "author": "Hashtages",
+  "type": "backend",
+  "serviceProvider": "GroupON\\Providers\\MyFirstViewServiceProvider",
+  "version":"0.0.1",
+  "license":"MIT",
+  "keywords":["terra","backend", "groupON"],
+  "pluginIcon":"icon_plugin_xs.png",
+  "price":0.00,
+  "authorIcon":"icon_author_xs.png"
+}
