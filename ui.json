@@ -3,7 +3,7 @@
   "namespace": "GroupON",
   "menuEntries": [
     {
-      "label": "Hello World",
+      "label": "GroupON",
       "menu": "start",
       "urlKey": "hello-world",
       "entryPoint": "index.html"
