@@ -5,6 +5,7 @@
   "author": "Hashtages",
   "type": "backend",
   "serviceProvider": "GroupON\\Providers\\MyFirstViewServiceProvider",
+  "runOnBuild":["GroupON\\Migrations\\CreateGroupOnTable"],
   "version":"0.0.1",
   "license":"MIT",
   "keywords":["terra","backend", "groupON"],
