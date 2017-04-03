@@ -18,6 +18,7 @@ class GroupOn extends Model
      * @var int
      */
     public $id              = 0;
+    public $userId          = '';
     public $supplierID = '';
     public $token          = '';
     public $createdAt       = '';

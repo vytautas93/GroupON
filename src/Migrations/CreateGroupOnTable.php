@@ -6,7 +6,7 @@ use GroupON\Models\GroupOn;
 use Plenty\Modules\Plugin\DataBase\Contracts\Migrate;
  
 /**
- * Class CreateToDoTable
+ * Class CreateGroupOnTable
  */
 class CreateGroupOnTable
 {
