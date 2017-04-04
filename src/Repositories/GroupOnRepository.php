@@ -9,7 +9,7 @@ use GroupON\Models\GroupOn;
 use GroupON\Validators\GroupOnValidator;
 use Plenty\Modules\Frontend\Services\AccountService;
  
-use GroupON\Methods\GroupOnPickupDataMethod;
+
  
 class GroupOnRepository implements GroupOnRepositoryContract
 {
@@ -135,13 +135,7 @@ class GroupOnRepository implements GroupOnRepositoryContract
         return $groupOnUser;
     }
     
-     public function test():string
-    {
-        $test = $this->getSupplierID();
-        
-        return $test;
-    } 
-    
+  
     
     
 }

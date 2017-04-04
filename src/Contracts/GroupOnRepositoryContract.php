@@ -25,8 +25,6 @@ interface GroupOnRepositoryContract
      */
     public function getGroupOnList(): array;
     
-    public function test(): array;
- 
     /**
      * Update the status of the task
      *

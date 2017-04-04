@@ -20,11 +20,9 @@ class ContentController extends Controller
      * @return string
      */
      
-    public function test(Twig $twig,  GroupOnRepositoryContract $groupOnRepo):string
+    public function test(Twig $twig):string
     {
-        $test = $groupOnRepo->test();
-        $templateData = array("tests" => $test);
-        return $twig->render('GroupON::content.test', $templateData);
+        return $twig->render('GroupON::content.test');
     } 
      
 
