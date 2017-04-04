@@ -22,7 +22,7 @@ class ContentController extends Controller
      
     public function test(Twig $twig,  GroupOnRepositoryContract $groupOnRepo):string
     {
-        $test = $groupOnRepo->test()
+        $test = $groupOnRepo->test();
         $templateData = array("tests" => $test);
         return $twig->render('GroupON::content.test', $templateData);
     } 
