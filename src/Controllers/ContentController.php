@@ -20,9 +20,11 @@ class ContentController extends Controller
      * @return string
      */
      
-    public function test(GroupOnPickupDataMethod $pickupMethod): string
+    public function test(Twig $twig, GroupOnPickupDataMethod $pickupMethod):string
     {
-        return $twig->render('GroupON::content.test');
+        $test = $pickupMethod->getSupplierID();
+        $templateData = array("tests" => $test);
+        return $twig->render('GroupON::content.test', $templateData);
     } 
      
 
