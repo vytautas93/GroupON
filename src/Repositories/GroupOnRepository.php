@@ -83,8 +83,6 @@ class GroupOnRepository implements GroupOnRepositoryContract
         /**
          * @var ToDo[] $toDoList
          */
-        print_r($id);
-        die;
         $groupOnUserList = $database->query(GroupOn::class)->where('userId', '=', $id)->get();
         return $groupOnUserList;
     }
