@@ -5,6 +5,8 @@ namespace GroupON\Providers;
 use Plenty\Plugin\ServiceProvider;
 use GroupON\Contracts\GroupOnRepositoryContract;
 use GroupON\Repositories\GroupOnRepository;
+
+use GroupON\Methods\GroupOnPickupDataMethod;
  
 /**
  * Class ToDoServiceProvider
@@ -20,4 +22,10 @@ class GroupOnServiceProvider extends ServiceProvider
         $this->getApplication()->register(GroupOnRouteServiceProvider::class);
         $this->getApplication()->bind(GroupOnRepositoryContract::class, GroupOnRepository::class);
     }
+    
+    public function boot()
+    {
+        
+    }
+    
 }

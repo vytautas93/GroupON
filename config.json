@@ -1,6 +1,13 @@
 [
     {
         "tab"     : "Settings",
+        "key"     : "url",
+        "label"   : "Your GroupOn url",
+        "type"    : "text",
+        "default" : ""
+    },
+    {
+        "tab"     : "Settings",
         "key"     : "supplierID",
         "label"   : "Your suplier ID",
         "type"    : "text",
