@@ -7,7 +7,7 @@ use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Templates\Twig;
 use GroupON\Contracts\GroupOnRepositoryContract;
 
-
+use Plenty\Plugin\ConfigRepository;
 /**
  * Class ContentController
  * @package ToDoList\Controllers
@@ -20,9 +20,18 @@ class ContentController extends Controller
      * @return string
      */
      
-    public function test(Twig $twig):string
+    public function test(Twig $twig,ConfigRepository $configRepository ):string
     {
-        return $twig->render('GroupON::content.test');
+        $supplierID = $configRepository->get('GroupON.supplierID');
+ 
+        if(!strlen($supplierID))
+        {
+            $supplierID = 'Enter Supplier ID';
+        }
+        $templateData = array("supplierID" => $supplierID);
+       
+        
+        return $twig->render('GroupON::content.test',$templateData);
     } 
      
 
