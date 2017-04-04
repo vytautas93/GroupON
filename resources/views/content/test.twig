@@ -14,15 +14,11 @@
 </head>
  
 <body>
+       
         <ul>
-            {% if tests is not null %}
-                {% for test in tests %}
-                    <li>
-                        <span>{{ test.supplierID }}</span>
-                        <span>{{ test.token }}</span>
-                    </li>
-                {% endfor %}
-            {% endif %}
+            <li>
+                <span>{{ tests}}</span>
+            </li>
         </ul>
 </body>
 </html>
