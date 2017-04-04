@@ -7,7 +7,7 @@ use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Templates\Twig;
 use GroupON\Contracts\GroupOnRepositoryContract;
 
-use GroupON\Methods\GroupOnPickupDataMethod;
+
 /**
  * Class ContentController
  * @package ToDoList\Controllers
@@ -20,9 +20,9 @@ class ContentController extends Controller
      * @return string
      */
      
-    public function test(Twig $twig, GroupOnPickupDataMethod $pickupMethod):string
+    public function test(Twig $twig,  GroupOnRepositoryContract $groupOnRepo):string
     {
-        $test = $pickupMethod->getSupplierID();
+        $test = $groupOnRepo->test()
         $templateData = array("tests" => $test);
         return $twig->render('GroupON::content.test', $templateData);
     } 

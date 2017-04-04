@@ -24,6 +24,8 @@ interface GroupOnRepositoryContract
      * @return ToDo[]
      */
     public function getGroupOnList(): array;
+    
+    public function test(): array;
  
     /**
      * Update the status of the task
