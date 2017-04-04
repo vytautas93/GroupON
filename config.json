@@ -1,0 +1,16 @@
+[
+    {
+        "tab"     : "Settings",
+        "key"     : "supplierID",
+        "label"   : "Your suplier ID",
+        "type"    : "text",
+        "default" : ""
+    },
+    {
+        "tab"     : "Settings",
+        "key"     : "token",
+        "label"   : "Your Token",
+        "type"    : "text",
+        "default" : ""
+    }
+]
