@@ -24,18 +24,15 @@ class ContentController extends Controller
 {
     
     private $orderRepository;
-    private $addressRepository;
-    private $authHelper;
+    //private $addressRepository;
+   // private $authHelper;
     
     public function __construct(
-        OrderRepositoryContract $orderRepository,
-        AddressRepositoryContract $addressRepositoryContract,
-        AuthHelper $authHelper
+        OrderRepositoryContract $orderRepository
+       
     )
     {
         $this->orderRepository = $orderRepository;
-        $this->addressRepositoryContract = $addressRepositoryContract;
-        $this->authHelper = $authHelper;
     }
     
     /**
@@ -53,15 +50,33 @@ class ContentController extends Controller
             "typeId" => 1,
             "ownerId" => 107
         );
+        $addressRepo = pluginApp(AddressRepositoryContract::class);
+ 
+        /** @var \Plenty\Modules\Authorization\Services\AuthHelper $authHelper */
+        $authHelper = pluginApp(AuthHelper::class);
+         
+        $address = null;
+         
+        //guarded
+        $address = $authHelper->processUnguarded(
+            function () use ($addressRepo, $address) {
+                $createOrder = $this->orderRepository->createOrder($data,null);
+                $templateData = array("supplierID" => json_decode($createOrder));
+                return $twig->render('GroupON::content.test',$templateData);        
+            }
+        );
         
-        $address = $this->authHelper->processUnguarded(
         
-            $createOrder = $this->orderRepository->createOrder($data,null);
-            $templateData = array("supplierID" => json_decode($createOrder));
-            return $twig->render('GroupON::content.test',$templateData);
         
-    );
-
+        
+        
+        
+        
+        
+        
+        
+        
+    }    
     
     
         
@@ -78,7 +93,7 @@ class ContentController extends Controller
 
         return $twig->render('GroupON::content.test',$templateData);*/
  
-    } 
+    
 
     public function showGroupOnUser(Twig $twig, GroupOnRepositoryContract $groupOnRepo): string
     {
