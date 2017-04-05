@@ -25,6 +25,7 @@ class ContentController extends Controller
     
     private $orderRepository;
     private $addressRepository;
+    private $authHelper;
     
     public function __construct(
         OrderRepositoryContract $orderRepository,
