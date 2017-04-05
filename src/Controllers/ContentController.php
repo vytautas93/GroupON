@@ -50,8 +50,6 @@ class ContentController extends Controller
             "typeId" => 1,
             "ownerId" => 107
         );
-        $addressRepo = pluginApp(AddressRepositoryContract::class);
- 
         /** @var \Plenty\Modules\Authorization\Services\AuthHelper $authHelper */
         $authHelper = pluginApp(AuthHelper::class);
          
@@ -59,14 +57,15 @@ class ContentController extends Controller
          
         //guarded
         $address = $authHelper->processUnguarded(
-            function () use ($addressRepo, $address) {
-                $createOrder = $this->orderRepository->createOrder($data,null);
-                return $createOrder;
+            function () use ($address) {
+                return $this->orderRepository->createOrder($data,null);
             }
         );
-        $test = $address();
-        $templateData = array("supplierID" => json_decode($test));
-        return $twig->render('GroupON::content.test',$templateData);        
+        
+        $templateData = array("supplierID" => json_decode($address));
+        return $twig->render('GroupON::content.test',$templateData);
+        
+       
     }    
     
     
