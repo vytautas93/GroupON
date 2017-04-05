@@ -61,10 +61,11 @@ class ContentController extends Controller
         $address = $authHelper->processUnguarded(
             function () use ($addressRepo, $address) {
                 $createOrder = $this->orderRepository->createOrder($data,null);
-               return $createOrder;
+                return $createOrder;
             }
         );
-        $templateData = array("supplierID" => json_decode($address));
+        $test = $address();
+        $templateData = array("supplierID" => json_decode($test));
         return $twig->render('GroupON::content.test',$templateData);        
     }    
     
