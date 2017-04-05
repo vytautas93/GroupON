@@ -49,14 +49,11 @@ class ContentController extends Controller
         $data = array
         (
             "typeId" => 1,
-            "ownerId" => 107
+            "ownerId" => 107,
+            "plentyId" => 32407,
+            "orderItems" => 1073
         );
-        /** @var \Plenty\Modules\Authorization\Services\AuthHelper $authHelper */
-       
-         
-        $address = null;
-         
-        //guarded
+        
         $address = $this->authHelper->processUnguarded(
             function () use ($address,$data) {
                 $test = $this->orderRepository->createOrder($data,null);
