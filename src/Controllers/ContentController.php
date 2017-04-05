@@ -5,6 +5,9 @@ namespace GroupON\Controllers;
 use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Request;
 
+use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
+use Plenty\Modules\Authorization\Services\AuthHelper;
+
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Templates\Twig;
 
@@ -21,10 +24,17 @@ class ContentController extends Controller
 {
     
     private $orderRepository;
+    private $addressRepository;
     
-    public function __construct(OrderRepositoryContract $orderRepository)
+    public function __construct(
+        OrderRepositoryContract $orderRepository,
+        AddressRepositoryContract $addressRepositoryContract,
+        AuthHelper $authHelper
+    )
     {
         $this->orderRepository = $orderRepository;
+        $this->addressRepositoryContract = $addressRepositoryContract;
+        $this->authHelper = $authHelper;
     }
     
     /**
@@ -32,7 +42,9 @@ class ContentController extends Controller
      * @param ToDoRepositoryContract $toDoRepo
      * @return string
      */
-     
+    
+    
+    
     public function test(Twig $twig, ConfigRepository $configRepository ):string
     {
         $data = array
@@ -41,10 +53,17 @@ class ContentController extends Controller
             "ownerId" => 107
         );
         
-        $createOrder = $this->orderRepository->createOrder($data,null);
-        $templateData = array("supplierID" => json_decode($createOrder));
+        $address = $authHelper->processUnguarded(
+        function () use ( $this->addressRepositoryContract,  $this->authHelper) {
+            $createOrder = $this->orderRepository->createOrder($data,null);
+            $templateData = array("supplierID" => json_decode($createOrder));
+            return $twig->render('GroupON::content.test',$templateData);
+        }
+    );
 
-        return $twig->render('GroupON::content.test',$templateData);
+    
+    
+        
         
         /*$supplierID = $configRepository->get('GroupON.supplierID');
         $token = $configRepository->get('GroupON.token');
