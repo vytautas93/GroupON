@@ -24,15 +24,16 @@ class ContentController extends Controller
 {
     
     private $orderRepository;
+    private $authHelper;
     //private $addressRepository;
-   // private $authHelper;
     
     public function __construct(
-        OrderRepositoryContract $orderRepository
-       
+        OrderRepositoryContract $orderRepository,
+        AuthHelper $authHelper
     )
     {
         $this->orderRepository = $orderRepository;
+        $this->authHelper = $authHelper;
     }
     
     /**
@@ -51,12 +52,12 @@ class ContentController extends Controller
             "ownerId" => 107
         );
         /** @var \Plenty\Modules\Authorization\Services\AuthHelper $authHelper */
-        $authHelper = pluginApp(AuthHelper::class);
+       
          
         $address = null;
          
         //guarded
-        $address = $authHelper->processUnguarded(
+        $address = $this->authHelper->processUnguarded(
             function () use ($address,$data) {
                 $test = $this->orderRepository->createOrder($data,null);
                 return $test;
