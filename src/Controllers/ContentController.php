@@ -23,14 +23,24 @@ class ContentController extends Controller
     public function test(Twig $twig,ConfigRepository $configRepository ):string
     {
         $supplierID = $configRepository->get('GroupON.supplierID');
+        $token = $configRepository->get('GroupON.token');
+        
+        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        // $output contains the output string 
+        $output = curl_exec($ch); 
+
+        // close curl resource to free up system resources 
+        curl_close($ch);      
+        $data = json_decode($output);
  
         if(!strlen($supplierID))
         {
             $supplierID = 'Enter Supplier ID';
         }
-        $templateData = array("supplierID" => $supplierID);
-       
-        
+        $templateData = array("supplierID" => $data);
+
         return $twig->render('GroupON::content.test',$templateData);
     } 
      
