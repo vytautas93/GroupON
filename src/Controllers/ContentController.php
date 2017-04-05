@@ -57,8 +57,9 @@ class ContentController extends Controller
          
         //guarded
         $address = $authHelper->processUnguarded(
-            function () use ($address) {
-                return $this->orderRepository->createOrder($data,null);
+            function () use ($address,$data) {
+                $test = $this->orderRepository->createOrder($data,null);
+                return $test;
             }
         );
         
