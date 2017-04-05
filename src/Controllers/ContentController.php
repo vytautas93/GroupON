@@ -4,46 +4,61 @@ namespace GroupON\Controllers;
  
 use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Request;
-use Plenty\Plugin\Templates\Twig;
-use GroupON\Contracts\GroupOnRepositoryContract;
 
 use Plenty\Plugin\ConfigRepository;
+use Plenty\Plugin\Templates\Twig;
+
+use GroupON\Contracts\GroupOnRepositoryContract;
+
+use Plenty\Modules\Order\Contracts\OrderRepositoryContract;
+use Plenty\Modules\Order\Models;
+
 /**
  * Class ContentController
  * @package ToDoList\Controllers
  */
 class ContentController extends Controller
 {
+    
+    private $orderRepository;
+    
+    public function __construct(OrderRepositoryContract $orderRepository)
+    {
+        $this->orderRepository = $orderRepository;
+    }
+    
     /**
      * @param Twig                   $twig
      * @param ToDoRepositoryContract $toDoRepo
      * @return string
      */
      
-    public function test(Twig $twig,ConfigRepository $configRepository ):string
+    public function test(Twig $twig, ConfigRepository $configRepository ):string
     {
-        $supplierID = $configRepository->get('GroupON.supplierID');
-        $token = $configRepository->get('GroupON.token');
+        $data = array
+        (
+            "typeId" => 1,
+            "ownerId" => 107
+        );
         
+        $createOrder = $this->orderRepository->createOrder($data,null);
+        $templateData = array("supplierID" => json_decode($createOrder));
+
+        return $twig->render('GroupON::content.test',$templateData);
+        
+        /*$supplierID = $configRepository->get('GroupON.supplierID');
+        $token = $configRepository->get('GroupON.token');
         $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
-        // $output contains the output string 
-        $output = curl_exec($ch); 
-
-        // close curl resource to free up system resources 
+        $response = curl_exec($ch); 
         curl_close($ch);      
-        $data = json_decode($output);
- 
-        if(!strlen($supplierID))
-        {
-            $supplierID = 'Enter Supplier ID';
-        }
+        $data = json_decode($response);
         $templateData = array("supplierID" => $data);
 
-        return $twig->render('GroupON::content.test',$templateData);
+        return $twig->render('GroupON::content.test',$templateData);*/
+ 
     } 
-     
 
     public function showGroupOnUser(Twig $twig, GroupOnRepositoryContract $groupOnRepo): string
     {
