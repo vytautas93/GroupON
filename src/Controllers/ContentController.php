@@ -52,8 +52,8 @@ class ContentController extends Controller
             "ownerId" => 107,
             "plentyId" => 32407,
             "orderItems" => [
-                "itemVariationId" => 1073,
-                "itemVariationId" => 1026
+                  137,
+                  136
             ]
         );
         
