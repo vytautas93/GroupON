@@ -11,7 +11,7 @@ use Plenty\Plugin\Templates\Twig;
 use GroupON\Contracts\GroupOnRepositoryContract;
 
 use Plenty\Modules\Order\Contracts\OrderRepositoryContract;
-use Plenty\Modules\Order\Models;
+use Plenty\Modules\Order\Models\Order;
 
 /**
  * Class ContentController
