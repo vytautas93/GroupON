@@ -16,7 +16,7 @@ class GroupOnRouteServiceProvider extends RouteServiceProvider
      */
     public function map(Router $router)
     {
-        $router->post('test', [
+        $router->get('test', [
             'middleware' => 'oauth',
             'uses'       => 'GroupON\Controllers\ContentController@test'
         ]);
