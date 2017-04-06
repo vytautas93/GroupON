@@ -102,7 +102,7 @@ class ContentController extends Controller
                     ]
                 );
                 $addOrder = $this->orderRepository->createOrder($data,null);*/
-                return $deliveryAddress;
+                return $deliveryAddress->id;
             }
         );
         
