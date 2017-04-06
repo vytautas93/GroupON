@@ -27,17 +27,29 @@ class ContentController extends Controller
     public function __construct(
         OrderRepositoryContract $orderRepository,
         AddressRepositoryContract $addressRepository,
+        ConfigRepository $configRepository,
         AuthHelper $authHelper
     )
     {
         $this->orderRepository = $orderRepository;
         $this->addressRepository = $addressRepository;
+        $this->configRepository = $configRepository;
         $this->authHelper = $authHelper;
     }
     
-    public function test(Twig $twig, ConfigRepository $configRepository ):string
+    public function test(Twig $twig):string
     {
-
+        $groupOnOrders = $this->getGroupOnOrders();
+        
+        
+        $templateData = array("supplierID" => $groupOnOrders);
+        return $twig->render('GroupON::content.test',$templateData);
+        
+      /*  
+        
+        
+        
+        
         $order = $this->authHelper->processUnguarded(
             function () use ($order) 
             {
@@ -78,7 +90,7 @@ class ContentController extends Controller
                
                 $addOrder = $this->orderRepository->createOrder(
                     [
-                         'typeId' => 1,
+                        'typeId' => 1,
                         'methodOfPaymentId' => 4040,
                         'shippingProfileId' => 6,
                         'statusId' => 5.0, 
@@ -93,10 +105,10 @@ class ContentController extends Controller
                 return $addOrder;
             }
         );
-        
+     
         $templateData = array("supplierID" => json_decode($order));
         return $twig->render('GroupON::content.test',$templateData);
-        
+           */
        
     }    
     
@@ -116,6 +128,21 @@ class ContentController extends Controller
         return $twig->render('GroupON::content.test',$templateData);*/
  
     
+    public function getGroupOnOrders()
+    {
+        $supplierID = $this->configRepository->get('GroupON.supplierID');
+        $token = $this->configRepository->get('GroupON.token');
+        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        $response = curl_exec($ch); 
+        curl_close($ch);      
+        $groupOnData = json_decode($response);
+        
+        return $groupOnData;
+    }
+
+
 
     public function showGroupOnUser(Twig $twig, GroupOnRepositoryContract $groupOnRepo): string
     {
