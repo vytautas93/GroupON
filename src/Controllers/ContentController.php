@@ -50,11 +50,7 @@ class ContentController extends Controller
     
     public function test(Twig $twig, ConfigRepository $configRepository ):string
     {
-        
-       
- 
- 
-        
+
         $order = $this->authHelper->processUnguarded(
             function () use ($order) 
             {
@@ -74,7 +70,7 @@ class ContentController extends Controller
                     'stateId' => 1
                 ]);
                 
-                $amounts = [];
+           /*     $amounts = [];
                 $amounts[] = [
                     'currency' => 'EU',
                     'priceOriginalGross' => 182.15,
@@ -106,8 +102,8 @@ class ContentController extends Controller
                         ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                     ]
                 );
-                $addOrder = $this->orderRepository->createOrder($data,null);
-                return $addOrder;
+                $addOrder = $this->orderRepository->createOrder($data,null);*/
+                return $deliveryAddress;
             }
         );
         
