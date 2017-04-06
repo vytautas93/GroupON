@@ -54,10 +54,12 @@ class ContentController extends Controller
        
  
  
- 
-        $address = $this->authHelper->processUnguarded(
-            function () use ($address) {
-               $deliveryAddress = $this->addressRepository->createAddress([
+        
+        $order = $this->authHelper->processUnguarded(
+            function () use ($order) 
+            {
+                
+                 $deliveryAddress = $this->addressRepository->createAddress([
                     'name1' => "HashtagES",
                     'name2' => "Vytautas",
                     'name3' => "Sakalauskas",
@@ -71,14 +73,7 @@ class ContentController extends Controller
                     'countryId' => 1,
                     'stateId' => 1
                 ]);
-                return $deliveryAddress;
-            }
-        );
-
-        
-        $order = $this->authHelper->processUnguarded(
-            function () use ($order,$address) 
-            {
+                
                 $amounts = [];
                 $amounts[] = [
                     'currency' => 'EU',
@@ -107,16 +102,16 @@ class ContentController extends Controller
                     'plentyId' => 0,
                     'orderItems' => $orderItems,
                     'addressRelations' => [
-                        ['typeId' => 1, 'addressId' => $address->id],
-                        ['typeId' => 2, 'addressId' => $address->id],
+                        ['typeId' => 1, 'addressId' => $deliveryAddress->id],
+                        ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                     ]
                 );
-                $test = $this->orderRepository->createOrder($data,null);
-                return $test;
+                $addOrder = $this->orderRepository->createOrder($data,null);
+                return $addOrder;
             }
         );
         
-        $templateData = array("supplierID" => json_decode($address));
+        $templateData = array("supplierID" => json_decode($order));
         return $twig->render('GroupON::content.test',$templateData);
         
        
