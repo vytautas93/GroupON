@@ -50,11 +50,7 @@ class ContentController extends Controller
         (
             "typeId" => 1,
             "ownerId" => 107,
-            "plentyId" => 32407,
-            "orderItems" => [
-                  137,
-                  136
-            ]
+            "plentyId" => 32407
         );
         
         $address = $this->authHelper->processUnguarded(
