@@ -5,7 +5,6 @@ namespace GroupON\Controllers;
 use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Request;
 
-use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
 use Plenty\Modules\Authorization\Services\AuthHelper;
 
 use Plenty\Plugin\ConfigRepository;
