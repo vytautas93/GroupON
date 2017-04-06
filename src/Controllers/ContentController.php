@@ -14,6 +14,7 @@ use Plenty\Plugin\Templates\Twig;
 use GroupON\Contracts\GroupOnRepositoryContract;
 
 use Plenty\Modules\Order\Contracts\OrderRepositoryContract;
+use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
 use Plenty\Modules\Order\Models\Order;
 
 /**
@@ -24,15 +25,18 @@ class ContentController extends Controller
 {
     
     private $orderRepository;
+    private $addressRepository;
     private $authHelper;
     //private $addressRepository;
     
     public function __construct(
         OrderRepositoryContract $orderRepository,
+        AddressRepositoryContract $addressRepository,
         AuthHelper $authHelper
     )
     {
         $this->orderRepository = $orderRepository;
+        $this->addressRepository = $addressRepository;
         $this->authHelper = $authHelper;
     }
     
@@ -46,15 +50,67 @@ class ContentController extends Controller
     
     public function test(Twig $twig, ConfigRepository $configRepository ):string
     {
-        $data = array
-        (
-            "typeId" => 1,
-            "ownerId" => 107,
-            "plentyId" => 32407
-        );
         
+       
+ 
+ 
+ 
         $address = $this->authHelper->processUnguarded(
-            function () use ($address,$data) {
+            function () use ($address) {
+               $deliveryAddress = $this->addressRepository->createAddress([
+                    'name1' => "HashtagES",
+                    'name2' => "Vytautas",
+                    'name3' => "Sakalauskas",
+                    'name4' => "c/o",
+                    'address1' => "Pero st.",
+                    'address2' => "25",
+                    'address3' => "Perrui",
+                    'address4' => "FreeFieldCreateSomething",
+                    'postalCode' => "45874",
+                    'town' => "Roma",
+                    'countryId' => 1,
+                    'stateId' => 1
+                ]);
+                return $deliveryAddress;
+            }
+        );
+
+        
+        $order = $this->authHelper->processUnguarded(
+            function () use ($order,$address) 
+            {
+                $amounts = [];
+                $amounts[] = [
+                    'currency' => 'EU',
+                    'priceOriginalGross' => 182.15,
+                    'priceOriginalNet' => 200.14
+                ];
+             
+                $orderItems = [];
+                $orderItems[] = [
+                    'typeId' => 11,
+                    'quantity' => 2,
+                    'orderItemName' => "HelloWorldItem",
+                    'itemVariationId' => 1033,
+                    'referrerId' => 1,
+                    'countryVatId' => 1,
+                    'amounts' => $amounts
+                ];
+
+                $data = array
+                (
+                    'typeId' => 1,
+                    'methodOfPaymentId' => 4040,
+                    'shippingProfileId' => 6,
+                    'statusId' => 5.0, 
+                    'ownerId' => 107,
+                    'plentyId' => 0,
+                    'orderItems' => $orderItems,
+                    'addressRelations' => [
+                        ['typeId' => 1, 'addressId' => $address->id],
+                        ['typeId' => 2, 'addressId' => $address->id],
+                    ]
+                );
                 $test = $this->orderRepository->createOrder($data,null);
                 return $test;
             }
