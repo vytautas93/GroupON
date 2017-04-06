@@ -42,7 +42,7 @@ class ContentController extends Controller
         $groupOnOrders = $this->getGroupOnOrders();
         
         
-        $templateData = array("supplierID" => $groupOnOrders);
+        $templateData = array("supplierID" => $groupOnOrders->data);
         return $twig->render('GroupON::content.test',$templateData);
         
       /*  
@@ -139,7 +139,7 @@ class ContentController extends Controller
         curl_close($ch);      
         $groupOnData = json_decode($response);
         
-        return $groupOnData->data;
+        return $groupOnData;
     }
 
 
