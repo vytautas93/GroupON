@@ -139,7 +139,7 @@ class ContentController extends Controller
         curl_close($ch);      
         $groupOnData = json_decode($response);
         
-        return $groupOnData;
+        return $groupOnData->data;
     }
 
 
