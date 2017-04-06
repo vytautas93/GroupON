@@ -16,17 +16,13 @@ use Plenty\Modules\Order\Contracts\OrderRepositoryContract;
 use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
 use Plenty\Modules\Order\Models\Order;
 
-/**
- * Class ContentController
- * @package ToDoList\Controllers
- */
+
 class ContentController extends Controller
 {
     
     private $orderRepository;
     private $addressRepository;
     private $authHelper;
-    //private $addressRepository;
     
     public function __construct(
         OrderRepositoryContract $orderRepository,
@@ -38,14 +34,6 @@ class ContentController extends Controller
         $this->addressRepository = $addressRepository;
         $this->authHelper = $authHelper;
     }
-    
-    /**
-     * @param Twig                   $twig
-     * @param ToDoRepositoryContract $toDoRepo
-     * @return string
-     */
-    
-    
     
     public function test(Twig $twig, ConfigRepository $configRepository ):string
     {
@@ -69,7 +57,7 @@ class ContentController extends Controller
                     'stateId' => 1
                 ]);
                 
-           /*     $amounts = [];
+                $amounts = [];
                 $amounts[] = [
                     'currency' => 'EU',
                     'priceOriginalGross' => 182.15,
@@ -87,22 +75,22 @@ class ContentController extends Controller
                     'amounts' => $amounts
                 ];
 
-                $data = array
-                (
-                    'typeId' => 1,
-                    'methodOfPaymentId' => 4040,
-                    'shippingProfileId' => 6,
-                    'statusId' => 5.0, 
-                    'ownerId' => 107,
-                    'plentyId' => 0,
-                    'orderItems' => $orderItems,
-                    'addressRelations' => [
-                        ['typeId' => 1, 'addressId' => $deliveryAddress->id],
-                        ['typeId' => 2, 'addressId' => $deliveryAddress->id],
-                    ]
-                );
-                $addOrder = $this->orderRepository->createOrder($data,null);*/
-                return $deliveryAddress->id;
+               
+                $addOrder = $this->orderRepository->createOrder(
+                    [
+                         'typeId' => 1,
+                        'methodOfPaymentId' => 4040,
+                        'shippingProfileId' => 6,
+                        'statusId' => 5.0, 
+                        'ownerId' => 107,
+                        'plentyId' => 0,
+                        'orderItems' => $orderItems,
+                        'addressRelations' => [
+                            ['typeId' => 1, 'addressId' => $deliveryAddress->id],
+                            ['typeId' => 2, 'addressId' => $deliveryAddress->id],
+                        ]    
+                    ]);
+                return $addOrder;
             }
         );
         
