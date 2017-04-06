@@ -40,9 +40,7 @@ class ContentController extends Controller
     public function test(Twig $twig):string
     {
         $groupOnOrders = $this->getGroupOnOrders();
-        
-        
-        $templateData = array("supplierID" => $groupOnOrders->data);
+        $templateData = array("supplierID" => json_decode($groupOnOrders->data));
         return $twig->render('GroupON::content.test',$templateData);
         
       /*  
