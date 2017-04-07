@@ -103,7 +103,7 @@ class ContentController extends Controller
                             ]    
                         ]);
                     return $addOrder;*/
-                    $test = $this->variationLookupRepositoryContract->hasExternalId("17022");
+                    $test = $this->variationLookupRepositoryContract->hasExternalId("BN17022012171668");
                     return $test;
                     
                 }
