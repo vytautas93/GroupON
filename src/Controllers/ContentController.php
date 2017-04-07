@@ -63,14 +63,14 @@ class ContentController extends Controller
                     $countryISO = $groupOnOrder->customer->country;
                     $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
                     
-                   /* $deliveryAddress = $this->addressRepository->createAddress([
+                    $deliveryAddress = $this->addressRepository->createAddress([
                         'name1' => $groupOnOrder->customer->name,
                         'address1' => $street,
                         'address2' => $houseNumber,
                         'address3' => "Perrui",
                         'address4' => "FreeFieldCreateSomething",
                         'postalCode' => $groupOnOrder->customer->zip,
-                        'countryId' => 1,
+                        'countryId' => $country->id,
                         'stateId' => 1
                     ]);
                     
@@ -107,15 +107,15 @@ class ContentController extends Controller
                                 ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                             ]    
                         ]);
-                    return $addOrder;*/
-                    return $country;
+                    return $addOrder;
+                    
                 }
             );
         }
        
        
        
-        $templateData = array("supplierID" => json_encode($order));
+        $templateData = array("supplierID" => json_encode($addOrder));
         return $twig->render('GroupON::content.test',$templateData);
         
       /*  
