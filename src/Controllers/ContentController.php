@@ -67,8 +67,7 @@ class ContentController extends Controller
                         'name1' => $groupOnOrder->customer->name,
                         'address1' => $street,
                         'address2' => $houseNumber,
-                        'address3' => "Perrui",
-                        'address4' => "FreeFieldCreateSomething",
+                        'town' => $country->name,
                         'postalCode' => $groupOnOrder->customer->zip,
                         'countryId' => $country->id,
                         'stateId' => 1
