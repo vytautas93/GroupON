@@ -17,13 +17,16 @@ use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
 use Plenty\Modules\Order\Models\Order;
 use Plenty\Modules\Order\Shipping\Countries\Contracts\CountryRepositoryContract;
 
-
+use Plenty\Modules\Item\Variation\Contracts\VariationLookupRepositoryContract;
 
 class ContentController extends Controller
 {
     
     private $orderRepository;
     private $addressRepository;
+    private $configRepository;
+    private $countryRepositoryContract;
+    private $variationLookupRepositoryContract;
     private $authHelper;
     
     public function __construct(
@@ -31,6 +34,7 @@ class ContentController extends Controller
         AddressRepositoryContract $addressRepository,
         ConfigRepository $configRepository,
         CountryRepositoryContract $countryRepositoryContract,
+        VariationLookupRepositoryContract $variationLookupRepositoryContract,
         AuthHelper $authHelper
     )
     {
@@ -38,29 +42,21 @@ class ContentController extends Controller
         $this->addressRepository = $addressRepository;
         $this->configRepository = $configRepository;
         $this->countryRepositoryContract = $countryRepositoryContract;
+        $this->variationLookupRepositoryContract = $variationLookupRepositoryContract;
         $this->authHelper = $authHelper;
     }
     
     public function test(Twig $twig):string
     {
+        
+
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
             $order = $this->authHelper->processUnguarded(
                 function () use ($order,$groupOnOrder) 
                 {
-                    $formatAddress = $this->checkAddress($groupOnOrder->customer->address1);
-                    if(is_array($formatAddress) && isset($formatAddress) )
-                    {
-                        $street = $formatAddress['Street'];
-                        $houseNumber = $formatAddress['HouseNumber'];
-                    }
-                    else
-                    {
-                        $street = $address;
-                        $houseNumber = $address;
-                    }           
-                    $countryISO = $groupOnOrder->customer->country;
+                  /*  $countryISO = $groupOnOrder->customer->country;
                     $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
                     
                     $deliveryAddress = $this->addressRepository->createAddress([
@@ -106,7 +102,9 @@ class ContentController extends Controller
                                 ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                             ]    
                         ]);
-                    return $addOrder;
+                    return $addOrder;*/
+                    $test = $this->variationLookupRepositoryContract->hasExternalId("BN17022012171668");
+                    return $test;
                     
                 }
             );
@@ -114,7 +112,7 @@ class ContentController extends Controller
        
        
        
-        $templateData = array("supplierID" => json_encode($addOrder));
+        $templateData = array("supplierID" => json_encode($order));
         return $twig->render('GroupON::content.test',$templateData);
         
       /*  
