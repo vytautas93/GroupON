@@ -65,12 +65,12 @@ class ContentController extends Controller
                     
                     $deliveryAddress = $this->addressRepository->createAddress([
                         'name1' => $groupOnOrder->customer->name,
-                        'address1' => $street,
-                        'address2' => $houseNumber,
-                        'town' => $country->name,
+                        'address1' => $groupOnOrder->customer->address1,
+                        'address2' => $groupOnOrder->customer->address2,
+                        'town' => $country->customer->city,
                         'postalCode' => $groupOnOrder->customer->zip,
                         'countryId' => $country->id,
-                        'stateId' => 1
+                        'phone' => $groupOnOrder->customer->phone
                     ]);
                     
                     $amounts = [];
