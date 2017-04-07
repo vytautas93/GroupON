@@ -67,7 +67,7 @@ class ContentController extends Controller
                         'name1' => $groupOnOrder->customer->name,
                         'address1' => $groupOnOrder->customer->address1,
                         'address2' => $groupOnOrder->customer->address2,
-                        'town' => $country->customer->city,
+                        'town' => $groupOnOrder->customer->city,
                         'postalCode' => $groupOnOrder->customer->zip,
                         'countryId' => $country->id,
                         'phone' => $groupOnOrder->customer->phone
