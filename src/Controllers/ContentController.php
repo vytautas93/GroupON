@@ -114,7 +114,7 @@ class ContentController extends Controller
         $orderItems = [];
         foreach($groupOnItems as $groupOnItem)
         {
-            $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => "ąčęąč"));
+            $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $groupOnItem->sku));
             if (!empty($findVariationID)){
                 $amounts[] = [
                 'currency' => 'EU',
