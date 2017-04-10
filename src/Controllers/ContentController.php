@@ -103,7 +103,7 @@ class ContentController extends Controller
                             ]    
                         ]);
                     return $addOrder;*/
-                    $test = $this->variationSkuRepositoryContract->show("BN17022012171668");
+                    $test = $this->variationSkuRepositoryContract->search(array("sku" => "BN17022012171668"));
                     return $test;
                     
                 }
