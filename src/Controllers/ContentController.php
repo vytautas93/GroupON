@@ -77,6 +77,11 @@ class ContentController extends Controller
                             'ownerId' => 107,
                             'plentyId' => 0,
                             'orderItems' => $orderItems,
+                            'properties' => 
+                            [
+                                "typeId" => 7,
+                                "value" => $groupOnOrder->orderid
+                            ],
                             'addressRelations' => [
                                 ['typeId' => 1, 'addressId' => $deliveryAddress->id],
                                 ['typeId' => 2, 'addressId' => $deliveryAddress->id],
