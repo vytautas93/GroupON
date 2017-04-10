@@ -66,7 +66,8 @@ class ContentController extends Controller
                         'phone' => $groupOnOrder->customer->phone
                     ]);
                     $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
-                    if (!isset($orderItems)) {
+            /*        if (!isset($orderItems)) 
+                    {
                         $addOrder = $this->orderRepository->createOrder(
                         [
                             'typeId' => 1,
@@ -83,8 +84,8 @@ class ContentController extends Controller
                         ]);
                         
                         return $addOrder;
-                    }
-                    return null;
+                    }*/
+                    return $orderItems;
                 }
             );
         }
