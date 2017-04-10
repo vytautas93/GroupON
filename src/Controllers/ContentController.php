@@ -85,7 +85,7 @@ class ContentController extends Controller
                         
                         return $addOrder;
                     }
-                    return $orderItems;
+                    return null;
                 }
             );
         }
