@@ -55,9 +55,7 @@ class ContentController extends Controller
                 function () use ($order,$groupOnOrder) 
                 {
                     $countryISO = $groupOnOrder->customer->country;
-                    
                     $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
-                    
                     $deliveryAddress = $this->addressRepository->createAddress([
                         'name1' => $groupOnOrder->customer->name,
                         'address1' => $groupOnOrder->customer->address1,
@@ -67,32 +65,26 @@ class ContentController extends Controller
                         'countryId' => $country->id,
                         'phone' => $groupOnOrder->customer->phone
                     ]);
-                    
-                 $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
-                 
-                   
-                    $addOrder = $this->orderRepository->createOrder(
-                        [
-                            'typeId' => 1,
-                            'methodOfPaymentId' => 4040,
-                            'shippingProfileId' => 6,
-                            'statusId' => 5.0, 
-                            'ownerId' => 107,
-                            'plentyId' => 0,
-                            'orderItems' => $orderItems,
-                            'addressRelations' => [
-                                ['typeId' => 1, 'addressId' => $deliveryAddress->id],
-                                ['typeId' => 2, 'addressId' => $deliveryAddress->id],
-                            ]    
-                        ]);
-                    
-                    return $addOrder;
+                    $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
+                    /*$addOrder = $this->orderRepository->createOrder(
+                    [
+                        'typeId' => 1,
+                        'methodOfPaymentId' => 4040,
+                        'shippingProfileId' => 6,
+                        'statusId' => 5.0, 
+                        'ownerId' => 107,
+                        'plentyId' => 0,
+                        'orderItems' => $orderItems,
+                        'addressRelations' => [
+                            ['typeId' => 1, 'addressId' => $deliveryAddress->id],
+                            ['typeId' => 2, 'addressId' => $deliveryAddress->id],
+                        ]    
+                    ]);*/
+                    return $orderItems;
                 }
             );
         }
-       
-       
-       
+        
         $templateData = array("supplierID" => json_encode($order));
         return $twig->render('GroupON::content.test',$templateData);
         
@@ -200,7 +192,6 @@ class ContentController extends Controller
         $orderItems = [];
         foreach($groupOnItems as $groupOnItem)
         {
-               
             $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $groupOnItem->sku));
             $amounts[] = [
                 'currency' => 'EU',
