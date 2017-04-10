@@ -58,8 +58,6 @@ class ContentController extends Controller
                     
                     $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
                     
-                    $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $groupOnOrder->line_items[0]->sku));
-                    
                     $deliveryAddress = $this->addressRepository->createAddress([
                         'name1' => $groupOnOrder->customer->name,
                         'address1' => $groupOnOrder->customer->address1,
@@ -70,24 +68,8 @@ class ContentController extends Controller
                         'phone' => $groupOnOrder->customer->phone
                     ]);
                     
-                    $amounts = [];
-                    $amounts[] = [
-                        'currency' => 'EU',
-                        'priceOriginalGross' => $groupOnOrder->line_items[0]->unit_price,
-                        'priceOriginalNet' => $groupOnOrder->line_items[0]->unit_price
-                    ];
+                 $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
                  
-                    $orderItems = [];
-                    $orderItems[] = [
-                        'typeId' => 11,
-                        'quantity' => $groupOnOrder->line_items[0]->quantity,
-                        'orderItemName' => $groupOnOrder->line_items[0]->name,
-                        'itemVariationId' => $findVariationID->variationId,
-                        'referrerId' => 10,
-                        'countryVatId' => 1,
-                        'amounts' => $amounts
-                    ];
-    
                    
                     $addOrder = $this->orderRepository->createOrder(
                         [
@@ -212,31 +194,34 @@ class ContentController extends Controller
         return $groupOnData->data;
     }
     
-    public function checkAddress($address)
-    {   
-        $removeNumber =  preg_match_all('/\d+/', $address, $matches);
-        
-        if ($removeNumber > 0 OR empty($address) == true)
+    public function generateOrderItemLists(array $orderItems)
+    {
+        $amounts = [];
+        $orderItems = [];
+        foreach($orderItems as $orderItem)
         {
-            $houseNumber = $matches[0][0];
-            $street = str_replace($houseNumber,'', $address);
+               
+            $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $orderItem->sku));
+            $amounts[] = [
+                'currency' => 'EU',
+                'priceOriginalGross' => $orderItem->unit_price,
+                'priceOriginalNet' => $orderItem->unit_price
+            ];
+                 
+            $orderItems[] = [
+                'typeId' => 11,
+                'quantity' => $orderItem->quantity,
+                'orderItemName' => $orderItem->name,
+                'itemVariationId' => $findVariationID->variationId,
+                'referrerId' => 10,
+                'countryVatId' => 1,
+                'amounts' => $amounts
+            ];
         }
-        else 
-        {
-            $houseNumber = $address;
-            $street = $address;
-        }
-        
-        $address = 
-        [
-            'HouseNumber' => $houseNumber,
-            'Street' => $street
-        ];
-        return $address;
+        return $orderItems;
     }
     
-
-
+    
 
     public function showGroupOnUser(Twig $twig, GroupOnRepositoryContract $groupOnRepo): string
     {
