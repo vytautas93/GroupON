@@ -17,7 +17,7 @@ use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
 use Plenty\Modules\Order\Models\Order;
 use Plenty\Modules\Order\Shipping\Countries\Contracts\CountryRepositoryContract;
 
-use Plenty\Modules\Item\Variation\Contracts\VariationLookupRepositoryContract;
+use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 
 class ContentController extends Controller
 {
@@ -34,7 +34,7 @@ class ContentController extends Controller
         AddressRepositoryContract $addressRepository,
         ConfigRepository $configRepository,
         CountryRepositoryContract $countryRepositoryContract,
-        VariationLookupRepositoryContract $variationLookupRepositoryContract,
+        VariationSkuRepositoryContract $variationSkuRepositoryContract,
         AuthHelper $authHelper
     )
     {
@@ -42,7 +42,7 @@ class ContentController extends Controller
         $this->addressRepository = $addressRepository;
         $this->configRepository = $configRepository;
         $this->countryRepositoryContract = $countryRepositoryContract;
-        $this->variationLookupRepositoryContract = $variationLookupRepositoryContract;
+        $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
         $this->authHelper = $authHelper;
     }
     
@@ -103,7 +103,7 @@ class ContentController extends Controller
                             ]    
                         ]);
                     return $addOrder;*/
-                    $test = $this->variationLookupRepositoryContract->hasExternalId("BN17022012171668");
+                    $test = $this->variationSkuRepositoryContract->show("BN17022012171668");
                     return $test;
                     
                 }
