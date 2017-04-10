@@ -66,7 +66,7 @@ class ContentController extends Controller
                         'phone' => $groupOnOrder->customer->phone
                     ]);
                     $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
-            /*        if (!isset($orderItems)) 
+                    if (!isset($orderItems)) 
                     {
                         $addOrder = $this->orderRepository->createOrder(
                         [
@@ -84,14 +84,14 @@ class ContentController extends Controller
                         ]);
                         
                         return $addOrder;
-                    }*/
+                    }
                     return $orderItems;
                 }
             );
         }
         
-       // $templateData = array("supplierID" => json_encode($order));
-        return $twig->render('GroupON::content.test',$orderItems);
+        $templateData = array("supplierID" => json_encode($order));
+        return $twig->render('GroupON::content.test',$templateData);
     }    
 
     public function getGroupOnOrders()
@@ -117,7 +117,7 @@ class ContentController extends Controller
         {
             $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $groupOnItem->sku));
             
-            /*if (!empty($findVariationID)){
+            if (!isset($findVariationID)){
                 $amounts[] = [
                 'currency' => 'EU',
                 'priceOriginalGross' => $groupOnItem->unit_price,
@@ -135,8 +135,8 @@ class ContentController extends Controller
                 ];    
             
                 return $orderItems;
-            }*/
-            return $findVariationID;
+            }
+            return null;
         }
         
     }
