@@ -90,8 +90,8 @@ class ContentController extends Controller
             );
         }
         
-        $templateData = array("supplierID" => json_encode($order));
-        return $twig->render('GroupON::content.test',$templateData);
+       // $templateData = array("supplierID" => json_encode($order));
+        return $twig->render('GroupON::content.test',$orderItems);
     }    
 
     public function getGroupOnOrders()
