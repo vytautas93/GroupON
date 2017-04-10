@@ -66,7 +66,7 @@ class ContentController extends Controller
                         'phone' => $groupOnOrder->customer->phone
                     ]);
                     $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
-                    if (!isset($orderItems)) 
+                    if (isset($orderItems)) 
                     {
                         $addOrder = $this->orderRepository->createOrder(
                         [
@@ -85,7 +85,7 @@ class ContentController extends Controller
                         
                         return $addOrder;
                     }
-                    return null;
+                        return null;    
                 }
             );
         }
@@ -117,7 +117,7 @@ class ContentController extends Controller
         {
             $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $groupOnItem->sku));
             
-            if (!isset($findVariationID)){
+            if (isset($findVariationID)){
                 $amounts[] = [
                 'currency' => 'EU',
                 'priceOriginalGross' => $groupOnItem->unit_price,
@@ -136,7 +136,10 @@ class ContentController extends Controller
             
                 return $orderItems;
             }
-            return null;
+           
+                return null;    
+            
+            
         }
         
     }
