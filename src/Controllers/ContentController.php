@@ -109,14 +109,15 @@ class ContentController extends Controller
         return $groupOnData->data;
     }
     
-    public function generateOrderItemLists(array $groupOnItems)
+    public function generateOrderItemLists($groupOnItems)
     {
         $amounts = [];
         $orderItems = [];
         foreach($groupOnItems as $groupOnItem)
         {
             $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $groupOnItem->sku));
-            if (!empty($findVariationID)){
+            
+            /*if (!empty($findVariationID)){
                 $amounts[] = [
                 'currency' => 'EU',
                 'priceOriginalGross' => $groupOnItem->unit_price,
@@ -134,8 +135,8 @@ class ContentController extends Controller
                 ];    
             
                 return $orderItems;
-            }
-            return null;
+            }*/
+            return $findVariationID;
         }
         
     }
