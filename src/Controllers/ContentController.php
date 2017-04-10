@@ -194,24 +194,24 @@ class ContentController extends Controller
         return $groupOnData->data;
     }
     
-    public function generateOrderItemLists(array $orderItems)
+    public function generateOrderItemLists(array $groupOnItems)
     {
         $amounts = [];
         $orderItems = [];
-        foreach($orderItems as $orderItem)
+        foreach($groupOnItems as $groupOnItem)
         {
                
-            $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $orderItem->sku));
+            $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $groupOnItem->sku));
             $amounts[] = [
                 'currency' => 'EU',
-                'priceOriginalGross' => $orderItem->unit_price,
-                'priceOriginalNet' => $orderItem->unit_price
+                'priceOriginalGross' => $groupOnItem->unit_price,
+                'priceOriginalNet' => $groupOnItem->unit_price
             ];
                  
             $orderItems[] = [
                 'typeId' => 11,
-                'quantity' => $orderItem->quantity,
-                'orderItemName' => $orderItem->name,
+                'quantity' => $groupOnItem->quantity,
+                'orderItemName' => $groupOnItem->name,
                 'itemVariationId' => $findVariationID->variationId,
                 'referrerId' => 10,
                 'countryVatId' => 1,
