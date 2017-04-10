@@ -58,7 +58,7 @@ class ContentController extends Controller
                     
                     $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
                     
-                    $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $groupOnOrder->line_items->sku));
+                    $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $groupOnOrder->line_items[0]->sku));
                     
                     $deliveryAddress = $this->addressRepository->createAddress([
                         'name1' => $groupOnOrder->customer->name,
@@ -73,15 +73,15 @@ class ContentController extends Controller
                     $amounts = [];
                     $amounts[] = [
                         'currency' => 'EU',
-                        'priceOriginalGross' => $groupOnOrder->line_items->unit_price,
-                        'priceOriginalNet' => $groupOnOrder->line_items->unit_price
+                        'priceOriginalGross' => $groupOnOrder->line_items[0]->unit_price,
+                        'priceOriginalNet' => $groupOnOrder->line_items[0]->unit_price
                     ];
                  
                     $orderItems = [];
                     $orderItems[] = [
                         'typeId' => 11,
-                        'quantity' => $groupOnOrder->line_items->quantity,
-                        'orderItemName' => $groupOnOrder->line_items->name,
+                        'quantity' => $groupOnOrder->line_items[0]->quantity,
+                        'orderItemName' => $groupOnOrder->line_items[0]->name,
                         'itemVariationId' => $findVariationID->variationId,
                         'referrerId' => 10,
                         'countryVatId' => 1,
