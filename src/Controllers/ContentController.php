@@ -127,7 +127,7 @@ class ContentController extends Controller
                 'amounts' => $amounts
             ];
         }
-        return $findVariationID->variationId;
+        return $findVariationID[0]->variationId;
     }
     
     
