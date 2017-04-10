@@ -48,16 +48,17 @@ class ContentController extends Controller
     
     public function test(Twig $twig):string
     {
-        
-
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
             $order = $this->authHelper->processUnguarded(
                 function () use ($order,$groupOnOrder) 
                 {
-                  /*  $countryISO = $groupOnOrder->customer->country;
+                    $countryISO = $groupOnOrder->customer->country;
+                    
                     $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
+                    
+                    $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $groupOnOrder->line_items->sku));
                     
                     $deliveryAddress = $this->addressRepository->createAddress([
                         'name1' => $groupOnOrder->customer->name,
@@ -72,18 +73,17 @@ class ContentController extends Controller
                     $amounts = [];
                     $amounts[] = [
                         'currency' => 'EU',
-                        'priceOriginalGross' => 182.15,
-                        'priceOriginalNet' => 200.14
+                        'priceOriginalGross' => $groupOnOrder->line_items->sku,
+                        'priceOriginalNet' => $groupOnOrder->line_items->sku
                     ];
                  
                     $orderItems = [];
                     $orderItems[] = [
                         'typeId' => 11,
-                        'quantity' => 2,
-                        'orderItemName' => "HelloWorldItem",
-                        'itemVariationId' => 1033,
-                        'referrerId' => 1,
-                        'countryVatId' => 1,
+                        'quantity' => $groupOnOrder->line_items->quantity,
+                        'orderItemName' => $groupOnOrder->line_items->name,
+                        'itemVariationId' => $findVariationID->variationId,
+                        'referrerId' => 10,
                         'amounts' => $amounts
                     ];
     
@@ -102,8 +102,8 @@ class ContentController extends Controller
                                 ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                             ]    
                         ]);
-                    return $addOrder;*/
-                    $test = $this->variationSkuRepositoryContract->search(array("sku" => "BN17022012171668"));
+                    return $addOrder;
+                    
                     return $test;
                     
                 }
