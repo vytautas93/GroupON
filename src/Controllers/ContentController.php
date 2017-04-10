@@ -87,90 +87,8 @@ class ContentController extends Controller
         
         $templateData = array("supplierID" => json_encode($order));
         return $twig->render('GroupON::content.test',$templateData);
-        
-      /*  
-        
-        
-        
-        
-        $order = $this->authHelper->processUnguarded(
-            function () use ($order) 
-            {
-                
-                 $deliveryAddress = $this->addressRepository->createAddress([
-                    'name1' => "HashtagES",
-                    'name2' => "Vytautas",
-                    'name3' => "Sakalauskas",
-                    'name4' => "c/o",
-                    'address1' => "Pero st.",
-                    'address2' => "25",
-                    'address3' => "Perrui",
-                    'address4' => "FreeFieldCreateSomething",
-                    'postalCode' => "45874",
-                    'town' => "Roma",
-                    'countryId' => 1,
-                    'stateId' => 1
-                ]);
-                
-                $amounts = [];
-                $amounts[] = [
-                    'currency' => 'EU',
-                    'priceOriginalGross' => 182.15,
-                    'priceOriginalNet' => 200.14
-                ];
-             
-                $orderItems = [];
-                $orderItems[] = [
-                    'typeId' => 11,
-                    'quantity' => 2,
-                    'orderItemName' => "HelloWorldItem",
-                    'itemVariationId' => 1033,
-                    'referrerId' => 1,
-                    'countryVatId' => 1,
-                    'amounts' => $amounts
-                ];
-
-               
-                $addOrder = $this->orderRepository->createOrder(
-                    [
-                        'typeId' => 1,
-                        'methodOfPaymentId' => 4040,
-                        'shippingProfileId' => 6,
-                        'statusId' => 5.0, 
-                        'ownerId' => 107,
-                        'plentyId' => 0,
-                        'orderItems' => $orderItems,
-                        'addressRelations' => [
-                            ['typeId' => 1, 'addressId' => $deliveryAddress->id],
-                            ['typeId' => 2, 'addressId' => $deliveryAddress->id],
-                        ]    
-                    ]);
-                return $addOrder;
-            }
-        );
-     
-        $templateData = array("supplierID" => json_decode($order));
-        return $twig->render('GroupON::content.test',$templateData);
-           */
-       
     }    
-    
-    
-        
-        
-        /*$supplierID = $configRepository->get('GroupON.supplierID');
-        $token = $configRepository->get('GroupON.token');
-        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        $response = curl_exec($ch); 
-        curl_close($ch);      
-        $data = json_decode($response);
-        $templateData = array("supplierID" => $data);
 
-        return $twig->render('GroupON::content.test',$templateData);*/
- 
-    
     public function getGroupOnOrders()
     {
         $supplierID = $this->configRepository->get('GroupON.supplierID');
@@ -209,7 +127,7 @@ class ContentController extends Controller
                 'amounts' => $amounts
             ];
         }
-        return $orderItems;
+        return $findVariationID;
     }
     
     
