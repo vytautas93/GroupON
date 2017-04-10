@@ -66,22 +66,25 @@ class ContentController extends Controller
                         'phone' => $groupOnOrder->customer->phone
                     ]);
                     $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
-                    /*$addOrder = $this->orderRepository->createOrder(
-                    [
-                        'typeId' => 1,
-                        'methodOfPaymentId' => 4040,
-                        'shippingProfileId' => 6,
-                        'statusId' => 5.0, 
-                        'ownerId' => 107,
-                        'plentyId' => 0,
-                        'orderItems' => $orderItems,
-                        'addressRelations' => [
-                            ['typeId' => 1, 'addressId' => $deliveryAddress->id],
-                            ['typeId' => 2, 'addressId' => $deliveryAddress->id],
-                        ]    
-                    ]);
-                    return $addOrder;*/
-                    return $orderItems;
+                    if (!isset($orderItems)) {
+                        $addOrder = $this->orderRepository->createOrder(
+                        [
+                            'typeId' => 1,
+                            'methodOfPaymentId' => 4040,
+                            'shippingProfileId' => 6,
+                            'statusId' => 5.0, 
+                            'ownerId' => 107,
+                            'plentyId' => 0,
+                            'orderItems' => $orderItems,
+                            'addressRelations' => [
+                                ['typeId' => 1, 'addressId' => $deliveryAddress->id],
+                                ['typeId' => 2, 'addressId' => $deliveryAddress->id],
+                            ]    
+                        ]);
+                        
+                        return $addOrder;
+                    }
+                    return null;
                 }
             );
         }
@@ -112,25 +115,28 @@ class ContentController extends Controller
         foreach($groupOnItems as $groupOnItem)
         {
             $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => "ąčęąč"));
-            
-            
-            $amounts[] = [
+            if (!empty($findVariationID)){
+                $amounts[] = [
                 'currency' => 'EU',
                 'priceOriginalGross' => $groupOnItem->unit_price,
                 'priceOriginalNet' => $groupOnItem->unit_price
-            ];
-                 
-            $orderItems[] = [
-                'typeId' => 11,
-                'quantity' => $groupOnItem->quantity,
-                'orderItemName' => $groupOnItem->name,
-                'itemVariationId' => $findVariationID[0]->variationId,
-                'referrerId' => 10,
-                'countryVatId' => 1,
-                'amounts' => $amounts
-            ];
+                ];
+                     
+                $orderItems[] = [
+                    'typeId' => 11,
+                    'quantity' => $groupOnItem->quantity,
+                    'orderItemName' => $groupOnItem->name,
+                    'itemVariationId' => $findVariationID[0]->variationId,
+                    'referrerId' => 10,
+                    'countryVatId' => 1,
+                    'amounts' => $amounts
+                ];    
+            
+                return $orderItems;
+            }
+            return null;
         }
-        return $findVariationID;
+        
     }
     
     
