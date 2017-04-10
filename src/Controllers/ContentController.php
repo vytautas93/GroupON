@@ -116,7 +116,6 @@ class ContentController extends Controller
         foreach($groupOnItems as $groupOnItem)
         {
             $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $groupOnItem->sku));
-            
             if (!is_null($findVariationID[0]->variationId)){
                 $amounts[] = [
                 'currency' => 'EU',
@@ -133,14 +132,14 @@ class ContentController extends Controller
                     'countryVatId' => 1,
                     'amounts' => $amounts
                 ];    
-            
-                return $orderItems;
             }
-            return null;    
+            else
+            {
+                return null;    
+            }
         }
-        
+        return $orderItems;
     }
-    
     
 
     public function showGroupOnUser(Twig $twig, GroupOnRepositoryContract $groupOnRepo): string
