@@ -66,7 +66,7 @@ class ContentController extends Controller
                         'phone' => $groupOnOrder->customer->phone
                     ]);
                     $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
-                    /*$addOrder = $this->orderRepository->createOrder(
+                    $addOrder = $this->orderRepository->createOrder(
                     [
                         'typeId' => 1,
                         'methodOfPaymentId' => 4040,
@@ -79,8 +79,8 @@ class ContentController extends Controller
                             ['typeId' => 1, 'addressId' => $deliveryAddress->id],
                             ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                         ]    
-                    ]);*/
-                    return $orderItems;
+                    ]);
+                    return $addOrder;
                 }
             );
         }
@@ -121,13 +121,13 @@ class ContentController extends Controller
                 'typeId' => 11,
                 'quantity' => $groupOnItem->quantity,
                 'orderItemName' => $groupOnItem->name,
-                'itemVariationId' => $findVariationID->variationId,
+                'itemVariationId' => $findVariationID[0]->variationId,
                 'referrerId' => 10,
                 'countryVatId' => 1,
                 'amounts' => $amounts
             ];
         }
-        return $findVariationID[0]->variationId;
+        return $orderItems;
     }
     
     
