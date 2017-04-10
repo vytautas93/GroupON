@@ -79,8 +79,10 @@ class ContentController extends Controller
                             'orderItems' => $orderItems,
                             'properties' => 
                             [
-                                "typeId" => 7,
-                                "value" => $groupOnOrder->orderid
+                               [
+                                    "typeId" => 7,
+                                    "value" => $groupOnOrder->orderid
+                               ],
                             ],
                             'addressRelations' => [
                                 ['typeId' => 1, 'addressId' => $deliveryAddress->id],
