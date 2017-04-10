@@ -66,7 +66,7 @@ class ContentController extends Controller
                         'phone' => $groupOnOrder->customer->phone
                     ]);
                     $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
-                    $addOrder = $this->orderRepository->createOrder(
+                    /*$addOrder = $this->orderRepository->createOrder(
                     [
                         'typeId' => 1,
                         'methodOfPaymentId' => 4040,
@@ -80,7 +80,8 @@ class ContentController extends Controller
                             ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                         ]    
                     ]);
-                    return $addOrder;
+                    return $addOrder;*/
+                    return $orderItems;
                 }
             );
         }
@@ -110,7 +111,9 @@ class ContentController extends Controller
         $orderItems = [];
         foreach($groupOnItems as $groupOnItem)
         {
-            $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $groupOnItem->sku));
+            $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => "ąčęąč"));
+            
+            
             $amounts[] = [
                 'currency' => 'EU',
                 'priceOriginalGross' => $groupOnItem->unit_price,
@@ -127,7 +130,7 @@ class ContentController extends Controller
                 'amounts' => $amounts
             ];
         }
-        return $orderItems;
+        return $findVariationID;
     }
     
     
