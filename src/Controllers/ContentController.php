@@ -73,8 +73,8 @@ class ContentController extends Controller
                     $amounts = [];
                     $amounts[] = [
                         'currency' => 'EU',
-                        'priceOriginalGross' => $groupOnOrder->line_items->sku,
-                        'priceOriginalNet' => $groupOnOrder->line_items->sku
+                        'priceOriginalGross' => $groupOnOrder->line_items->unit_price,
+                        'priceOriginalNet' => $groupOnOrder->line_items->unit_price
                     ];
                  
                     $orderItems = [];
@@ -84,6 +84,7 @@ class ContentController extends Controller
                         'orderItemName' => $groupOnOrder->line_items->name,
                         'itemVariationId' => $findVariationID->variationId,
                         'referrerId' => 10,
+                        'countryVatId' => 1,
                         'amounts' => $amounts
                     ];
     
@@ -102,10 +103,8 @@ class ContentController extends Controller
                                 ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                             ]    
                         ]);
+                    
                     return $addOrder;
-                    
-                    return $test;
-                    
                 }
             );
         }
