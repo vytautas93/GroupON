@@ -61,24 +61,8 @@ class ContentController extends Controller
     
     public function test(Twig $twig):string
     {
-        $data = 
-        [
-            'typeId'=>1,
-            'firstName' => 'FirstNameTest',
-            'lastName' => 'LastNameTest',
-            'email' => 'email@email.com',
-            'gender' => 'male',
-            'formOfAddress' => '',
-            'lang'=>'de',
-            'referrerId' => 1,
-            'plentyId' => 0
-        ];
-        $test = $this->contactRepositoryContract->createContact($data); 
-        
-        
-        
-        
-       /* $groupOnOrders = $this->getGroupOnOrders();
+       
+        $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
             $order = $this->authHelper->processUnguarded(
@@ -95,7 +79,41 @@ class ContentController extends Controller
                         'countryId' => $country->id,
                         'phone' => $groupOnOrder->customer->phone
                     ]);
-                    $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
+                    
+                    
+                    
+                    $data = 
+                    [
+                        'typeId'=>1,
+                        'firstName' => $groupOnOrder->customer->name,
+                        'formOfAddress' => 0,
+                        'lang'=>'de',
+                        'referrerId' => 1,
+                        'plentyId' => 0,
+                        'privatePhone' => $groupOnOrder->customer->phone,
+                        'addresses' => $deliveryAddress
+                    ];
+                    
+                    $test = $this->contactRepositoryContract->createContact($data); 
+                    
+                    
+                    return $test;
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    /*$orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
                     if (!is_null($orderItems)) 
                     {
                         $addOrder = $this->orderRepository->createOrder(
@@ -122,12 +140,12 @@ class ContentController extends Controller
                         
                         return $addOrder;
                     }
-                    return null;    
+                    return null;    */
                 }
             );
-        }*/
+        }
         
-        $templateData = array("supplierID" => json_encode($test));
+        $templateData = array("supplierID" => json_encode($order));
         return $twig->render('GroupON::content.test',$templateData);
     }    
 
