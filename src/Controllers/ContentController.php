@@ -69,9 +69,9 @@ class ContentController extends Controller
             function () use ($order,$groupOnOrder) 
             {
                 $customer = $this->createCustomer($groupOnOrder);
-                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
-                return $deliveryAddress;
-                /*$orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
+                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);
+               
+                $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
                 if (!is_null($orderItems)) 
                 {
                     $addOrder = $this->orderRepository->createOrder(
@@ -98,7 +98,7 @@ class ContentController extends Controller
                     
                     return $addOrder;
                 }
-                return null;*/
+                return null;
             });
         }
         
@@ -154,14 +154,9 @@ class ContentController extends Controller
     }
     
 
-    public function createDeliveryAddress($groupOnOrder,$customer)
+    public function createDeliveryAddress($groupOnOrder)
     {
-        $addressContactRelation = 
-        [
-          "contactId" => $customer->id,
-          "typeId" => 2,
-          "addressId" =>$deliveryAddress->id
-        ];
+    
         
         $countryISO = $groupOnOrder->customer->country;
         $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
@@ -172,8 +167,7 @@ class ContentController extends Controller
             'town' => $groupOnOrder->customer->city,
             'postalCode' => $groupOnOrder->customer->zip,
             'countryId' => $country->id,
-            'phone' => $groupOnOrder->customer->phone,
-            "contactRelations" => $addressContactRelation
+            'phone' => $groupOnOrder->customer->phone
         ]);
         
         
