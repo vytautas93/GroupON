@@ -68,9 +68,9 @@ class ContentController extends Controller
             $order = $this->authHelper->processUnguarded(
             function () use ($order,$groupOnOrder) 
             {
-                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);
-                $customer = $this->createCustomer($groupOnOrder,$deliveryAddress);
-                return $customer;    
+                $customer = $this->createCustomer($groupOnOrder);
+                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
+                return $deliveryAddress;
                 /*$orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
                 if (!is_null($orderItems)) 
                 {
@@ -154,8 +154,15 @@ class ContentController extends Controller
     }
     
 
-    public function createDeliveryAddress($groupOnOrder)
+    public function createDeliveryAddress($groupOnOrder,$customer)
     {
+        $addressContactRelation = 
+        [
+          "contactId" => $customer->id,
+          "typeId" => 2,
+          "addressId" =>$deliveryAddress->id
+        ];
+        
         $countryISO = $groupOnOrder->customer->country;
         $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
         $deliveryAddress = $this->addressRepository->createAddress([
@@ -166,12 +173,20 @@ class ContentController extends Controller
             'postalCode' => $groupOnOrder->customer->zip,
             'countryId' => $country->id,
             'phone' => $groupOnOrder->customer->phone,
+            "contactRelations" => $addressContactRelation
         ]);
+        
+        
+        
+        
+        
+        
         return $deliveryAddress;
     }
     
-    public function createCustomer($groupOnOrder,$deliveryAddress)
+    public function createCustomer($groupOnOrder)
     {
+
         $data = 
         [
             'typeId'=>1,
@@ -181,10 +196,6 @@ class ContentController extends Controller
             'referrerId' => 1,
             'plentyId' => 0,
             'privatePhone' => $groupOnOrder->customer->phone,
-            'addresses' => 
-            [
-                'id'=>$deliveryAddress->id
-            ]
         ];
         
         $customer = $this->contactRepositoryContract->createContact($data); 
