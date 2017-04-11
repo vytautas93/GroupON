@@ -71,7 +71,7 @@ class ContentController extends Controller
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);
                 $customer = $this->createCustomer($groupOnOrder,$deliveryAddress);
 
-                $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
+               /* $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
                 if (!is_null($orderItems)) 
                 {
                     $addOrder = $this->orderRepository->createOrder(
@@ -99,7 +99,8 @@ class ContentController extends Controller
                     return $addOrder;
                 }
                 return null;
-                }
+                }*/
+                return $customer;
             );
         }
         
