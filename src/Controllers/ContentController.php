@@ -70,8 +70,8 @@ class ContentController extends Controller
             {
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);
-               
                 $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
+                
                 if (!is_null($orderItems)) 
                 {
                     $addOrder = $this->orderRepository->createOrder(
@@ -91,12 +91,14 @@ class ContentController extends Controller
                            ],
                         ],
                         'addressRelations' => [
-                            ['typeId' => 1, 'addressId' => $deliveryAddress->id, "contactId" => $customer->id],
-                            ['typeId' => 2, 'addressId' => $deliveryAddress->id, "contactId" => $customer->id],
+                            ['typeId' => 1, 'addressId' => $deliveryAddress->id],
+                            ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                         ]    
                     ]);
                     
-                    return $addOrder;
+                    $exported = $this->markAsExported($groupOnOrder);
+
+                    return $exported;
                 }
                 return null;
             });
@@ -105,6 +107,25 @@ class ContentController extends Controller
         $templateData = array("supplierID" => json_encode($order));
         return $twig->render('GroupON::content.test',$templateData);
     }    
+    public function markAsExported($groupOnOrder)
+    {   
+        $supplierID = $this->configRepository->get('GroupON.supplierID');
+        $token = $this->configRepository->get('GroupON.token');
+        $lineItemsIds = [];
+        foreach($groupOnOrder->line_items as $item)
+        {
+            $lineItemsIds[] = $item->ci_lineitemid;
+        }
+        
+        $datatopost = array (
+            "supplier_id" => $supplierID,
+            "token" => $token,
+            "ci_lineitem_ids" => json_encode ($lineItemsIds),
+        );
+        
+        return $datatopost;
+    }
+
 
     public function getGroupOnOrders()
     {
@@ -169,18 +190,12 @@ class ContentController extends Controller
             'countryId' => $country->id,
             'phone' => $groupOnOrder->customer->phone
         ]);
-        
-        
-        
-        
-        
-        
+
         return $deliveryAddress;
     }
     
     public function createCustomer($groupOnOrder)
     {
-
         $data = 
         [
             'typeId'=>1,
