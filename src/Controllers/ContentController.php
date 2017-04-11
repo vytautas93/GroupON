@@ -181,7 +181,7 @@ class ContentController extends Controller
             'lang'=>'de',
             'referrerId' => 1,
             'plentyId' => 0,
-            'privatePhone' => $groupOnOrder->customer->phone
+            'privatePhone' => $groupOnOrder->customer->phone,
             'addresses' => 
             [
                 'id'=>$deliveryAddress->id
