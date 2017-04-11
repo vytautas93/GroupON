@@ -61,7 +61,7 @@ class ContentController extends Controller
     
     public function test(Twig $twig):string
     {
-        $test = $this->contactRepositoryContract->getContactList(array $filter = [], array $with = [], array $columns = [], int $page = 1, int $itemsPerPage = 50); 
+        $test = $this->contactRepositoryContract->getContactList(); 
         
         
         
