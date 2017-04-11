@@ -66,81 +66,39 @@ class ContentController extends Controller
         foreach($groupOnOrders as $groupOnOrder)
         {
             $order = $this->authHelper->processUnguarded(
-                function () use ($order,$groupOnOrder) 
+            function () use ($order,$groupOnOrder) 
+            {
+                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);
+                $customer = $this->createCustomer($groupOnOrder);
+
+                $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
+                if (!is_null($orderItems)) 
                 {
-                    $countryISO = $groupOnOrder->customer->country;
-                    $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
-                    $deliveryAddress = $this->addressRepository->createAddress([
-                        'name1' => $groupOnOrder->customer->name,
-                        'address1' => $groupOnOrder->customer->address1,
-                        'address2' => $groupOnOrder->customer->address2,
-                        'town' => $groupOnOrder->customer->city,
-                        'postalCode' => $groupOnOrder->customer->zip,
-                        'countryId' => $country->id,
-                        'phone' => $groupOnOrder->customer->phone
+                    $addOrder = $this->orderRepository->createOrder(
+                    [
+                        'typeId' => 1,
+                        'methodOfPaymentId' => 4040,
+                        'shippingProfileId' => 6,
+                        'statusId' => 5.0, 
+                        'ownerId' => 107,
+                        'plentyId' => 0,
+                        'orderItems' => $orderItems,
+                        'properties' => 
+                        [
+                           [
+                                "typeId" => 7,
+                                "value" => $groupOnOrder->orderid
+                           ],
+                        ],
+                        'addressRelations' => [
+                            ['typeId' => 1, 'addressId' => $deliveryAddress->id],
+                            ['typeId' => 2, 'addressId' => $deliveryAddress->id],
+                        ]    
                     ]);
                     
-                    
-                    
-                    $data = 
-                    [
-                        'typeId'=>1,
-                        'firstName' => $groupOnOrder->customer->name,
-                        'formOfAddress' => 0,
-                        'lang'=>'de',
-                        'referrerId' => 1,
-                        'plentyId' => 0,
-                        'privatePhone' => $groupOnOrder->customer->phone,
-                        'addresses' => $deliveryAddress
-                    ];
-                    
-                    $test = $this->contactRepositoryContract->createContact($data); 
-                    
-                    
-                    return $test;
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    /*$orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
-                    if (!is_null($orderItems)) 
-                    {
-                        $addOrder = $this->orderRepository->createOrder(
-                        [
-                            'typeId' => 1,
-                            'methodOfPaymentId' => 4040,
-                            'shippingProfileId' => 6,
-                            'statusId' => 5.0, 
-                            'ownerId' => 107,
-                            'plentyId' => 0,
-                            'orderItems' => $orderItems,
-                            'properties' => 
-                            [
-                               [
-                                    "typeId" => 7,
-                                    "value" => $groupOnOrder->orderid
-                               ],
-                            ],
-                            'addressRelations' => [
-                                ['typeId' => 1, 'addressId' => $deliveryAddress->id],
-                                ['typeId' => 2, 'addressId' => $deliveryAddress->id],
-                            ]    
-                        ]);
-                        
-                        return $addOrder;
-                    }
-                    return null;    */
+                    return $addOrder;
+                }
+                return null;
                 }
             );
         }
@@ -196,6 +154,64 @@ class ContentController extends Controller
         return $orderItems;
     }
     
+
+    public function createDeliveryAddress($groupOnOrder)
+    {
+        $countryISO = $groupOnOrder->customer->country;
+        $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
+
+        $deliveryAddress = $this->addressRepository->createAddress([
+            'name1' => $groupOnOrder->customer->name,
+            'address1' => $groupOnOrder->customer->address1,
+            'address2' => $groupOnOrder->customer->address2,
+            'town' => $groupOnOrder->customer->city,
+            'postalCode' => $groupOnOrder->customer->zip,
+            'countryId' => $country->id,
+            'phone' => $groupOnOrder->customer->phone
+        ]);
+        return $deliveryAddress;
+    }
+    
+    public function createCustomer($groupOnOrder)
+    {
+        $data = 
+        [
+            'typeId'=>1,
+            'firstName' => $groupOnOrder->customer->name,
+            'formOfAddress' => 0,
+            'lang'=>'de',
+            'referrerId' => 1,
+            'plentyId' => 0,
+            'privatePhone' => $groupOnOrder->customer->phone
+        ];
+        
+        $customer = $this->contactRepositoryContract->createContact($data); 
+        return $customer;        
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function showGroupOnUser(Twig $twig, GroupOnRepositoryContract $groupOnRepo): string
     {
