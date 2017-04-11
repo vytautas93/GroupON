@@ -1,36 +1,19 @@
 <?php
  
-namespace GroupON\Controllers;
+namespace GroupON\Crons;
  
-use Plenty\Plugin\Controller;
-use Plenty\Plugin\Http\Request;
+use Plenty\Plugin\ServiceProvider;
+use Plenty\Modules\Cron\Contracts\CronContainer as Cron;
 
 use Plenty\Modules\Authorization\Services\AuthHelper;
-
 use Plenty\Plugin\ConfigRepository;
-use Plenty\Plugin\Templates\Twig;
-
-use GroupON\Contracts\GroupOnRepositoryContract;
-
 use Plenty\Modules\Order\Contracts\OrderRepositoryContract;
 use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
-use Plenty\Modules\Order\Models\Order;
 use Plenty\Modules\Order\Shipping\Countries\Contracts\CountryRepositoryContract;
-
-
-
 use Plenty\Modules\Account\Contact\Contracts\ContactRepositoryContract;
+use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract; 
 
-
-
-
-
-
-
-
-use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
-
-class ContentController extends Controller
+class SynchronizeGroupOnOrdersCron extends Cron
 {
     
     private $orderRepository;
@@ -58,10 +41,10 @@ class ContentController extends Controller
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->authHelper = $authHelper;
     }
+
     
-    public function test(Twig $twig):string
+    public function handle()
     {
-       
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
@@ -103,9 +86,10 @@ class ContentController extends Controller
                 return null;
             });
         }
-        $templateData = array("supplierID" => json_encode($order));
-        return $twig->render('GroupON::content.test',$templateData);
-    }    
+        /*$templateData = array("supplierID" => json_encode($order));
+        return $twig->render('GroupON::content.test',$templateData);*/
+    }
+    
     public function markAsExported($groupOnOrder)
     {   
         $supplierID = $this->configRepository->get('GroupON.supplierID');
@@ -121,7 +105,6 @@ class ContentController extends Controller
             "token" => $token,
             "ci_lineitem_ids" => json_encode ($lineItemsIds),
         );
-        
         
         $ch = curl_init ("https://scm.commerceinterface.com/api/v2/mark_exported");
         curl_setopt ($ch, CURLOPT_POST, true);
@@ -140,7 +123,6 @@ class ContentController extends Controller
        
        return $response;
     }
-
 
     public function getGroupOnOrders()
     {
@@ -192,8 +174,6 @@ class ContentController extends Controller
 
     public function createDeliveryAddress($groupOnOrder)
     {
-    
-        
         $countryISO = $groupOnOrder->customer->country;
         $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
         $deliveryAddress = $this->addressRepository->createAddress([
@@ -224,69 +204,5 @@ class ContentController extends Controller
         
         $customer = $this->contactRepositoryContract->createContact($data); 
         return $customer;        
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function showGroupOnUser(Twig $twig, GroupOnRepositoryContract $groupOnRepo): string
-    {
-        $groupOnUserList = $groupOnRepo->getGroupOnList();
-        $templateData = array("groupOnUsers" => $groupOnUserList);
-        return $twig->render('GroupON::content.groupOnUsers', $templateData);
-    }
- 
-    /**
-     * @param  \Plenty\Plugin\Http\Request $request
-     * @param ToDoRepositoryContract       $toDoRepo
-     * @return string
-     */
-    public function createGroupOnUser(Request $request, GroupOnRepositoryContract $groupOnRepo): string
-    {
-        $newGroupOnUser = $groupOnRepo->createGroupOnUser($request->all());
-        return json_encode($newGroupOnUser);
-    }
- 
-    /**
-     * @param int                    $id
-     * @param ToDoRepositoryContract $toDoRepo
-     * @return string
-     */
-    public function updateGroupOnUser(int $id, GroupOnRepositoryContract $groupOnRepo): string
-    {
-        $updateGroupOnUser = $groupOnRepo->updateGroupOnUser($id);
-        return json_encode($updateGroupOnUser);
-    }
- 
-    /**
-     * @param int                    $id
-     * @param ToDoRepositoryContract $toDoRepo
-     * @return string
-     */
-    public function deleteGroupOnUser(int $id, GroupOnRepositoryContract $groupOnRepo): string
-    {
-        $deleteGroupOnUser = $groupOnRepo->deleteTask($id);
-        return json_encode($deleteGroupOnUser);
     }
 }

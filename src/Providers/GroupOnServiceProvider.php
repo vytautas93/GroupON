@@ -3,9 +3,11 @@
 namespace GroupON\Providers;
  
 use Plenty\Plugin\ServiceProvider;
+use Plenty\Modules\Cron\Services\CronContainer;
+
+use GroupON\Crons\SynchronizeGroupOnOrdersCron;
 use GroupON\Contracts\GroupOnRepositoryContract;
 use GroupON\Repositories\GroupOnRepository;
-
 use GroupON\Methods\GroupOnPickupDataMethod;
  
 /**
@@ -20,12 +22,12 @@ class GroupOnServiceProvider extends ServiceProvider
     public function register()
     {
         $this->getApplication()->register(GroupOnRouteServiceProvider::class);
-        $this->getApplication()->bind(GroupOnRepositoryContract::class, GroupOnRepository::class);
+        /*$this->getApplication()->bind(GroupOnRepositoryContract::class, GroupOnRepository::class);*/
     }
     
-    public function boot()
+    public function boot(CronContainer $container)
     {
-        
+        $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);
     }
     
 }
