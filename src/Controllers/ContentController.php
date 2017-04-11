@@ -104,7 +104,7 @@ class ContentController extends Controller
             });
         }
         
-        $templateData = array("supplierID" => json_encode($groupOnOrders));
+        $templateData = array("supplierID" => json_encode($exported));
         return $twig->render('GroupON::content.test',$templateData);
     }    
     public function markAsExported($groupOnOrder)
