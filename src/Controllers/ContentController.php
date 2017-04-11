@@ -129,8 +129,17 @@ class ContentController extends Controller
         curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
         curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec ($ch);
-
-        return $response;
+        /*if( $response ) 
+        {
+          $response_json = json_decode( $response );
+          if( $response_json->success == true ) {
+            //Successfully marked as exported (only items which are not already marked exported
+          } else {
+            
+          }
+        }*/
+       
+       return $response;
     }
 
 
