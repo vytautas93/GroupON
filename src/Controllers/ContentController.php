@@ -62,6 +62,8 @@ class ContentController extends Controller
     public function test(Twig $twig):string
     {
         $data = array(
+            "externalId" => 123,
+            "typeId" => 1,
             "firstName"=>"Test1",
             "lastName"=>"LastNameTest",
             "email"=>"email@email.com"
