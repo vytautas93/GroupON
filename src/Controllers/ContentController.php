@@ -17,6 +17,17 @@ use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
 use Plenty\Modules\Order\Models\Order;
 use Plenty\Modules\Order\Shipping\Countries\Contracts\CountryRepositoryContract;
 
+
+
+use Plenty\Modules\Account\Contact\Contracts\ContactRepositoryContract;
+
+
+
+
+
+
+
+
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 
 class ContentController extends Controller
@@ -35,6 +46,7 @@ class ContentController extends Controller
         ConfigRepository $configRepository,
         CountryRepositoryContract $countryRepositoryContract,
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
+        ContactRepositoryContract $contactRepositoryContract,
         AuthHelper $authHelper
     )
     {
@@ -43,12 +55,24 @@ class ContentController extends Controller
         $this->configRepository = $configRepository;
         $this->countryRepositoryContract = $countryRepositoryContract;
         $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
+        $this->contactRepositoryContract = $contactRepositoryContract;
         $this->authHelper = $authHelper;
     }
     
     public function test(Twig $twig):string
     {
-        $groupOnOrders = $this->getGroupOnOrders();
+        $data = array(
+            "firstName"=>"Test1",
+            "lastName"=>"LastNameTest",
+            "email"=>"email@email.com"
+            
+        );
+        $test = $this->contactRepositoryContract->createContact(array($data)); 
+        
+        
+        
+        
+       /* $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
             $order = $this->authHelper->processUnguarded(
@@ -95,9 +119,9 @@ class ContentController extends Controller
                     return null;    
                 }
             );
-        }
+        }*/
         
-        $templateData = array("supplierID" => json_encode($order));
+        $templateData = array("supplierID" => json_encode($test));
         return $twig->render('GroupON::content.test',$templateData);
     }    
 
