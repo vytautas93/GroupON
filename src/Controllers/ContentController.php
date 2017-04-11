@@ -61,7 +61,19 @@ class ContentController extends Controller
     
     public function test(Twig $twig):string
     {
-        $test = $this->contactRepositoryContract->getContactList(); 
+        $data = 
+        [
+            'typeId'=>1,
+            'firstName' => 'FirstNameTest',
+            'lastName' => 'LastNameTest',
+            'email' => 'email@email.com',
+            'gender' => 'male',
+            'formOfAddress' => '',
+            'lang'=>'de',
+            'referrerId' => 1,
+            'plentyId' => 0
+        ];
+        $test = $this->contactRepositoryContract->createContact($data); 
         
         
         
