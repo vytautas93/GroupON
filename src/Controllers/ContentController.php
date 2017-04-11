@@ -123,7 +123,14 @@ class ContentController extends Controller
             "ci_lineitem_ids" => json_encode ($lineItemsIds),
         );
         
-        return $datatopost;
+        
+        $ch = curl_init ("https://scm.commerceinterface.com/api/v2/mark_exported");
+        curl_setopt ($ch, CURLOPT_POST, true);
+        curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
+        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec ($ch);
+
+        return $response;
     }
 
 
@@ -131,7 +138,7 @@ class ContentController extends Controller
     {
         $supplierID = $this->configRepository->get('GroupON.supplierID');
         $token = $this->configRepository->get('GroupON.token');
-        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token;
+        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=03/29/2017+00:00&end_datetime=03/29/2017+23:59';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
