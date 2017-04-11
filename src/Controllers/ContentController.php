@@ -68,8 +68,8 @@ class ContentController extends Controller
             $order = $this->authHelper->processUnguarded(
             function () use ($order,$groupOnOrder) 
             {
-                $customer = $this->createCustomer($groupOnOrder);
-                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
+                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);
+                $customer = $this->createCustomer($groupOnOrder,$deliveryAddress);
 
                 $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
                 if (!is_null($orderItems)) 
@@ -155,11 +155,10 @@ class ContentController extends Controller
     }
     
 
-    public function createDeliveryAddress($groupOnOrder,$customer)
+    public function createDeliveryAddress($groupOnOrder)
     {
         $countryISO = $groupOnOrder->customer->country;
         $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
-        $test = $this->contactRepositoryContract->findContactById($customer->id);
         $deliveryAddress = $this->addressRepository->createAddress([
             'name2' => $groupOnOrder->customer->name,
             'address1' => $groupOnOrder->customer->address1,
@@ -168,12 +167,11 @@ class ContentController extends Controller
             'postalCode' => $groupOnOrder->customer->zip,
             'countryId' => $country->id,
             'phone' => $groupOnOrder->customer->phone,
-            'contacts' => $test
         ]);
         return $deliveryAddress;
     }
     
-    public function createCustomer($groupOnOrder)
+    public function createCustomer($groupOnOrder,$deliveryAddress)
     {
         $data = 
         [
@@ -184,6 +182,10 @@ class ContentController extends Controller
             'referrerId' => 1,
             'plentyId' => 0,
             'privatePhone' => $groupOnOrder->customer->phone
+            'addresses' => 
+            [
+                'id'=>$deliveryAddress->id
+            ]
         ];
         
         $customer = $this->contactRepositoryContract->createContact($data); 
