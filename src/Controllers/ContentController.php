@@ -68,8 +68,8 @@ class ContentController extends Controller
             $order = $this->authHelper->processUnguarded(
             function () use ($order,$groupOnOrder) 
             {
-                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);
                 $customer = $this->createCustomer($groupOnOrder);
+                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
 
                 $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
                 if (!is_null($orderItems)) 
@@ -155,19 +155,20 @@ class ContentController extends Controller
     }
     
 
-    public function createDeliveryAddress($groupOnOrder)
+    public function createDeliveryAddress($groupOnOrder,$customer)
     {
         $countryISO = $groupOnOrder->customer->country;
         $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
 
         $deliveryAddress = $this->addressRepository->createAddress([
-            'name1' => $groupOnOrder->customer->name,
+            'name2' => $groupOnOrder->customer->name,
             'address1' => $groupOnOrder->customer->address1,
             'address2' => $groupOnOrder->customer->address2,
             'town' => $groupOnOrder->customer->city,
             'postalCode' => $groupOnOrder->customer->zip,
             'countryId' => $country->id,
-            'phone' => $groupOnOrder->customer->phone
+            'phone' => $groupOnOrder->customer->phone,
+            'contacts' => $customer
         ]);
         return $deliveryAddress;
     }
