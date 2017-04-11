@@ -91,8 +91,8 @@ class ContentController extends Controller
                            ],
                         ],
                         'addressRelations' => [
-                            ['typeId' => 1, 'addressId' => $deliveryAddress->id, $customer->id],
-                            ['typeId' => 2, 'addressId' => $deliveryAddress->id, $customer->id],
+                            ['typeId' => 1, 'addressId' => $deliveryAddress->id, "contactId" => $customer->id],
+                            ['typeId' => 2, 'addressId' => $deliveryAddress->id, "contactId" => $customer->id],
                         ]    
                     ]);
                     
