@@ -62,12 +62,11 @@ class ContentController extends Controller
     public function test(Twig $twig):string
     {
         $data = array(
-            "referrerId" => 0,
             "typeId" => 1,
             "firstName"=>"Test1",
             "lastName"=>"LastNameTest",
-            "email"=>"email@email.com"
-            
+            "email"=>"email@email.com",
+            "referrerId" => 0
         );
         $test = $this->contactRepositoryContract->createContact(array($data)); 
         
