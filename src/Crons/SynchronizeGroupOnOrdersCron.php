@@ -3,7 +3,7 @@
 namespace GroupON\Crons;
  
 use Plenty\Plugin\ServiceProvider;
-use Plenty\Modules\Cron\Contracts\CronContainer as Cron;
+use Plenty\Modules\Cron\Contracts\CronHandler as Cron;
 
 use Plenty\Modules\Authorization\Services\AuthHelper;
 use Plenty\Plugin\ConfigRepository;
