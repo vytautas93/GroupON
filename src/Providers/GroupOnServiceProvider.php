@@ -4,7 +4,6 @@ namespace GroupON\Providers;
  
 use Plenty\Plugin\ServiceProvider;
 use Plenty\Modules\Cron\Services\CronContainer;
-
 use GroupON\Crons\SynchronizeGroupOnOrdersCron;
 use GroupON\Contracts\GroupOnRepositoryContract;
 use GroupON\Repositories\GroupOnRepository;
