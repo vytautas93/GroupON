@@ -31,6 +31,6 @@ class GroupOnServiceProvider extends ServiceProvider
     
     public function boot(CronContainer $container,EventProceduresService $eventProceduresService,ReferenceContainer $referenceContainer)
     {
-        $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);
+        $container->add(15,'SynchronizeGroupOnOrdersCron::class');
     }
 }
