@@ -19,6 +19,7 @@ use GroupON\Methods\GroupOnPickupDataMethod;
  */
 class GroupOnServiceProvider extends ServiceProvider
 {
+    use Loggable;
     /**
      * Register the service provider.
      */
