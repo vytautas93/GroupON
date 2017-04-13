@@ -72,6 +72,10 @@ class SynchronizeGroupOnOrdersCron extends Cron
                                 "typeId" => 7,
                                 "value" => $groupOnOrder->orderid
                            ],
+                           [
+                                "typeId" => 8,
+                                "value" => $customer->id
+                           ],
                         ],
                         'addressRelations' => [
                             ['typeId' => 1, 'addressId' => $deliveryAddress->id],
@@ -86,8 +90,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                 return null;
             });
         }
-        /*$templateData = array("supplierID" => json_encode($order));
-        return $twig->render('GroupON::content.test',$templateData);*/
+        
     }
     
     public function markAsExported($groupOnOrder)
