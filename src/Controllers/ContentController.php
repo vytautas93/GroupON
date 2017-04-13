@@ -95,7 +95,7 @@ class ContentController extends Controller
                             [
                                 "referenceType" => "contact",
                                 "relation" => "receiver",
-                                "contactReceiver" => $customer
+                                "referenceId"=>$customer->id
                             ],
                         ],
                         'addressRelations' => [
