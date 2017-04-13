@@ -69,7 +69,7 @@ class ContentController extends Controller
             function () use ($order,$groupOnOrder) 
             {
                 $customer = $this->createCustomer($groupOnOrder);
-                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);
+                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
                 $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
                 
                 if (!is_null($orderItems)) 
@@ -101,15 +101,6 @@ class ContentController extends Controller
                         'addressRelations' => [
                             ['typeId' => 1, 'addressId' => $deliveryAddress->id],
                             ['typeId' => 2, 'addressId' => $deliveryAddress->id],
-                        ],
-                        
-                        "orderReferences" =>
-                        [
-                            [
-                                "isEditable" => False,
-                                "name" => "GroupON",
-                                "origin" =>(string) $groupOnOrder->orderid
-                            ]
                         ],
                     ]);
                     
@@ -207,7 +198,7 @@ class ContentController extends Controller
     }
     
 
-    public function createDeliveryAddress($groupOnOrder)
+    public function createDeliveryAddress($groupOnOrder,$customer)
     {
     
         
@@ -220,7 +211,15 @@ class ContentController extends Controller
             'town' => $groupOnOrder->customer->city,
             'postalCode' => $groupOnOrder->customer->zip,
             'countryId' => $country->id,
-            'phone' => $groupOnOrder->customer->phone
+            'phone' => $groupOnOrder->customer->phone,
+            'contacts' => 
+            [
+                [
+                    "id" => $customer->id,    
+                    "firstName" => $customer->firstName,
+                    "lastName" => $customer->lastName    
+                ],
+            ]
         ]);
 
         return $deliveryAddress;
