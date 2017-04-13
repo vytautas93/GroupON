@@ -72,10 +72,6 @@ class SynchronizeGroupOnOrdersCron extends Cron
                                 "typeId" => 7,
                                 "value" => $groupOnOrder->orderid
                            ],
-                           [
-                                "typeId" => 8,
-                                "value" => $customer->id
-                           ],
                         ],
                         'addressRelations' => [
                             ['typeId' => 1, 'addressId' => $deliveryAddress->id],
