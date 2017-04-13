@@ -69,7 +69,7 @@ class ContentController extends Controller
             function () use ($order,$groupOnOrder) 
             {
                 $customer = $this->createCustomer($groupOnOrder);
-                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
+                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);
                 $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
                 
                 if (!is_null($orderItems)) 
@@ -198,7 +198,7 @@ class ContentController extends Controller
     }
     
 
-    public function createDeliveryAddress($groupOnOrder,$customer)
+    public function createDeliveryAddress($groupOnOrder)
     {
     
         
@@ -211,15 +211,7 @@ class ContentController extends Controller
             'town' => $groupOnOrder->customer->city,
             'postalCode' => $groupOnOrder->customer->zip,
             'countryId' => $country->id,
-            'phone' => $groupOnOrder->customer->phone,
-            'contacts' => 
-            [
-                [
-                    "id" => $customer->id,    
-                    "firstName" => $customer->firstName,
-                    "lastName" => $customer->lastName    
-                ],
-            ]
+            'phone' => $groupOnOrder->customer->phone
    
         ]);
 
