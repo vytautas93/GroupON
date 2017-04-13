@@ -101,7 +101,16 @@ class ContentController extends Controller
                         'addressRelations' => [
                             ['typeId' => 1, 'addressId' => $deliveryAddress->id],
                             ['typeId' => 2, 'addressId' => $deliveryAddress->id],
-                        ]    
+                        ],
+                        
+                        "orderReferences" =>
+                        [
+                            [
+                                "isEditable" => False,
+                                "name" => "GroupON",
+                                "origin" =>(string) $groupOnOrder->orderid
+                            ]
+                        ],
                     ]);
                     
                     $exported = $this->markAsExported($groupOnOrder);
