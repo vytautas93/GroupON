@@ -91,7 +91,7 @@ class ContentController extends Controller
                            ],
                            [
                                 "typeId" => 8,
-                                "value" => $customer->externalId
+                                "value" => (string) $customer->id
                            ],
                         ],
                         'addressRelations' => [
