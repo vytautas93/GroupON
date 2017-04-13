@@ -220,6 +220,7 @@ class ContentController extends Controller
                     "lastName" => $customer->lastName    
                 ],
             ]
+   
         ]);
 
         return $deliveryAddress;
