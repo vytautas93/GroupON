@@ -89,10 +89,14 @@ class ContentController extends Controller
                                 "typeId" => 7,
                                 "value" => $groupOnOrder->orderid
                            ],
-                           [
-                                "typeId" => 8,
-                                "value" => (string) $customer->id
-                           ],
+                        ],
+                        "relations" =>
+                        [
+                            [
+                                "referenceType" => "contact",
+                                "relation" => "receiver",
+                                "contactReceiver" => $customer
+                            ],
                         ],
                         'addressRelations' => [
                             ['typeId' => 1, 'addressId' => $deliveryAddress->id],
