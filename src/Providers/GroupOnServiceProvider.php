@@ -5,7 +5,7 @@ namespace GroupON\Providers;
 use Plenty\Log\Services\ReferenceContainer;
 use Plenty\Plugin\ServiceProvider;
 use Plenty\Modules\Cron\Services\CronContainer;
-use GroupON\Crons\SynchronizeGroupOnOrdersCron;
+//use GroupON\Crons\SynchronizeGroupOnOrdersCron;
 use Plenty\Modules\EventProcedures\Services\EventProceduresService;
  
 /**
