@@ -8,13 +8,14 @@ use Plenty\Plugin\Templates\Twig;
 use Plenty\Modules\Order\Models\Order;
 use GroupON\Contracts\GroupOnRepositoryContract;
 
+use Plenty\Modules\Authorization\Services\AuthHelper;
 use Plenty\Modules\Order\Contracts\OrderRepositoryContract;
 use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Modules\Order\Shipping\Countries\Contracts\CountryRepositoryContract;
 use Plenty\Modules\Account\Contact\Contracts\ContactRepositoryContract;
+
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
-use Plenty\Modules\Authorization\Services\AuthHelper;
 
 class ContentController extends Controller
 {
@@ -23,7 +24,7 @@ class ContentController extends Controller
     private $addressRepository;
     private $configRepository;
     private $countryRepositoryContract;
-    /*private $variationLookupRepositoryContract;*/
+    private $contactRepositoryContract;
     private $variationSkuRepositoryContract;
     private $authHelper;
     
@@ -33,6 +34,7 @@ class ContentController extends Controller
         ConfigRepository $configRepository,
         CountryRepositoryContract $countryRepositoryContract,
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
+        ContactRepositoryContract $contactRepositoryContract,
         AuthHelper $authHelper
     )
     {
@@ -41,6 +43,7 @@ class ContentController extends Controller
         $this->configRepository = $configRepository;
         $this->countryRepositoryContract = $countryRepositoryContract;
         $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
+        $this->contactRepositoryContract = $contactRepositoryContract;
         $this->authHelper = $authHelper;
     }
     
@@ -226,69 +229,5 @@ class ContentController extends Controller
         
         $customer = $this->contactRepositoryContract->createContact($data); 
         return $customer;        
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function showGroupOnUser(Twig $twig, GroupOnRepositoryContract $groupOnRepo): string
-    {
-        $groupOnUserList = $groupOnRepo->getGroupOnList();
-        $templateData = array("groupOnUsers" => $groupOnUserList);
-        return $twig->render('GroupON::content.groupOnUsers', $templateData);
-    }
- 
-    /**
-     * @param  \Plenty\Plugin\Http\Request $request
-     * @param ToDoRepositoryContract       $toDoRepo
-     * @return string
-     */
-    public function createGroupOnUser(Request $request, GroupOnRepositoryContract $groupOnRepo): string
-    {
-        $newGroupOnUser = $groupOnRepo->createGroupOnUser($request->all());
-        return json_encode($newGroupOnUser);
-    }
- 
-    /**
-     * @param int                    $id
-     * @param ToDoRepositoryContract $toDoRepo
-     * @return string
-     */
-    public function updateGroupOnUser(int $id, GroupOnRepositoryContract $groupOnRepo): string
-    {
-        $updateGroupOnUser = $groupOnRepo->updateGroupOnUser($id);
-        return json_encode($updateGroupOnUser);
-    }
- 
-    /**
-     * @param int                    $id
-     * @param ToDoRepositoryContract $toDoRepo
-     * @return string
-     */
-    public function deleteGroupOnUser(int $id, GroupOnRepositoryContract $groupOnRepo): string
-    {
-        $deleteGroupOnUser = $groupOnRepo->deleteTask($id);
-        return json_encode($deleteGroupOnUser);
     }
 }

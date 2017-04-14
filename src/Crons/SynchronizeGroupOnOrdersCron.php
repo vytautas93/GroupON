@@ -21,6 +21,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
     private $configRepository;
     private $countryRepositoryContract;
     private $variationLookupRepositoryContract;
+    private $contactRepositoryContract;
     private $authHelper;
     
     public function __construct(
