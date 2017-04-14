@@ -20,7 +20,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
     private $addressRepository;
     private $configRepository;
     private $countryRepositoryContract;
-    private $variationLookupRepositoryContract;
+    private $variationSkuRepositoryContract;
     private $contactRepositoryContract;
     private $authHelper;
     

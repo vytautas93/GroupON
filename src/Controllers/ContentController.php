@@ -102,6 +102,7 @@ class ContentController extends Controller
         $templateData = array("supplierID" => json_encode($order));
         return $twig->render('GroupON::content.test',$templateData);
     }    
+    
     public function markAsExported($groupOnOrder)
     {   
         $supplierID = $this->configRepository->get('GroupON.supplierID');
