@@ -222,7 +222,6 @@ class ContentController extends Controller
         [
             'typeId'=>1,
             'firstName' => $groupOnOrder->customer->name,
-            'lastName' => $groupOnOrder->customer->name,
             'formOfAddress' => 0,
             'lang'=>'de',
             'referrerId' => 1,
