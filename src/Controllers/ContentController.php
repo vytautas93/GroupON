@@ -55,7 +55,7 @@ class ContentController extends Controller
         {
             
             $order = $this->authHelper->processUnguarded(
-            function () use ($order,$groupOnOrder) 
+            function () use ($groupOnOrder) 
             {
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
