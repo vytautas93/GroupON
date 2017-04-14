@@ -22,8 +22,8 @@ class GroupOnServiceProvider extends ServiceProvider
         $this->getApplication()->register(GroupOnRouteServiceProvider::class);
     }
     
-    // public function boot(CronContainer $container,EventProceduresService $eventProceduresService,ReferenceContainer $referenceContainer)
-    // {
-    //     $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);
-    // }
+     public function boot(CronContainer $container,EventProceduresService $eventProceduresService,ReferenceContainer $referenceContainer)
+     {
+         $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);
+     }
 }
