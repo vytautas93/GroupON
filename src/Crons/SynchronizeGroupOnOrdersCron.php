@@ -1,5 +1,5 @@
 <?php
-/* 
+
 namespace GroupON\Crons;
  
 use Plenty\Plugin\ServiceProvider;
@@ -50,7 +50,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         foreach($groupOnOrders as $groupOnOrder)
         {
             $orders = $this->authHelper->processUnguarded(
-            function () use ($orders,$groupOnOrder) 
+            function () use ($groupOnOrder) 
             {
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);
@@ -205,4 +205,4 @@ class SynchronizeGroupOnOrdersCron extends Cron
         $customer = $this->contactRepositoryContract->createContact($data); 
         return $customer;        
     }
-}*/
+}
