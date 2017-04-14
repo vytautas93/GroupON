@@ -4,31 +4,17 @@ namespace GroupON\Controllers;
  
 use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Request;
-
-use Plenty\Modules\Authorization\Services\AuthHelper;
-
-use Plenty\Plugin\ConfigRepository;
 use Plenty\Plugin\Templates\Twig;
-
+use Plenty\Modules\Order\Models\Order;
 use GroupON\Contracts\GroupOnRepositoryContract;
 
 use Plenty\Modules\Order\Contracts\OrderRepositoryContract;
 use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
-use Plenty\Modules\Order\Models\Order;
+use Plenty\Plugin\ConfigRepository;
 use Plenty\Modules\Order\Shipping\Countries\Contracts\CountryRepositoryContract;
-
-
-
 use Plenty\Modules\Account\Contact\Contracts\ContactRepositoryContract;
-
-
-
-
-
-
-
-
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
+use Plenty\Modules\Authorization\Services\AuthHelper;
 
 class ContentController extends Controller
 {
@@ -37,7 +23,8 @@ class ContentController extends Controller
     private $addressRepository;
     private $configRepository;
     private $countryRepositoryContract;
-    private $variationLookupRepositoryContract;
+    /*private $variationLookupRepositoryContract;*/
+    private $variationSkuRepositoryContract;
     private $authHelper;
     
     public function __construct(
@@ -46,7 +33,6 @@ class ContentController extends Controller
         ConfigRepository $configRepository,
         CountryRepositoryContract $countryRepositoryContract,
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
-        ContactRepositoryContract $contactRepositoryContract,
         AuthHelper $authHelper
     )
     {
@@ -55,7 +41,6 @@ class ContentController extends Controller
         $this->configRepository = $configRepository;
         $this->countryRepositoryContract = $countryRepositoryContract;
         $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
-        $this->contactRepositoryContract = $contactRepositoryContract;
         $this->authHelper = $authHelper;
     }
     
@@ -69,7 +54,7 @@ class ContentController extends Controller
             function () use ($order,$groupOnOrder) 
             {
                 $customer = $this->createCustomer($groupOnOrder);
-                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);
+                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
                 $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
                 
                 if (!is_null($orderItems)) 
@@ -198,7 +183,7 @@ class ContentController extends Controller
     }
     
 
-    public function createDeliveryAddress($groupOnOrder)
+    public function createDeliveryAddress($groupOnOrder,$customer)
     {
     
         
@@ -211,7 +196,15 @@ class ContentController extends Controller
             'town' => $groupOnOrder->customer->city,
             'postalCode' => $groupOnOrder->customer->zip,
             'countryId' => $country->id,
-            'phone' => $groupOnOrder->customer->phone
+            'phone' => $groupOnOrder->customer->phone,
+            'contacts' => 
+            [
+                [
+                    "id" => $customer->id,    
+                    "firstName" => $customer->firstName,
+                    "lastName" => $customer->lastName    
+                ],
+            ]
    
         ]);
 
