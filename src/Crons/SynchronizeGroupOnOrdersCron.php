@@ -49,8 +49,8 @@ class SynchronizeGroupOnOrdersCron extends Cron
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
-            $order = $this->authHelper->processUnguarded(
-            function () use ($order,$groupOnOrder) 
+            $orders = $this->authHelper->processUnguarded(
+            function () use ($orders,$groupOnOrder) 
             {
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);

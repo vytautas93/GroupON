@@ -53,8 +53,9 @@ class ContentController extends Controller
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
-            $order = $this->authHelper->processUnguarded(
-            function () use ($order,$groupOnOrder) 
+            
+            $orders = $this->authHelper->processUnguarded(
+            function () use ($orders,$groupOnOrder) 
             {
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
@@ -99,7 +100,7 @@ class ContentController extends Controller
                 return null;
             });
         }
-        $templateData = array("supplierID" => json_encode($order));
+        $templateData = array("supplierID" => json_encode($orders));
         return $twig->render('GroupON::content.test',$templateData);
     }    
     
