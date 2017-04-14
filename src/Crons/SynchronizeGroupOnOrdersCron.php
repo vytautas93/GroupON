@@ -1,5 +1,5 @@
 <?php
- 
+/* 
 namespace GroupON\Crons;
  
 use Plenty\Plugin\ServiceProvider;
@@ -205,4 +205,4 @@ class SynchronizeGroupOnOrdersCron extends Cron
         $customer = $this->contactRepositoryContract->createContact($data); 
         return $customer;        
     }
-}
+}*/
