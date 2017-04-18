@@ -180,9 +180,16 @@ class ContentController extends Controller
                     'quantity' => $groupOnItem->quantity,
                     'orderItemName' => $groupOnItem->name,
                     'itemVariationId' => $findVariationID[0]->variationId,
-                    'referrerId' => $groupOnItem->ci_lineitemid,
+                    'referrerId' => 10,
                     'countryVatId' => 1,
-                    'amounts' => $amounts
+                    'amounts' => $amounts,
+                    'properties' => 
+                    [
+                        [
+                            'typeId' => 17,
+                            'value' => $groupOnItem->ci_lineitemid
+                        ],
+                    ]
                 ];    
             }
             else
