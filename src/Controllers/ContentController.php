@@ -241,9 +241,10 @@ class ContentController extends Controller
             'privatePhone' => $groupOnOrder->customer->phone,
         ];
 
+      
+        $customer = $this->contactRepositoryContract->createContact($data); 
         if(isset($customer->id))
         {
-            $customer = $this->contactRepositoryContract->createContact($data); 
             return $customer;        
         }
         else
