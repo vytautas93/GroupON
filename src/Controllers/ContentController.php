@@ -187,7 +187,7 @@ class ContentController extends Controller
                     [
                         [
                             'typeId' => 17,
-                            'value' => $groupOnItem->ci_lineitemid
+                            'value' => (string)$groupOnItem->ci_lineitemid
                         ],
                     ]
                 ];    
