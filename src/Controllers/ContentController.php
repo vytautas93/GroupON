@@ -95,6 +95,13 @@ class ContentController extends Controller
                             ['typeId' => 1, 'addressId' => $deliveryAddress->id],
                             ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                         ],
+                        "orderReferences" =>
+                        [
+                            [
+                                "isEditable" => false,
+                                "origin" => $groupOnOrder->orderid,
+                            ],
+                        ]
                     ]);
                     
                     $exported = $this->markAsExported($groupOnOrder);
@@ -206,10 +213,11 @@ class ContentController extends Controller
             'phone' => $groupOnOrder->customer->phone
         ]);
         
+        if(isset($deliveryAddress->id) || isset($customer->id)
+        {
+             $addContactAddress = $this->contactAddressRepositoryContract->addAddress($deliveryAddress->id,$customer->id,2);
+        }
         
-        $add = $this->contactAddressRepositoryContract->addAddress($deliveryAddress->id,$customer->id,2);
-        
-
         return $deliveryAddress;
     }
     
