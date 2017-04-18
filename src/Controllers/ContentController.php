@@ -26,6 +26,7 @@ class ContentController extends Controller
     private $configRepository;
     private $countryRepositoryContract;
     private $contactRepositoryContract;
+    private $contactAddressRepositoryContract;
     private $variationSkuRepositoryContract;
     private $authHelper;
     
