@@ -96,13 +96,6 @@ class ContentController extends Controller
                                 ['typeId' => 1, 'addressId' => $deliveryAddress->id],
                                 ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                             ],
-                            "orderReferences" =>
-                            [
-                                [
-                                    "isEditable" => false,
-                                    "origin" => $groupOnOrder->orderid,
-                                ],
-                            ]
                         ]);
                     
                         $exported = $this->markAsExported($groupOnOrder);
@@ -187,7 +180,7 @@ class ContentController extends Controller
                     'quantity' => $groupOnItem->quantity,
                     'orderItemName' => $groupOnItem->name,
                     'itemVariationId' => $findVariationID[0]->variationId,
-                    'referrerId' => 10,
+                    'referrerId' => $groupOnItem->ci_lineitemid,
                     'countryVatId' => 1,
                     'amounts' => $amounts
                 ];    
