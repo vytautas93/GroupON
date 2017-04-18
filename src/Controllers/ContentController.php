@@ -213,7 +213,7 @@ class ContentController extends Controller
             'phone' => $groupOnOrder->customer->phone
         ]);
         
-        if(isset($deliveryAddress->id) || isset($customer->id)
+        if(isset($deliveryAddress->id) || isset($customer->id))
         {
              $addContactAddress = $this->contactAddressRepositoryContract->addAddress($deliveryAddress->id,$customer->id,2);
         }
