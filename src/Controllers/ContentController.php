@@ -201,15 +201,7 @@ class ContentController extends Controller
             'town' => $groupOnOrder->customer->city,
             'postalCode' => $groupOnOrder->customer->zip,
             'countryId' => $country->id,
-            'phone' => $groupOnOrder->customer->phone,
-            'contacts' => 
-            [
-                [
-                    "id" => $customer->id,    
-                    "firstName" => $customer->firstName
-                ],
-            ]
-   
+            'phone' => $groupOnOrder->customer->phone
         ]);
 
         return $deliveryAddress;
