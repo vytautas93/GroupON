@@ -14,6 +14,7 @@ use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
 use Plenty\Plugin\ConfigRepository;
 use Plenty\Modules\Order\Shipping\Countries\Contracts\CountryRepositoryContract;
 use Plenty\Modules\Account\Contact\Contracts\ContactRepositoryContract;
+use Plenty\Modules\Account\Contact\Contracts\ContactAddressRepositoryContract;
 
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 
@@ -35,6 +36,7 @@ class ContentController extends Controller
         CountryRepositoryContract $countryRepositoryContract,
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
         ContactRepositoryContract $contactRepositoryContract,
+        ContactAddressRepositoryContract $contactAddressRepositoryContract,
         AuthHelper $authHelper
     )
     {
@@ -44,6 +46,7 @@ class ContentController extends Controller
         $this->countryRepositoryContract = $countryRepositoryContract;
         $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
         $this->contactRepositoryContract = $contactRepositoryContract;
+        $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
         $this->authHelper = $authHelper;
     }
     
@@ -144,7 +147,7 @@ class ContentController extends Controller
     {
         $supplierID = $this->configRepository->get('GroupON.supplierID');
         $token = $this->configRepository->get('GroupON.token');
-        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=04/09/2017+00:00&end_datetime=04/09/2017+23:59';
+        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=04/09/2017+00:00&end_datetime=04/09/2017+07:50';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -190,8 +193,6 @@ class ContentController extends Controller
 
     public function createDeliveryAddress($groupOnOrder,$customer)
     {
-    
-        
         $countryISO = $groupOnOrder->customer->country;
         $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
         $deliveryAddress = $this->addressRepository->createAddress([
@@ -203,6 +204,10 @@ class ContentController extends Controller
             'countryId' => $country->id,
             'phone' => $groupOnOrder->customer->phone
         ]);
+        
+        
+        $add = $this->contactAddressRepositoryContract->addAddress($deliveryAddress->id,$customer->id,2);
+        
 
         return $deliveryAddress;
     }
