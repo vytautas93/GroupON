@@ -63,50 +63,52 @@ class ContentController extends Controller
             {
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
-                $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
-                
-                if (!is_null($orderItems)) 
+                if(!is_null($customer) && !is_null($deliveryAddress))
                 {
-                    $addOrder = $this->orderRepository->createOrder(
-                    [
-                        'typeId' => 1,
-                        'methodOfPaymentId' => 4040,
-                        'shippingProfileId' => 6,
-                        'statusId' => 5.0, 
-                        'ownerId' => 107,
-                        'plentyId' => 0,
-                        'orderItems' => $orderItems,
-                        'properties' => 
+                    $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
+                    if (!is_null($orderItems)) 
+                    {
+                        $addOrder = $this->orderRepository->createOrder(
                         [
-                           [
-                                "typeId" => 7,
-                                "value" => $groupOnOrder->orderid
-                           ],
-                        ],
-                        "relations" =>
-                        [
+                            'typeId' => 1,
+                            'methodOfPaymentId' => 4040,
+                            'shippingProfileId' => 6,
+                            'statusId' => 5.0, 
+                            'ownerId' => 107,
+                            'plentyId' => 0,
+                            'orderItems' => $orderItems,
+                            'properties' => 
                             [
-                                "referenceType" => "contact",
-                                "relation" => "receiver",
-                                "referenceId"=>$customer->id
+                               [
+                                    "typeId" => 7,
+                                    "value" => $groupOnOrder->orderid
+                               ],
                             ],
-                        ],
-                        'addressRelations' => [
-                            ['typeId' => 1, 'addressId' => $deliveryAddress->id],
-                            ['typeId' => 2, 'addressId' => $deliveryAddress->id],
-                        ],
-                        "orderReferences" =>
-                        [
+                            "relations" =>
                             [
-                                "isEditable" => false,
-                                "origin" => $groupOnOrder->orderid,
+                                [
+                                    "referenceType" => "contact",
+                                    "relation" => "receiver",
+                                    "referenceId"=>$customer->id
+                                ],
                             ],
-                        ]
-                    ]);
+                            'addressRelations' => [
+                                ['typeId' => 1, 'addressId' => $deliveryAddress->id],
+                                ['typeId' => 2, 'addressId' => $deliveryAddress->id],
+                            ],
+                            "orderReferences" =>
+                            [
+                                [
+                                    "isEditable" => false,
+                                    "origin" => $groupOnOrder->orderid,
+                                ],
+                            ]
+                        ]);
                     
-                    $exported = $this->markAsExported($groupOnOrder);
+                        $exported = $this->markAsExported($groupOnOrder);
 
-                    return $addOrder;
+                        return $addOrder;
+                    }
                 }
                 return null;
             });
@@ -213,12 +215,16 @@ class ContentController extends Controller
             'phone' => $groupOnOrder->customer->phone
         ]);
         
-        if(isset($deliveryAddress->id) || isset($customer->id))
+        if(isset($deliveryAddress->id) && isset($customer->id))
         {
-             $addContactAddress = $this->contactAddressRepositoryContract->addAddress($deliveryAddress->id,$customer->id,2);
+            $addContactAddress = $this->contactAddressRepositoryContract->addAddress($deliveryAddress->id,$customer->id,2);
+            return $deliveryAddress;
+        }
+        else
+        {
+            return null;
         }
         
-        return $deliveryAddress;
     }
     
     public function createCustomer($groupOnOrder)
@@ -234,8 +240,15 @@ class ContentController extends Controller
             'plentyId' => 0,
             'privatePhone' => $groupOnOrder->customer->phone,
         ];
-        
-        $customer = $this->contactRepositoryContract->createContact($data); 
-        return $customer;        
+
+        if(isset($customer->id))
+        {
+            $customer = $this->contactRepositoryContract->createContact($data); 
+            return $customer;        
+        }
+        else
+        {
+            return null;
+        }
     }
 }
