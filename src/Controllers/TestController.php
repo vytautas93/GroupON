@@ -9,7 +9,7 @@ use Plenty\Plugin\Templates\Twig;
 use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 
 
-class ContentController extends Controller
+class TestController extends Controller
 {
     private $event; 
     public function __construct(
