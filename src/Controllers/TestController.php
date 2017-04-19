@@ -11,7 +11,7 @@ use PPlenty\Modules\EventProcedures\Services\EventProceduresService;
 
 class TestController extends Controller
 {
-    private $entry; 
+    private $procedure; 
     public function __construct(
         EventProceduresService $procedure
     )
