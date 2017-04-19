@@ -17,7 +17,7 @@ class GroupOnRouteServiceProvider extends RouteServiceProvider
     public function map(Router $router)
     {
       
-  	    
+  	    $router->get('event', 'GroupON\Controllers\TestController@event');
         $router->get('test', 'GroupON\Controllers\ContentController@test');
         $router->get('group-on', 'GroupON\Controllers\ContentController@showGroupOnUser');
         
