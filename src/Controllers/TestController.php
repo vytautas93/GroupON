@@ -5,33 +5,19 @@ namespace GroupON\Controllers;
 
 use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Request;
-use Plenty\Plugin\Templates\Twig;
-use Plenty\Modules\EventProcedures\Services\EventProceduresService;
-use Plenty\Modules\EventProcedures\Services\Entries\ProcedureEntry;
+
+
 class TestController extends Controller
 {
-    private $procedure; 
-    public function __construct(
-        EventProceduresService $procedure
-    )
-    {
-        $this->procedure = $procedure;
-    }
     
-    public function event(Twig $twig)
+    public function event(Twig $twig, Dispatcher $dispatcher)
     {
-        
-        $test = $this->procedure->registerProcedure(
-            "Send Feedback" ,
-            ProcedureEntry::EVENT_TYPE_ORDER,
-            [
-                'de' => 'Send Feedback DE',
-                'en' => 'Send Feedback',
-            ],
-            'GroupON\\Controllers\\TestController@sendFeedback'
-        );
-
-        $templateData = array("supplierID" => json_encode($test));
-        return $twig->render('GroupON::content.test',$templateData);
+        $test = $dispatcher->listen(OrderCreated::class,function()
+        {
+            $templateData = array("supplierID" => json_encode($test));
+            return $twig->render('GroupON::content.test',$templateData);
+            
+        });
+       
     }
 }
