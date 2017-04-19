@@ -6,23 +6,23 @@ namespace GroupON\Controllers;
 use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Templates\Twig;
-use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
+use Plenty\Modules\EventProcedures\Services\Entries\ProcedureEntry;
 
 
 class TestController extends Controller
 {
-    private $event; 
+    private $entry; 
     public function __construct(
-        EventProceduresTriggered $event
+        ProcedureEntry $entry
     )
     {
-        $this->event = $event;
+        $this->entry = $entry;
     }
     
     public function event(Twig $twig)
     {
         
-        $test = $this->event->getOrder();
+        $test = $this->entry->getModuleName();
         
         $templateData = array("supplierID" => json_encode($test));
         return $twig->render('GroupON::content.test',$templateData);
