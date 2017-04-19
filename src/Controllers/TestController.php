@@ -8,7 +8,6 @@ use Plenty\Plugin\Http\Request;
 use Plenty\Plugin\Templates\Twig;
 use Plenty\Modules\EventProcedures\Services\EventProceduresService;
 
-
 class TestController extends Controller
 {
     private $procedure; 
@@ -24,7 +23,7 @@ class TestController extends Controller
         
         $test = $this->procedure->registerProcedure(
             "Send Feedback" ,
-            ProcedureEntry::EVENT_TYPE_ORDER,
+            Plenty\Modules\EventProcedures\Services\Entries\ProcedureEntry::EVENT_TYPE_ORDER,
             [
                 'de' => 'Send Feedback DE',
                 'en' => 'Send Feedback',
