@@ -8,8 +8,7 @@ use Plenty\Modules\Cron\Services\CronContainer;
 use GroupON\Crons\SynchronizeGroupOnOrdersCron;
 use Plenty\Modules\EventProcedures\Services\EventProceduresService;
  
- 
-use Plenty\Plugin\Templates\Twig;
+
 use Plenty\Plugin\Log\Loggable;
 use Plenty\Plugin\Events\Dispatcher;
 use Plenty\Modules\Order\Events\OrderCreated; 
@@ -33,7 +32,7 @@ class GroupOnServiceProvider extends ServiceProvider
          $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);
      }*/
 
-    public function boot(Twig $twig, Dispatcher $dispatcher)
+    public function boot(Dispatcher $dispatcher)
     {
         $test = $dispatcher->listen(OrderCreated::class,function()
         {
