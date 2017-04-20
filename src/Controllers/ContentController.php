@@ -46,7 +46,7 @@ class ContentController extends Controller
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
         ContactRepositoryContract $contactRepositoryContract,
         ContactAddressRepositoryContract $contactAddressRepositoryContract,
-        AuthHelper $authHelper
+        AuthHelper $authHelper,
         EventProceduresTriggered $eventProceduresTriggered
     )
     {
@@ -58,7 +58,7 @@ class ContentController extends Controller
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
         $this->authHelper = $authHelper;
-        $this->eventProceduresTriggered = $eventProceduresTriggered
+        $this->eventProceduresTriggered = $eventProceduresTriggered;
     }
     
     public function test(Twig $twig):string
