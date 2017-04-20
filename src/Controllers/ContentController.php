@@ -58,7 +58,7 @@ class ContentController extends Controller
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
         $this->authHelper = $authHelper;
-        $this->eventProceduresTriggered = $eventTriggered;
+        $this->eventTriggered = $eventTriggered;
     }
     
     public function test(Twig $twig):string
@@ -267,7 +267,7 @@ class ContentController extends Controller
     
     public function Procedure()
     {
-          $order = $this->eventProceduresTriggered->getOrder();
+          $order = $this->eventTriggered->getOrder();
             $tet = $order->id;
         
            $this->getLogger(__FUNCTION__)->error('Procedure method', "$tet");  
