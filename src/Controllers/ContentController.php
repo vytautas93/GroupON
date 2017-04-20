@@ -19,6 +19,9 @@ use Plenty\Modules\Account\Contact\Contracts\ContactAddressRepositoryContract;
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 
 
+
+use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
+
 use Plenty\Plugin\Log\Loggable;
 
 class ContentController extends Controller
@@ -33,6 +36,8 @@ class ContentController extends Controller
     private $variationSkuRepositoryContract;
     private $authHelper;
     
+    private $eventProceduresTriggered
+    
     public function __construct(
         OrderRepositoryContract $orderRepository,
         AddressRepositoryContract $addressRepository,
@@ -42,6 +47,7 @@ class ContentController extends Controller
         ContactRepositoryContract $contactRepositoryContract,
         ContactAddressRepositoryContract $contactAddressRepositoryContract,
         AuthHelper $authHelper
+        EventProceduresTriggered $eventProceduresTriggered
     )
     {
         $this->orderRepository = $orderRepository;
@@ -52,6 +58,7 @@ class ContentController extends Controller
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
         $this->authHelper = $authHelper;
+        $this->eventProceduresTriggered = $eventProceduresTriggered
     }
     
     public function test(Twig $twig):string
@@ -260,7 +267,10 @@ class ContentController extends Controller
     
     public function Procedure()
     {
-           $this->getLogger(__FUNCTION__)->error('Procedure method', "Works");  
+          $order = $this->eventProceduresTriggered->getOrder();
+         
+        
+           $this->getLogger(__FUNCTION__)->error('Procedure method', "$order");  
     }
     
 }
