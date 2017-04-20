@@ -18,6 +18,9 @@ use Plenty\Modules\Account\Contact\Contracts\ContactAddressRepositoryContract;
 
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 
+
+use Plenty\Plugin\Log\Loggable;
+
 class ContentController extends Controller
 {
     
@@ -53,7 +56,8 @@ class ContentController extends Controller
     
     public function test(Twig $twig):string
     {
-       
+        use Loggable;
+        
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
@@ -252,4 +256,11 @@ class ContentController extends Controller
             return null;
         }
     }
+    
+    
+    public function Procedure()
+    {
+           $this->getLogger(__FUNCTION__)->error('Procedure method', "Works");  
+    }
+    
 }
