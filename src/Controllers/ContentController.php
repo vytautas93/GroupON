@@ -36,7 +36,7 @@ class ContentController extends Controller
     private $variationSkuRepositoryContract;
     private $authHelper;
     
-    private $eventProceduresTriggered
+    private $eventProceduresTriggered;
     
     public function __construct(
         OrderRepositoryContract $orderRepository,
