@@ -32,7 +32,12 @@ class GroupOnServiceProvider extends ServiceProvider
          $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);
      }*/
 
-    public function boot(Dispatcher $dispatcher)
+    public function boot(
+        Dispatcher $dispatcher,
+        CronContainer $container,
+        EventProceduresService $eventProceduresService,
+        ReferenceContainer $referenceContainer
+    )
     {
         $test = $dispatcher->listen(OrderCreated::class,function()
         {
@@ -40,5 +45,8 @@ class GroupOnServiceProvider extends ServiceProvider
             $this->getLogger(__FUNCTION__)->error('Order Created and works', "Order Created and works");  
             
         });
+        
+        $cron = $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);
+        $this->getLogger(__FUNCTION__)->error('Cron log', "$cron");  
     }
 }
