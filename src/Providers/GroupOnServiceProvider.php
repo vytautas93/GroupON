@@ -37,7 +37,7 @@ class GroupOnServiceProvider extends ServiceProvider
         $test = $dispatcher->listen(OrderCreated::class,function()
         {
             
-            $this->getLogger(__FUNCTION__)->error('Try Event!', "Response: $test");
+            $this->getLogger(__FUNCTION__)->error('Try Event 2!', "Order Created and works");  
             
         });
         
