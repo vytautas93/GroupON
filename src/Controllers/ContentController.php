@@ -23,7 +23,7 @@ use Plenty\Plugin\Log\Loggable;
 
 class ContentController extends Controller
 {
-    
+    use Loggable;
     private $orderRepository;
     private $addressRepository;
     private $configRepository;
@@ -56,7 +56,7 @@ class ContentController extends Controller
     
     public function test(Twig $twig):string
     {
-        use Loggable;
+       
         
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
