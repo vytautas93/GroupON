@@ -266,7 +266,8 @@ class ContentController extends Controller
           $order = $eventTriggered->getOrder();
             foreach($order->orderItems as $orderItems)
             {
-                  $this->getLogger(__FUNCTION__)->error('Procedure method', "$orderItems"); 
+                $test =$orderItems->properties;
+                $this->getLogger(__FUNCTION__)->error('Procedure method', "$test"); 
             }
             
     }
