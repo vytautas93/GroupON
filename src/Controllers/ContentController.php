@@ -36,8 +36,6 @@ class ContentController extends Controller
     private $variationSkuRepositoryContract;
     private $authHelper;
     
-    private $eventTriggered;
-    
     public function __construct(
         OrderRepositoryContract $orderRepository,
         AddressRepositoryContract $addressRepository,
@@ -46,8 +44,7 @@ class ContentController extends Controller
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
         ContactRepositoryContract $contactRepositoryContract,
         ContactAddressRepositoryContract $contactAddressRepositoryContract,
-        AuthHelper $authHelper,
-        EventProceduresTriggered $eventTriggered
+        AuthHelper $authHelper
     )
     {
         $this->orderRepository = $orderRepository;
@@ -58,7 +55,6 @@ class ContentController extends Controller
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
         $this->authHelper = $authHelper;
-        $this->eventTriggered = $eventTriggered;
     }
     
     public function test(Twig $twig):string
@@ -265,12 +261,11 @@ class ContentController extends Controller
     }
     
     
-    public function Procedure()
+    public function Procedure(EventProceduresTriggered $eventTriggered)
     {
-          $order = $this->eventTriggered->getOrder();
-            $tet = $order->id;
+          $order = $eventTriggered->getOrder();
         
-           $this->getLogger(__FUNCTION__)->error('Procedure method', "$tet");  
+          $this->getLogger(__FUNCTION__)->error('Procedure method', "$order");  
     }
     
 }
