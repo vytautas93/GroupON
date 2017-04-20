@@ -270,7 +270,8 @@ class ContentController extends Controller
             foreach($orderItems->properties as $properties)
             {
                 $this->getLogger(__FUNCTION__)->error('Procedure method', "$properties->typeId"); 
-                if( (int)$properties->typeId == 17)
+                $this->getLogger(__FUNCTION__)->error('Procedure method', "$properties->value"); 
+                if($properties->typeId = "17")
                 {
                     $lineItemId[] = $properties->value;
                 }    
