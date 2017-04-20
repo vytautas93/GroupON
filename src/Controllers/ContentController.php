@@ -269,7 +269,7 @@ class ContentController extends Controller
         {
             foreach($orderItems->properties as $properties)
             {
-                if($properties->typeId == "17")
+                if( (int)$properties->typeId == 17)
                 {
                     $lineItemId[] = $properties->value;
                 }
