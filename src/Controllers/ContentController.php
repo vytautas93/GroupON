@@ -263,13 +263,21 @@ class ContentController extends Controller
     
     public function Procedure(EventProceduresTriggered $eventTriggered)
     {
-          $order = $eventTriggered->getOrder();
-            foreach($order->orderItems as $orderItems)
+        $lineItemId = [];
+        $order = $eventTriggered->getOrder();
+        foreach($order->orderItems as $orderItems)
+        {
+            foreach($orderItems->properties as $properties)
             {
-                $test =$orderItems->properties;
-                $this->getLogger(__FUNCTION__)->error('Procedure method', "$test"); 
+                if($properties->typeId === 17)
+                {
+                    $lineItemId[] = $properties->value;
+                }    
             }
+                
+        }
             
+        $this->getLogger(__FUNCTION__)->error('Procedure method', "$lineItemId"); 
     }
     
 }
