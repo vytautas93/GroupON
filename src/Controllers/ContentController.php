@@ -277,8 +277,7 @@ class ContentController extends Controller
                 
         }
         
-        $test = json_encode($lineItemId);
-        $this->getLogger(__FUNCTION__)->error('Procedure method', "$test"); 
+        $this->getLogger(__FUNCTION__)->error('Procedure method', json_encode($lineItemId)); 
        
     }
     
