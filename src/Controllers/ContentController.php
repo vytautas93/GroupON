@@ -268,9 +268,9 @@ class ContentController extends Controller
     public function Procedure()
     {
           $order = $this->eventProceduresTriggered->getOrder();
-         
+            $tet = $order->id;
         
-           $this->getLogger(__FUNCTION__)->error('Procedure method', "$order");  
+           $this->getLogger(__FUNCTION__)->error('Procedure method', "$tet");  
     }
     
 }
