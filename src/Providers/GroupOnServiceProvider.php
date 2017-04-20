@@ -47,6 +47,5 @@ class GroupOnServiceProvider extends ServiceProvider
         });
         
         $cron = $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);
-        $this->getLogger(__FUNCTION__)->error('Cron log', "$cron");  
     }
 }
