@@ -46,7 +46,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         ContactRepositoryContract $contactRepositoryContract,
         ContactAddressRepositoryContract $contactAddressRepositoryContract,
         AuthHelper $authHelper,
-        Twig $twig;
+        Twig $twig
     )
     {
         $this->orderRepository = $orderRepository;
