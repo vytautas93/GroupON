@@ -263,8 +263,12 @@ class ContentController extends Controller
     
     public function Procedure(EventProceduresTriggered $eventTriggered)
     {
+        $supplierID = $this->configRepository->get('GroupON.supplierID');
+        $token = $this->configRepository->get('GroupON.token');
+        $carrier = $this->configRepository->get('GroupON.carrier');
         $lineItemId = [];
         $order = $eventTriggered->getOrder();
+        $this->getLogger(__FUNCTION__)->error('Order', json_encode($order)); 
         foreach($order->orderItems as $orderItems)
         {
             foreach($orderItems->properties as $properties)
@@ -277,7 +281,31 @@ class ContentController extends Controller
                 
         }
         
-        $this->getLogger(__FUNCTION__)->error('Procedure method', json_encode($lineItemId)); 
+       /* $datatopost = array (
+          "supplier_id" => $supplierID,
+          "token" => $token,
+          "tracking_info" => json_encode ( array ( "carrier" => "UPS", "ci_lineitem_id" => 54553918, "tracking" => "123456"), array ( "quantity" => 1, "carrier" => "UPS", "ci_lineitem_id" => 54553919, "tracking" => "234567") ),
+        );
+        $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
+        curl_setopt ($ch, CURLOPT_POST, true);
+        curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
+        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec ($ch);
+        
+        if( $response ) 
+        {
+          $response_json = json_decode( $response );
+          if( $response_json->success == true ) 
+          {
+            //Successfully saved tracking info of items other than those in data["non_open_ids"] array
+          } 
+          else 
+          {
+            
+          }
+        }*/
+        
+        $this->getLogger(__FUNCTION__)->error('LineitemId', json_encode($lineItemId)); 
        
     }
     
