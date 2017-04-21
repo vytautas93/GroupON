@@ -270,11 +270,12 @@ class ContentController extends Controller
         $order = $eventTriggered->getOrder();
         //$packageNumber = $this->orderRepository->getPackageNumbers();
         
+        $orderID = $order->orderId;
+        
+        $this->getLogger(__FUNCTION__)->error('Order', json_encode($order)); 
         
         
-        
-        
-        $this->getLogger(__FUNCTION__)->error('Order', json_encode($order->orderId)); 
+        $this->getLogger(__FUNCTION__)->error('OrderID', json_encode($orderID)); 
         foreach($order->orderItems as $orderItems)
         {
             foreach($orderItems->properties as $properties)
