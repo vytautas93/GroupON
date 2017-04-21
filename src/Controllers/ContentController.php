@@ -268,7 +268,13 @@ class ContentController extends Controller
         $carrier = $this->configRepository->get('GroupON.carrier');
         $lineItemId = [];
         $order = $eventTriggered->getOrder();
-        $this->getLogger(__FUNCTION__)->error('Order', json_encode($order)); 
+        //$packageNumber = $this->orderRepository->getPackageNumbers();
+        
+        
+        
+        
+        
+        $this->getLogger(__FUNCTION__)->error('Order', json_encode($order->orderId)); 
         foreach($order->orderItems as $orderItems)
         {
             foreach($orderItems->properties as $properties)
