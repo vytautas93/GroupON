@@ -60,7 +60,6 @@ class ContentController extends Controller
     public function test(Twig $twig):string
     {
        
-        
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {

@@ -53,6 +53,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
     {
         $this->getLogger(__FUNCTION__)->error('Cron',"Cron is trigered"); 
         $groupOnOrders = $this->getGroupOnOrders();
+        $this->getLogger(__FUNCTION__)->error('orders',json_encode($groupOnOrders)); 
         foreach($groupOnOrders as $groupOnOrder)
         {
             $orders = $this->authHelper->processUnguarded(
@@ -61,7 +62,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);
                 $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
-                
+                $this->getLogger(__FUNCTION__)->error('Order Items',json_encode($orderItems)); 
                 if (!is_null($orderItems)) 
                 {
                     $addOrder = $this->orderRepository->createOrder(
