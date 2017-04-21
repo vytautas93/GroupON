@@ -265,12 +265,12 @@ class ContentController extends Controller
     {
         $supplierID = $this->configRepository->get('GroupON.supplierID');
         $token = $this->configRepository->get('GroupON.token');
-        $carrier = $this->configRepository->get('GroupON.carrier');
+        //$carrier = $this->configRepository->get('GroupON.carrier');
         $lineItemId = [];
         $order = $eventTriggered->getOrder();
         //$packageNumber = $this->orderRepository->getPackageNumbers();
         
-        $orderID = $order->orderId;
+        $orderID = $order->id;
         
         $this->getLogger(__FUNCTION__)->error('Order', json_encode($order)); 
         
