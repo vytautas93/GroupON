@@ -5,28 +5,35 @@ namespace GroupON\Crons;
 use Plenty\Plugin\ServiceProvider;
 use Plenty\Modules\Cron\Contracts\CronHandler as Cron;
 
+
+
+
 use Plenty\Modules\Authorization\Services\AuthHelper;
-use Plenty\Plugin\ConfigRepository;
 use Plenty\Modules\Order\Contracts\OrderRepositoryContract;
 use Plenty\Modules\Account\Address\Contracts\AddressRepositoryContract;
+use Plenty\Plugin\ConfigRepository;
 use Plenty\Modules\Order\Shipping\Countries\Contracts\CountryRepositoryContract;
 use Plenty\Modules\Account\Contact\Contracts\ContactRepositoryContract;
-use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract; 
+use Plenty\Modules\Account\Contact\Contracts\ContactAddressRepositoryContract;
+
+use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 
 
+
+use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 
 use Plenty\Plugin\Log\Loggable;
 
 class SynchronizeGroupOnOrdersCron extends Cron
 {
     use Loggable;
-    
     private $orderRepository;
     private $addressRepository;
     private $configRepository;
     private $countryRepositoryContract;
-    private $variationSkuRepositoryContract;
     private $contactRepositoryContract;
+    private $contactAddressRepositoryContract;
+    private $variationSkuRepositoryContract;
     private $authHelper;
     
     public function __construct(
@@ -36,6 +43,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         CountryRepositoryContract $countryRepositoryContract,
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
         ContactRepositoryContract $contactRepositoryContract,
+        ContactAddressRepositoryContract $contactAddressRepositoryContract,
         AuthHelper $authHelper
     )
     {
@@ -45,60 +53,66 @@ class SynchronizeGroupOnOrdersCron extends Cron
         $this->countryRepositoryContract = $countryRepositoryContract;
         $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
         $this->contactRepositoryContract = $contactRepositoryContract;
+        $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
         $this->authHelper = $authHelper;
     }
-
     
     public function handle()
     {
-        $this->getLogger(__FUNCTION__)->error('Cron',"Cron is trigered"); 
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
-            $orders = $this->authHelper->processUnguarded(
+            
+            $order = $this->authHelper->processUnguarded(
             function () use ($groupOnOrder) 
             {
                 $customer = $this->createCustomer($groupOnOrder);
-                $this->getLogger(__FUNCTION__)->info('Customer',json_encode($customer)); 
-                
-                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder);
-                $this->getLogger(__FUNCTION__)->info('DeliveryAddress',json_encode($deliveryAddress)); 
-                
-                $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
-                $this->getLogger(__FUNCTION__)->info('Order Items',json_encode($orderItems)); 
-                
-                $this->getLogger(__FUNCTION__)->error('Order Items',json_encode($orderItems)); 
-                if (!is_null($orderItems)) 
+                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
+                if(!is_null($customer) && !is_null($deliveryAddress))
                 {
-                    $addOrder = $this->orderRepository->createOrder(
-                    [
-                        'typeId' => 1,
-                        'methodOfPaymentId' => 4040,
-                        'shippingProfileId' => 6,
-                        'statusId' => 5.0, 
-                        'ownerId' => 107,
-                        'plentyId' => 0,
-                        'orderItems' => $orderItems,
-                        'properties' => 
+                    $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
+                    if (!is_null($orderItems)) 
+                    {
+                        $addOrder = $this->orderRepository->createOrder(
                         [
-                           [
-                                "typeId" => 7,
-                                "value" => $groupOnOrder->orderid
-                           ],
-                        ],
-                        'addressRelations' => [
-                            ['typeId' => 1, 'addressId' => $deliveryAddress->id],
-                            ['typeId' => 2, 'addressId' => $deliveryAddress->id],
-                        ]    
-                    ]);
-                    $this->getLogger(__FUNCTION__)->info('Add Order',json_encode($addOrder));
-                    $exported = $this->markAsExported($groupOnOrder);
+                            'typeId' => 1,
+                            'methodOfPaymentId' => 4040,
+                            'shippingProfileId' => 6,
+                            'statusId' => 5.0, 
+                            'ownerId' => 107,
+                            'plentyId' => 0,
+                            'orderItems' => $orderItems,
+                            'properties' => 
+                            [
+                               [
+                                    "typeId" => 7,
+                                    "value" => $groupOnOrder->orderid
+                               ],
+                            ],
+                            "relations" =>
+                            [
+                                [
+                                    "referenceType" => "contact",
+                                    "relation" => "receiver",
+                                    "referenceId"=>$customer->id
+                                ],
+                            ],
+                            'addressRelations' => [
+                                ['typeId' => 1, 'addressId' => $deliveryAddress->id],
+                                ['typeId' => 2, 'addressId' => $deliveryAddress->id],
+                            ],
+                        ]);
+                    
+                        $exported = $this->markAsExported($groupOnOrder);
 
-                    return $addOrder;
+                        return $addOrder;
+                    }
                 }
                 return null;
             });
         }
+        $templateData = array("supplierID" => json_encode($order));
+        return $twig->render('GroupON::content.test',$templateData);
         
     }
     
@@ -118,6 +132,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
             "ci_lineitem_ids" => json_encode ($lineItemsIds),
         );
         
+        
         $ch = curl_init ("https://scm.commerceinterface.com/api/v2/mark_exported");
         curl_setopt ($ch, CURLOPT_POST, true);
         curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
@@ -136,11 +151,12 @@ class SynchronizeGroupOnOrdersCron extends Cron
        return $response;
     }
 
+
     public function getGroupOnOrders()
     {
         $supplierID = $this->configRepository->get('GroupON.supplierID');
         $token = $this->configRepository->get('GroupON.token');
-        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=04/11/2017+00:00&end_datetime=04/11/2017+23:59';
+        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=04/15/2017+14:00&end_datetime=04/15/2017+14:40';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -172,7 +188,14 @@ class SynchronizeGroupOnOrdersCron extends Cron
                     'itemVariationId' => $findVariationID[0]->variationId,
                     'referrerId' => 10,
                     'countryVatId' => 1,
-                    'amounts' => $amounts
+                    'amounts' => $amounts,
+                    'properties' => 
+                    [
+                        [
+                            'typeId' => 17,
+                            'value' => (string)$groupOnItem->ci_lineitemid
+                        ],
+                    ]
                 ];    
             }
             else
@@ -184,7 +207,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
     }
     
 
-    public function createDeliveryAddress($groupOnOrder)
+    public function createDeliveryAddress($groupOnOrder,$customer)
     {
         $countryISO = $groupOnOrder->customer->country;
         $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
@@ -197,8 +220,17 @@ class SynchronizeGroupOnOrdersCron extends Cron
             'countryId' => $country->id,
             'phone' => $groupOnOrder->customer->phone
         ]);
-
-        return $deliveryAddress;
+        
+        if(isset($deliveryAddress->id) && isset($customer->id))
+        {
+            $addContactAddress = $this->contactAddressRepositoryContract->addAddress($deliveryAddress->id,$customer->id,2);
+            return $deliveryAddress;
+        }
+        else
+        {
+            return null;
+        }
+        
     }
     
     public function createCustomer($groupOnOrder)
@@ -206,6 +238,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         $data = 
         [
             'typeId'=>1,
+            
             'firstName' => $groupOnOrder->customer->name,
             'formOfAddress' => 0,
             'lang'=>'de',
@@ -213,8 +246,80 @@ class SynchronizeGroupOnOrdersCron extends Cron
             'plentyId' => 0,
             'privatePhone' => $groupOnOrder->customer->phone,
         ];
-        
+
+      
         $customer = $this->contactRepositoryContract->createContact($data); 
-        return $customer;        
+        if(isset($customer->id))
+        {
+            return $customer;        
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    
+    public function Procedure(EventProceduresTriggered $eventTriggered)
+    {
+        $order = $eventTriggered->getOrder();
+        $datatopost = $this->formateFeedBack($order);
+        if(!empty($datatopost))
+        {
+            $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
+            curl_setopt ($ch, CURLOPT_POST, true);
+            curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
+            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec ($ch);
+            if($response) 
+            {
+              $response_json = json_decode( $response );
+              if( $response_json->success == true ) 
+              {
+                $this->getLogger(__FUNCTION__)->info('Succesfull response From GroupON',"FeedBack was sended\n.$response"); 
+              } 
+              else 
+              {
+                $this->getLogger(__FUNCTION__)->error('Bad Response From GroupON',"Something was wrong\n.$response"); 
+              }
+            }        
+        }
+    }
+    
+    
+    public function formateFeedBack($order)
+    {
+        
+        $supplierID = $this->configRepository->get('GroupON.supplierID');
+        $token = $this->configRepository->get('GroupON.token');
+        $carrier = $this->configRepository->get('GroupON.carrier');
+        $lineItemIds = [];
+        $packageNumber = $this->orderRepository->getPackageNumbers($order->id);
+        foreach($order->orderItems as $orderItems)
+        {
+            foreach($orderItems->properties as $properties)
+            {
+                if((int)$properties->typeId == 17)
+                {
+                    $lineItemIds[] = 
+                    [
+                        "ci_lineitem_id" => $properties->value,
+                        "carrier" => $carrier,
+                        "tracking" => $packageNumber[0],
+                        "quantity" => $orderItems->quantity
+                    ];
+                }
+            }
+        }
+        
+        $datatopost = array (
+            "supplier_id" => $supplierID,
+            "token" => $token,
+            "tracking_info" => json_encode ($lineItemIds)
+            );
+        
+        
+        return $datatopost;
+    
     }
 }
