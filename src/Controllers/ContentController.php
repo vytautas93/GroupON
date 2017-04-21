@@ -273,7 +273,7 @@ class ContentController extends Controller
         $this->getLogger(__FUNCTION__)->error('Order', json_encode($packageNumber)); 
         
         
-        $this->getLogger(__FUNCTION__)->error('OrderID', json_encode($orderID)); 
+        $this->getLogger(__FUNCTION__)->error('OrderID', json_encode($order)); 
         foreach($order->orderItems as $orderItems)
         {
             foreach($orderItems->properties as $properties)
