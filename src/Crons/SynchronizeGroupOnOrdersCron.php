@@ -4,7 +4,7 @@ namespace GroupON\Crons;
  
 use Plenty\Plugin\ServiceProvider;
 use Plenty\Modules\Cron\Contracts\CronHandler as Cron;
-
+use Plenty\Plugin\Templates\Twig;
 
 
 
@@ -35,6 +35,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
     private $contactAddressRepositoryContract;
     private $variationSkuRepositoryContract;
     private $authHelper;
+    private $twig;
     
     public function __construct(
         OrderRepositoryContract $orderRepository,
@@ -44,7 +45,8 @@ class SynchronizeGroupOnOrdersCron extends Cron
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
         ContactRepositoryContract $contactRepositoryContract,
         ContactAddressRepositoryContract $contactAddressRepositoryContract,
-        AuthHelper $authHelper
+        AuthHelper $authHelper,
+        Twig $twig;
     )
     {
         $this->orderRepository = $orderRepository;
@@ -55,6 +57,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
         $this->authHelper = $authHelper;
+        $this->twig = $twig;
     }
     
     public function handle()
@@ -112,7 +115,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
             });
         }
         $templateData = array("supplierID" => json_encode($order));
-        return $twig->render('GroupON::content.test',$templateData);
+        return $this->twig->render('GroupON::content.test',$templateData);
         
     }
     
