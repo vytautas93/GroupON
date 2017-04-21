@@ -289,21 +289,20 @@ class ContentController extends Controller
                 }
             }
         }
-       /* $datatopost = array (
+        $datatopost = array (
             "supplier_id" => $supplierID,
             "token" => $token,
-            "tracking_info" => json_encode ( 
-                array ( "carrier" => "UPS", "ci_lineitem_id" => 54553918, "tracking" => "123456"), 
-                array ( "quantity" => 1, "carrier" => "UPS", "ci_lineitem_id" => 54553919, "tracking" => "234567") 
-            ),
-        );*/
+            "tracking_info" => json_encode ($lineItemId)
+        );
+        $this->getLogger(__FUNCTION__)->error('LineitemId',$datatopost); 
+        
        
-       /* $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
+        $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
         curl_setopt ($ch, CURLOPT_POST, true);
         curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
         curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec ($ch);
-        
+        $this->getLogger(__FUNCTION__)->error('response',$response); 
         if( $response ) 
         {
           $response_json = json_decode( $response );
@@ -315,9 +314,8 @@ class ContentController extends Controller
           {
             
           }
-        }*/
+        }
         
-        $this->getLogger(__FUNCTION__)->error('LineitemId', json_encode($lineItemId)); 
        
     }
     
