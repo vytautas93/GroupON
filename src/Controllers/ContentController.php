@@ -270,9 +270,6 @@ class ContentController extends Controller
         $order = $eventTriggered->getOrder();
         $packageNumber = $this->orderRepository->getPackageNumbers($order->id);
         
-        /*$this->getLogger(__FUNCTION__)->error('Order', json_encode($packageNumber)); 
-        $this->getLogger(__FUNCTION__)->error('OrderID', json_encode($order)); */
-        
         foreach($order->orderItems as $orderItems)
         {
             foreach($orderItems->properties as $properties)
@@ -289,34 +286,32 @@ class ContentController extends Controller
                 }
             }
         }
-        $datatopost = array (
-            "supplier_id" => $supplierID,
-            "token" => $token,
-            "tracking_info" => json_encode ($lineItemId)
-        );
-        $this->getLogger(__FUNCTION__)->error('LineitemId',$datatopost); 
         
-       
-        $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
-        curl_setopt ($ch, CURLOPT_POST, true);
-        curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
-        curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec ($ch);
-        $this->getLogger(__FUNCTION__)->error('response',$response); 
-        if( $response ) 
+        if(!empty($lineItemId))
         {
-          $response_json = json_decode( $response );
-          if( $response_json->success == true ) 
-          {
-            //Successfully saved tracking info of items other than those in data["non_open_ids"] array
-          } 
-          else 
-          {
-            
-          }
-        }
-        
-       
-    }
+            $datatopost = array (
+                "supplier_id" => $supplierID,
+                "token" => $token,
+                "tracking_info" => json_encode ($lineItemId)
+            );
     
+            $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
+            curl_setopt ($ch, CURLOPT_POST, true);
+            curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
+            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec ($ch);
+            if($response) 
+            {
+              $response_json = json_decode( $response );
+              if( $response_json->success == true ) 
+              {
+                $this->getLogger(__FUNCTION__)->info('Succesfull response From GroupON',"FeedBack was sended\n.$response"); 
+              } 
+              else 
+              {
+                $this->getLogger(__FUNCTION__)->error('Bad Response From GroupON',"Something was wrong\n.$response"); 
+              }
+            }        
+        }
+    }
 }
