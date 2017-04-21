@@ -283,8 +283,8 @@ class ContentController extends Controller
                     [
                         "ci_lineitem_id" => $properties->value,
                         "carrier" => "UPS",
-                        "tracking"$packageNumber,
-                        "quantity"$orderItems->quantity
+                        "tracking" => $packageNumber,
+                        "quantity" => $orderItems->quantity
                     ];
                 }
             }
