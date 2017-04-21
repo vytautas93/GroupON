@@ -157,7 +157,7 @@ class ContentController extends Controller
     {
         $supplierID = $this->configRepository->get('GroupON.supplierID');
         $token = $this->configRepository->get('GroupON.token');
-        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=04/09/2017+00:00&end_datetime=04/09/2017+07:50';
+        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=04/15/2017+14:00&end_datetime=04/15/2017+14:40';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
