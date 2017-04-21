@@ -13,8 +13,13 @@ use Plenty\Modules\Order\Shipping\Countries\Contracts\CountryRepositoryContract;
 use Plenty\Modules\Account\Contact\Contracts\ContactRepositoryContract;
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract; 
 
+
+
+use Plenty\Plugin\Log\Loggable;
+
 class SynchronizeGroupOnOrdersCron extends Cron
 {
+    use Loggable;
     
     private $orderRepository;
     private $addressRepository;
@@ -46,6 +51,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
     
     public function handle()
     {
+        $this->getLogger(__FUNCTION__)->error('Cron',"Cron is trigered"); 
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
