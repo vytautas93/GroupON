@@ -279,10 +279,13 @@ class ContentController extends Controller
             {
                 if((int)$properties->typeId == 17)
                 {
-                    $lineItemId[]["ci_lineitem_id"] = $properties->value;
-                    $lineItemId[]["carrier"] = "UPS";
-                    $lineItemId[]["tracking"] = $packageNumber;
-                    $lineItemId[]["quantity"] = $orderItems->quantity;
+                    $lineItemId[] = 
+                    [
+                        "ci_lineitem_id" => $properties->value,
+                        "carrier" => "UPS",
+                        "tracking"$packageNumber,
+                        "quantity"$orderItems->quantity
+                    ];
                 }
             }
             
