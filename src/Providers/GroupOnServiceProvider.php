@@ -10,9 +10,10 @@ use Plenty\Modules\EventProcedures\Services\Entries\ProcedureEntry;
 use Plenty\Plugin\Log\Loggable;
 
 
-/*use Plenty\Modules\Cron\Services\CronContainer;*/
-/*use Plenty\Plugin\Events\Dispatcher;
+use Plenty\Modules\Cron\Services\CronContainer;
 use GroupON\Crons\SynchronizeGroupOnOrdersCron;
+
+/*use Plenty\Plugin\Events\Dispatcher;
 use Plenty\Modules\Order\Events\OrderCreated; */
 
 
@@ -38,7 +39,9 @@ class GroupOnServiceProvider extends ServiceProvider
      }*/
 
     public function boot(
-        EventProceduresService $eventProceduresService
+        CronContainer $container,
+        EventProceduresService $eventProceduresService,
+        ReferenceContainer $referenceContainer
     )
     {
         /*$test = $dispatcher->listen(OrderCreated::class,function()
@@ -48,7 +51,7 @@ class GroupOnServiceProvider extends ServiceProvider
             
         });*/
         
-        /*$cron = $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);*/
+        $cron = $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);
         
         
         $eventProceduresService->registerProcedure('SendFeedBack',ProcedureEntry::PROCEDURE_GROUP_ORDER, [

@@ -1,10 +1,10 @@
 [
     {
         "tab"     : "Settings",
-        "key"     : "url",
-        "label"   : "Your GroupOn url",
+        "key"     : "carrier",
+        "label"   : "Carrier",
         "type"    : "text",
-        "default" : ""
+        "default" : "UPS"
     },
     {
         "tab"     : "Settings",

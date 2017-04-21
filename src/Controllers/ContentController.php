@@ -263,38 +263,10 @@ class ContentController extends Controller
     
     public function Procedure(EventProceduresTriggered $eventTriggered)
     {
-        $supplierID = $this->configRepository->get('GroupON.supplierID');
-        $token = $this->configRepository->get('GroupON.token');
-        //$carrier = $this->configRepository->get('GroupON.carrier');
-        $lineItemId = [];
         $order = $eventTriggered->getOrder();
-        $packageNumber = $this->orderRepository->getPackageNumbers($order->id);
-        
-        foreach($order->orderItems as $orderItems)
+        $datatopost = $this->formateFeedBack($order);
+        if(!empty($datatopost))
         {
-            foreach($orderItems->properties as $properties)
-            {
-                if((int)$properties->typeId == 17)
-                {
-                    $lineItemId[] = 
-                    [
-                        "ci_lineitem_id" => $properties->value,
-                        "carrier" => "UPS",
-                        "tracking" => $packageNumber[0],
-                        "quantity" => $orderItems->quantity
-                    ];
-                }
-            }
-        }
-        
-        if(!empty($lineItemId))
-        {
-            $datatopost = array (
-                "supplier_id" => $supplierID,
-                "token" => $token,
-                "tracking_info" => json_encode ($lineItemId)
-            );
-    
             $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
             curl_setopt ($ch, CURLOPT_POST, true);
             curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
@@ -314,4 +286,42 @@ class ContentController extends Controller
             }        
         }
     }
+    
+    
+    public function formateFeedBack($order)
+    {
+        
+        $supplierID = $this->configRepository->get('GroupON.supplierID');
+        $token = $this->configRepository->get('GroupON.token');
+        $carrier = $this->configRepository->get('GroupON.carrier');
+        $lineItemIds = [];
+        $packageNumber = $this->orderRepository->getPackageNumbers($order->id);
+        foreach($order->orderItems as $orderItems)
+        {
+            foreach($orderItems->properties as $properties)
+            {
+                if((int)$properties->typeId == 17)
+                {
+                    $lineItemIds[] = 
+                    [
+                        "ci_lineitem_id" => $properties->value,
+                        "carrier" => $carrier,
+                        "tracking" => $packageNumber[0],
+                        "quantity" => $orderItems->quantity
+                    ];
+                }
+            }
+        }
+        
+        $datatopost = array (
+            "supplier_id" => $supplierID,
+            "token" => $token,
+            "tracking_info" => json_encode ($lineItemIds)
+            );
+        
+        
+        return $datatopost;
+    
+    }
+    
 }
