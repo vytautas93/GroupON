@@ -269,29 +269,33 @@ class ContentController extends Controller
         $lineItemId = [];
         $order = $eventTriggered->getOrder();
         $packageNumber = $this->orderRepository->getPackageNumbers($order->id);
-    
-        $this->getLogger(__FUNCTION__)->error('Order', json_encode($packageNumber)); 
         
+        /*$this->getLogger(__FUNCTION__)->error('Order', json_encode($packageNumber)); 
+        $this->getLogger(__FUNCTION__)->error('OrderID', json_encode($order)); */
         
-        $this->getLogger(__FUNCTION__)->error('OrderID', json_encode($order)); 
         foreach($order->orderItems as $orderItems)
         {
             foreach($orderItems->properties as $properties)
             {
-                if( (int)$properties->typeId == 17)
+                if((int)$properties->typeId == 17)
                 {
-                    $lineItemId[] = $properties->value;
+                    $lineItemId[]["ci_lineitem_id"] = $properties->value;
                 }
             }
-                
+            $lineItemId[]["carrier"] = "UPS";
+            $lineItemId[]["tracking"] = $packageNumber;
+            $lineItemId[]["quantity"] = $orderItems->quantity;
         }
-        
        /* $datatopost = array (
-          "supplier_id" => $supplierID,
-          "token" => $token,
-          "tracking_info" => json_encode ( array ( "carrier" => "UPS", "ci_lineitem_id" => 54553918, "tracking" => "123456"), array ( "quantity" => 1, "carrier" => "UPS", "ci_lineitem_id" => 54553919, "tracking" => "234567") ),
-        );
-        $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
+            "supplier_id" => $supplierID,
+            "token" => $token,
+            "tracking_info" => json_encode ( 
+                array ( "carrier" => "UPS", "ci_lineitem_id" => 54553918, "tracking" => "123456"), 
+                array ( "quantity" => 1, "carrier" => "UPS", "ci_lineitem_id" => 54553919, "tracking" => "234567") 
+            ),
+        );*/
+       
+       /* $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
         curl_setopt ($ch, CURLOPT_POST, true);
         curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
         curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
