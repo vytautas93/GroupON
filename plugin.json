@@ -2,7 +2,7 @@
   "name": "Groupon",
   "description": "Groupon plugin for Plenty Market 7",
   "namespace": "GroupON",
-  "author": "hashtagES GmbH,
+  "author": "hashtagES GmbH",
   "type": "marketplace",
   "serviceProvider": "GroupON\\Providers\\GroupOnServiceProvider",
   "runOnBuild":["GroupON\\Migrations\\CreateGroupOnTable"],
