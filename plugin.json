@@ -1,10 +1,11 @@
 {
-  "name": "GroupON",
+  "name": "GroupON,
   "description": "GroupON plugin for Plenty Market 7",
   "namespace": "GroupON",
   "author": "Hashtages",
   "type": "backend",
-  "serviceProvider": "GroupON\\Providers\\MyFirstViewServiceProvider",
+  "serviceProvider": "GroupON\\Providers\\GroupOnServiceProvider",
+  "runOnBuild":["GroupON\\Migrations\\CreateGroupOnTable"],
   "version":"0.0.1",
   "license":"MIT",
   "keywords":["terra","backend", "groupON"],
