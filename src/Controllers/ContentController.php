@@ -71,7 +71,7 @@ class ContentController extends Controller
             function () use ($groupOnOrder) 
             {
            
-                $referrerID = $this->orderRepository->searchOrders($page = 1, int $itemsPerPage = 50, $with = [
+                $referrerID = $this->orderRepository->searchOrders($page = 1,$itemsPerPage = 50, $with = [
                     'properties' => 
                     [
                        [
