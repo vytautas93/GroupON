@@ -67,6 +67,7 @@ class ContentController extends Controller
             $order = $this->authHelper->processUnguarded(
             function () use ($groupOnOrder) 
             {
+                $this->getLogger(__FUNCTION__)->info('Generating Order',"Order : $groupOnOrder"); 
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
                 if(!is_null($customer) && !is_null($deliveryAddress))
@@ -163,7 +164,7 @@ class ContentController extends Controller
         $response = curl_exec($ch); 
         curl_close($ch);      
         $groupOnData = json_decode($response);
-        $this->getLogger(__FUNCTION__)->info('Orders From GroupON',"Order from $url  response: ".json_decode($response)); 
+        $this->getLogger(__FUNCTION__)->info('Orders From GroupON',"Order from $url  response: $response"); 
         return $groupOnData->data;
     }
     
@@ -220,14 +221,16 @@ class ContentController extends Controller
             'countryId' => $country->id,
             'phone' => $groupOnOrder->customer->phone
         ]);
-        
+        $this->getLogger(__FUNCTION__)->info('Delivery Address Created Successfully',"Delivery Address : $deliveryAddress"); 
         if(isset($deliveryAddress->id) && isset($customer->id))
         {
             $addContactAddress = $this->contactAddressRepositoryContract->addAddress($deliveryAddress->id,$customer->id,2);
+            $this->getLogger(__FUNCTION__)->info('Address Connect with Customer',"info : $addContactAddress"); 
             return $deliveryAddress;
         }
         else
         {
+            $this->getLogger(__FUNCTION__)->error('Address not connected with Customer',"info : $addContactAddress"); 
             return null;
         }
         
@@ -251,10 +254,12 @@ class ContentController extends Controller
         $customer = $this->contactRepositoryContract->createContact($data); 
         if(isset($customer->id))
         {
+            $this->getLogger(__FUNCTION__)->info('Customer Created Successfully',"Customer : $customer"); 
             return $customer;        
         }
         else
         {
+            $this->getLogger(__FUNCTION__)->error('Customer not created',"Customer : $customer"); 
             return null;
         }
     }
