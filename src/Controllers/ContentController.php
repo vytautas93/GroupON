@@ -67,7 +67,7 @@ class ContentController extends Controller
             $order = $this->authHelper->processUnguarded(
             function () use ($groupOnOrder) 
             {
-                $this->getLogger(__FUNCTION__)->info('Generating Order',"Order : $groupOnOrder"); 
+                $this->getLogger(__FUNCTION__)->info('Generating Order',json_encode($groupOnOrder)); 
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
                 if(!is_null($customer) && !is_null($deliveryAddress))
@@ -157,7 +157,7 @@ class ContentController extends Controller
     {
         $supplierID = $this->configRepository->get('GroupON.supplierID');
         $token = $this->configRepository->get('GroupON.token');
-        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=04/15/2017+14:00&end_datetime=04/15/2017+14:40';
+        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=04/11/2017+00:01&end_datetime=04/11/2017+23:59';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
