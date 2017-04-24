@@ -244,11 +244,16 @@ class ContentController extends Controller
     
     public function createCustomer($groupOnOrder)
     {
+        
+        $parts = explode(" ", $groupOnOrder->customer->name);
+        $lastname = array_pop($parts);
+        $firstname = implode(" ", $parts);
+        
         $data = 
         [
             'typeId'=>1,
-            
-            'firstName' => $groupOnOrder->customer->name,
+            'firstName' => $firstname,
+            'lastname' => $lastname,
             'formOfAddress' => 0,
             'lang'=>'de',
             'referrerId' => 1,
