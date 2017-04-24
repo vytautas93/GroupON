@@ -240,7 +240,7 @@ class ContentController extends Controller
         $deliveryAddress = $this->addressRepository->createAddress([
             'name2' => $groupOnOrder->customer->name,
             'address1' => $groupOnOrder->customer->address1,
-            'address2' => $groupOnOrder->customer->address2,
+            'address2' => $houseNumber,
             'street' => $street,
             'houseNumber'=>$houseNumber,
             'town' => $groupOnOrder->customer->city,
