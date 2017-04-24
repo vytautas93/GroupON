@@ -18,7 +18,7 @@ use Plenty\Modules\Account\Contact\Contracts\ContactAddressRepositoryContract;
 
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 
-use Plenty\Modules\Order\Referrer\Contracts\OrderReferrerRepositoryContract;
+
 
 use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 
@@ -34,7 +34,7 @@ class ContentController extends Controller
     private $contactRepositoryContract;
     private $contactAddressRepositoryContract;
     private $variationSkuRepositoryContract;
-    private $orderReferrerRepositoryContract;
+    
     private $authHelper;
     
     public function __construct(
@@ -45,7 +45,7 @@ class ContentController extends Controller
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
         ContactRepositoryContract $contactRepositoryContract,
         ContactAddressRepositoryContract $contactAddressRepositoryContract,
-        OrderReferrerRepositoryContract $orderReferrerRepositoryContract,
+       
         AuthHelper $authHelper
     )
     {
@@ -56,7 +56,7 @@ class ContentController extends Controller
         $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
-        $this->orderReferrerRepositoryContract = $orderReferrerRepositoryContract;
+       
         $this->authHelper = $authHelper;
     }
     
@@ -70,11 +70,16 @@ class ContentController extends Controller
             $order = $this->authHelper->processUnguarded(
             function () use ($groupOnOrder) 
             {
-                
-            $referrefID = $this->orderReferrerRepositoryContract->getReferrerById($groupOnOrder->orderid);
-                
-            $this->getLogger(__FUNCTION__)->info('Referrer ID  ',json_encode($referrefID));    
-                
+           
+                $referrerID = $this->orderRepository->findOrderById($with = [
+                    'properties' => 
+                    [
+                       [
+                            "typeId" => 7,
+                            "value" => $groupOnOrder->orderid
+                       ],
+                    ]    
+                ]);
                 
                 
                 $customer = $this->createCustomer($groupOnOrder);
