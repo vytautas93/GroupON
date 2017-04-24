@@ -18,7 +18,7 @@ use Plenty\Modules\Account\Contact\Contracts\ContactAddressRepositoryContract;
 
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 
-
+use Plenty\Modules\Order\RelationReference\Contracts\OrderRelationReferenceRepositoryContract;
 
 use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 
@@ -34,7 +34,6 @@ class ContentController extends Controller
     private $contactRepositoryContract;
     private $contactAddressRepositoryContract;
     private $variationSkuRepositoryContract;
-    
     private $authHelper;
     
     public function __construct(
@@ -45,7 +44,6 @@ class ContentController extends Controller
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
         ContactRepositoryContract $contactRepositoryContract,
         ContactAddressRepositoryContract $contactAddressRepositoryContract,
-       
         AuthHelper $authHelper
     )
     {
@@ -56,7 +54,6 @@ class ContentController extends Controller
         $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
-       
         $this->authHelper = $authHelper;
     }
     
@@ -70,18 +67,6 @@ class ContentController extends Controller
             $order = $this->authHelper->processUnguarded(
             function () use ($groupOnOrder) 
             {
-           
-                $referrerID = $this->orderRepository->searchOrders($page = 1,$itemsPerPage = 50, $with = [
-                    'reference' => 
-                    [
-                       [
-                            "typeId" => 7,
-                            "value" => $groupOnOrder->orderid
-                       ],
-                    ]    
-                ]);
-                $this->getLogger(__FUNCTION__)->info('Referrer ID ',json_encode($referrerID)); 
-                
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
                 if(!is_null($customer) && !is_null($deliveryAddress))
