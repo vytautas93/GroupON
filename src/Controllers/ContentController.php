@@ -72,7 +72,7 @@ class ContentController extends Controller
             {
            
                 $referrerID = $this->orderRepository->searchOrders($page = 1,$itemsPerPage = 50, $with = [
-                    'properties' => 
+                    'reference' => 
                     [
                        [
                             "typeId" => 7,
