@@ -80,7 +80,7 @@ class ContentController extends Controller
                        ],
                     ]    
                 ]);
-                
+                $this->getLogger(__FUNCTION__)->info('Referrer ID ',json_encode($referrerID)); 
                 
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
