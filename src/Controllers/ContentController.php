@@ -163,7 +163,7 @@ class ContentController extends Controller
         $response = curl_exec($ch); 
         curl_close($ch);      
         $groupOnData = json_decode($response);
-        
+        $this->getLogger(__FUNCTION__)->info('Orders From GroupON',"Order from .$url. \n response: .$response"); 
         return $groupOnData->data;
     }
     
