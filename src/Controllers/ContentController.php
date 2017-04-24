@@ -225,12 +225,12 @@ class ContentController extends Controller
         if(isset($deliveryAddress->id) && isset($customer->id))
         {
             $addContactAddress = $this->contactAddressRepositoryContract->addAddress($deliveryAddress->id,$customer->id,2);
-            $this->getLogger(__FUNCTION__)->info('Address Connect with Customer',"info : $addContactAddress"); 
+            $this->getLogger(__FUNCTION__)->info('Address Connected with Customer',"info : $addContactAddress"); 
             return $deliveryAddress;
         }
         else
         {
-            $this->getLogger(__FUNCTION__)->error('Address not connected with Customer',"info : $addContactAddress"); 
+            $this->getLogger(__FUNCTION__)->error('Address not connected with Customer',json_encode($customer)); 
             return null;
         }
         
