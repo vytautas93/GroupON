@@ -382,6 +382,8 @@ class ContentController extends Controller
             'HouseNumber' => $houseNumber,
             'Street' => $street
         ];
+        
+        $this->getLogger(__FUNCTION__)->info('House Number',json_encode($address)); 
         return $address;
     }
     
