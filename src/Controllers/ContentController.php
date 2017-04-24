@@ -217,11 +217,32 @@ class ContentController extends Controller
           $countryISO  = "DE";
         }
         
+        $formatAddress = $this->checkAddress($groupOnOrder->customer->address1);
+
+        if(is_array($formatAddress) && isset($formatAddress) )
+        {
+            $street = $formatAddress['Street'];
+            $houseNumber = $formatAddress['HouseNumber'];
+        }
+        else
+        {
+            $street = $groupOnOrder->customer->address1;
+            $houseNumber = $groupOnOrder->customer->address1;
+        }
+        
+        
+        
+        
+        
+        
+        
         $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
         $deliveryAddress = $this->addressRepository->createAddress([
             'name2' => $groupOnOrder->customer->name,
             'address1' => $groupOnOrder->customer->address1,
             'address2' => $groupOnOrder->customer->address2,
+            'street' => $street,
+            'houseNumber'=>$houseNumber,
             'town' => $groupOnOrder->customer->city,
             'postalCode' => $groupOnOrder->customer->zip,
             'countryId' => $country->id,
@@ -338,5 +359,37 @@ class ContentController extends Controller
         return $datatopost;
     
     }
+    
+    
+    
+    public function checkAddress($address)
+    {   
+        $removeNumber =  preg_match_all('/\d+/', $address, $matches);
+        
+        if ($removeNumber > 0 OR empty($address) == true)
+        {
+            $houseNumber = $matches[0][0];
+            $street = str_replace($houseNumber,'', $address);
+        }
+        else 
+        {
+            $houseNumber = $address;
+            $street = $address;
+        }
+        
+        $address = 
+        [
+            'HouseNumber' => $houseNumber,
+            'Street' => $street
+        ];
+        return $address;
+    }
+    
+    
+    
+    
+    
+    
+    
     
 }
