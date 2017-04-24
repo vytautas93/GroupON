@@ -231,14 +231,17 @@ class ContentController extends Controller
         }
         
         
-        
+        $parts = explode(" ", $groupOnOrder->customer->name);
+        $lastname = array_pop($parts);
+        $firstname = implode(" ", $parts);
         
         
         
         
         $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
         $deliveryAddress = $this->addressRepository->createAddress([
-            'name2' => $groupOnOrder->customer->name,
+            'name2' => $firstname,
+            'name3' => $lastname,
             'address1' => $street,
             'address2' => $houseNumber,
             'street' => $street,
