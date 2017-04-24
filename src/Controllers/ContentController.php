@@ -18,7 +18,7 @@ use Plenty\Modules\Account\Contact\Contracts\ContactAddressRepositoryContract;
 
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 
-
+use Plenty\Modules\Order\Referrer\Contracts\OrderReferrerRepositoryContract;
 
 use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 
@@ -34,6 +34,7 @@ class ContentController extends Controller
     private $contactRepositoryContract;
     private $contactAddressRepositoryContract;
     private $variationSkuRepositoryContract;
+    private $orderReferrerRepositoryContract;
     private $authHelper;
     
     public function __construct(
@@ -44,6 +45,7 @@ class ContentController extends Controller
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
         ContactRepositoryContract $contactRepositoryContract,
         ContactAddressRepositoryContract $contactAddressRepositoryContract,
+        OrderReferrerRepositoryContract $orderReferrerRepositoryContract,
         AuthHelper $authHelper
     )
     {
@@ -54,6 +56,7 @@ class ContentController extends Controller
         $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
+        $this->orderReferrerRepositoryContract = $orderReferrerRepositoryContract;
         $this->authHelper = $authHelper;
     }
     
@@ -67,7 +70,13 @@ class ContentController extends Controller
             $order = $this->authHelper->processUnguarded(
             function () use ($groupOnOrder) 
             {
-                $this->getLogger(__FUNCTION__)->info('Generating Order',json_encode($groupOnOrder)); 
+                
+            $referrefID = $this->orderReferrerRepositoryContract->getReferrerById($groupOnOrder->orderid);
+                
+            $this->getLogger(__FUNCTION__)->info('Referrer ID  ',json_encode($referrefID));    
+                
+                
+                
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
                 if(!is_null($customer) && !is_null($deliveryAddress))
@@ -234,10 +243,8 @@ class ContentController extends Controller
         $parts = explode(" ", $groupOnOrder->customer->name);
         $lastname = array_pop($parts);
         $firstname = implode(" ", $parts);
-        
-        
-        
-        
+
+
         $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
         $deliveryAddress = $this->addressRepository->createAddress([
             'name2' => $firstname,
@@ -251,7 +258,7 @@ class ContentController extends Controller
             'countryId' => $country->id,
             'phone' => $groupOnOrder->customer->phone
         ]);
-        $this->getLogger(__FUNCTION__)->info('Delivery Address Created Successfully',"Delivery Address : $deliveryAddress"); 
+        
         if(isset($deliveryAddress->id) && isset($customer->id))
         {
             $addContactAddress = $this->contactAddressRepositoryContract->addAddress($deliveryAddress->id,$customer->id,2);
