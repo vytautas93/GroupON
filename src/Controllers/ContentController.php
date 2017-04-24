@@ -211,6 +211,12 @@ class ContentController extends Controller
     public function createDeliveryAddress($groupOnOrder,$customer)
     {
         $countryISO = $groupOnOrder->customer->country;
+        
+        if(empty($countryISO))
+        {
+          $countryISO  = "DE";
+        }
+        
         $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
         $deliveryAddress = $this->addressRepository->createAddress([
             'name2' => $groupOnOrder->customer->name,
