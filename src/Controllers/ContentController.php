@@ -239,7 +239,7 @@ class ContentController extends Controller
         $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
         $deliveryAddress = $this->addressRepository->createAddress([
             'name2' => $groupOnOrder->customer->name,
-            'address1' => $groupOnOrder->customer->address1,
+            'address1' => $street,
             'address2' => $houseNumber,
             'street' => $street,
             'houseNumber'=>$houseNumber,
