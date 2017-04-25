@@ -62,9 +62,16 @@ class ContentController extends Controller
         foreach($groupOnOrders as $groupOnOrder)
         {
             
+            $exists = $this->checkIfExists($groupOnOrder->orderid);
+            $this->getLogger(__FUNCTION__)->error('Exists',json_encode($exists)); 
+            
+            
+            
+            
             $order = $this->authHelper->processUnguarded(
             function () use ($groupOnOrder) 
             {
+                
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
                 if(!is_null($customer) && !is_null($deliveryAddress))
@@ -407,6 +414,17 @@ class ContentController extends Controller
         return $order; 
     }
     
+    public function checkIfExists($orderID)
+    {
+        $database = pluginApp(DataBase::class);
+ 
+        $order = $database->query(Groupon::class)
+            ->where('externalOrderID', '=', $orderID)
+            ->get();
+            
+        return $order;
+        
+    }
     
     
     
