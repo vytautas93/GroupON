@@ -34,7 +34,7 @@ class ContentController extends Controller
     private $contactRepositoryContract;
     private $contactAddressRepositoryContract;
     private $variationSkuRepositoryContract;
-    private $orderRelationReferenceRepositoryContract;
+    
     private $authHelper;
     
     public function __construct(
@@ -45,7 +45,7 @@ class ContentController extends Controller
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
         ContactRepositoryContract $contactRepositoryContract,
         ContactAddressRepositoryContract $contactAddressRepositoryContract,
-        OrderRelationReferenceRepositoryContract $orderRelationReferenceRepositoryContract,
+        
         AuthHelper $authHelper
     )
     {
@@ -56,7 +56,7 @@ class ContentController extends Controller
         $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
-        $this->orderRelationReferenceRepositoryContract = $orderRelationReferenceRepositoryContract;
+        
         $this->authHelper = $authHelper;
     }
     
@@ -71,7 +71,19 @@ class ContentController extends Controller
             function () use ($groupOnOrder) 
             {
                 
-                $findOrder = $this->orderRelationReferenceRepositoryContract->findByAnyValues(['referenceId'=>7,'value' => 426310161],$page = 1,$itemsPerPage = 50);
+                $findOrder = $this->orderRepository->searchOrders(
+                    $page = 1, $itemsPerPage = 50, array $with = 
+                        [
+                             'properties' => 
+                            [
+                               [
+                                    "typeId" => 7,
+                                    "value" => $groupOnOrder->orderid
+                               ],
+                            ],
+                        ]
+                    );
+                
                 $this->getLogger(__FUNCTION__)->info('FindOrder',json_encode($findOrder));
                 
                 
