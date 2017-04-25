@@ -376,8 +376,8 @@ class ContentController extends Controller
         $order = $database->query(Groupon::class)
             ->where('externalOrderID', '=', $orderID)
             ->get();
-        $this->getLogger(__FUNCTION__)->info('Order',$order); 
-        $this->getLogger(__FUNCTION__)->info('OrderID',json_encode($order['id'])); 
+        $this->getLogger(__FUNCTION__)->info('Order',$order[0]->id); 
+        $this->getLogger(__FUNCTION__)->info('OrderID',json_encode($order[0]->id)); 
         if($order['id'])
         {
             return true;
