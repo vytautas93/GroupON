@@ -65,12 +65,6 @@ class ContentController extends Controller
             $order = $this->authHelper->processUnguarded(
             function () use ($groupOnOrder) 
             {
-                
-                $findOrder = $this->orderPropertyRepositoryContract->findByOrderId($typeId = 7);
-                
-                $this->getLogger(__FUNCTION__)->info('Filter',json_encode($findOrder));
-                
-                
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
                 if(!is_null($customer) && !is_null($deliveryAddress))
