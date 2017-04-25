@@ -63,7 +63,7 @@ class ContentController extends Controller
         {
             
             $exists = $this->checkIfExists($groupOnOrder->orderid);
-            if ($exists != false) 
+            if ($exists !== false) 
             {   
                 $this->getLogger(__FUNCTION__)->info("Nera", json_encode($exists)); 
                 $order = $this->generateOrder($groupOnOrder);
