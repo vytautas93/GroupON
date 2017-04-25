@@ -390,7 +390,7 @@ class ContentController extends Controller
         function () use ($orderID) 
         {
             $contract = pluginApp(OrderRepositoryContract::class);
-            $setFilter = $contract->setFilters(['externalOrderId' => 426310161]);
+            $setFilter = $contract->setFilters(['externalOrderId' => '426310161']);
             $this->getLogger(__FUNCTION__)->info('setFilter',json_encode($setFilter)); 
             $getFilters = $contract->getFilters();
             $this->getLogger(__FUNCTION__)->info('getFilters',json_encode($getFilters)); 
