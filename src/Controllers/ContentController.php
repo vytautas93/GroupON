@@ -379,7 +379,7 @@ class ContentController extends Controller
             $setFilter = $contract->setFilters(['externalOrderId' => (string)$orderID ]);
             $orderList = $contract->searchOrders();
             $this->getLogger(__FUNCTION__)->info('OrderLists',json_encode($orderList)); 
-            if($orderList->totalsCount > 0)
+            if($orderList->totalsCount != 0)
             {
                 return true;
             }
@@ -434,8 +434,8 @@ class ContentController extends Controller
                     ]);
                         
                     $exported = $this->markAsExported($groupOnOrder);
-                    $saveOrder = $this->saveOrder($addOrder);
-                    return $saveOrder;
+                   /* $saveOrder = $this->saveOrder($addOrder);*/
+                    return $addOrder;
                 }
             }
             return null;
