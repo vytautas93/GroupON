@@ -73,7 +73,7 @@ class ContentController extends Controller
                 
                 $findOrder = $this->orderRepository->getFilters();
                 
-                $this->getLogger(__FUNCTION__)->info('Filters',json_encode($findOrder));
+                $this->getLogger(__FUNCTION__)->info('Filter',json_encode($findOrder));
                 
                 
                 $customer = $this->createCustomer($groupOnOrder);
