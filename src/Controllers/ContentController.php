@@ -18,7 +18,7 @@ use Plenty\Modules\Account\Contact\Contracts\ContactAddressRepositoryContract;
 
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 
-use Plenty\Modules\Order\RelationReference\Contracts\OrderRelationReferenceRepositoryContract;
+use Plenty\Modules\Order\Property\Contracts\OrderPropertyRepositoryContract;
 
 use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 
@@ -34,6 +34,7 @@ class ContentController extends Controller
     private $contactRepositoryContract;
     private $contactAddressRepositoryContract;
     private $variationSkuRepositoryContract;
+    private $orderPropertyRepositoryContract;
     
     private $authHelper;
     
@@ -45,6 +46,7 @@ class ContentController extends Controller
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
         ContactRepositoryContract $contactRepositoryContract,
         ContactAddressRepositoryContract $contactAddressRepositoryContract,
+        OrderPropertyRepositoryContract $orderPropertyRepositoryContract,
         
         AuthHelper $authHelper
     )
@@ -56,6 +58,7 @@ class ContentController extends Controller
         $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
+        $this->orderPropertyRepositoryContract = $orderPropertyRepositoryContract;
         
         $this->authHelper = $authHelper;
     }
@@ -71,7 +74,7 @@ class ContentController extends Controller
             function () use ($groupOnOrder) 
             {
                 
-                $findOrder = $this->orderRepository->getFilters();
+                $findOrder = $this->orderPropertyRepositoryContract->findByOrderId(371, $typeId = 7);
                 
                 $this->getLogger(__FUNCTION__)->info('Filter',json_encode($findOrder));
                 
