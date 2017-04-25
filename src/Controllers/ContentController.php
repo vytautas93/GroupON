@@ -386,14 +386,16 @@ class ContentController extends Controller
         {
             return false;
         }*/
-        
+        $this->authHelper->processUnguarded(
+        function () use ($orderID) 
+        {
         
         $contract = pluginApp(OrderRepositoryContract::class);
         $contract->setFilters(['externalOrderId' => $orderID]);
         $orderList = $contract->searchOrders();
         
         $this->getLogger(__FUNCTION__)->info('External',json_encode($orderList)); 
-        
+        }
         
     }
     
