@@ -372,7 +372,7 @@ class ContentController extends Controller
     
     public function checkIfExists($orderID)
     {
-        $this->authHelper->processUnguarded(
+        $exist = $this->authHelper->processUnguarded(
         function () use ($orderID) 
         {
             $contract = pluginApp(OrderRepositoryContract::class);
@@ -387,6 +387,7 @@ class ContentController extends Controller
                 return false;
             }
         });
+        return $exist;
     }
     
     public function generateOrder($groupOnOrder)
