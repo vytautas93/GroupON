@@ -10,6 +10,5 @@
   "keywords":["terra","backend", "groupON"],
   "pluginIcon":"icon_plugin_xs.png",
   "price":0.00,
-  "authorIcon":"icon_author_xs.png",
-  "runOnBuild":["GroupON\\Migrations\\CreateGrouponTable"]
+  "authorIcon":"icon_author_xs.png"
 }
