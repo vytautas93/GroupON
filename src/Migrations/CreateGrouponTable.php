@@ -8,7 +8,7 @@ use Plenty\Modules\Plugin\DataBase\Contracts\Migrate;
 /**
  * Class CreateToDoTable
  */
-class CreateGroupONTable
+class CreateGrouponTable
 {
     /**
      * @param Migrate $migrate
