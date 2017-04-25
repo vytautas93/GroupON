@@ -389,12 +389,13 @@ class ContentController extends Controller
         $this->authHelper->processUnguarded(
         function () use ($orderID) 
         {
-        
-        $contract = pluginApp(OrderRepositoryContract::class);
-        $contract->setFilters(['externalOrderId' => (string)$orderID]);
-        $orderList = $contract->searchOrders();
-        
-        $this->getLogger(__FUNCTION__)->info('External',json_encode($orderList)); 
+            $this->getLogger(__FUNCTION__)->info('OrderID',json_encode($orderID)); 
+            $contract = pluginApp(OrderRepositoryContract::class);
+            $test = $contract->setFilters(['externalOrderId' => (string)$orderID]);
+            $this->getLogger(__FUNCTION__)->info('setFilters',json_encode($test)); 
+            $orderList = $contract->searchOrders();
+            
+            $this->getLogger(__FUNCTION__)->info('searchOrders',json_encode($orderList)); 
         });
         
     }
