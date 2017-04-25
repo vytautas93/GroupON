@@ -193,7 +193,7 @@ class ContentController extends Controller
                             'typeId' => 17,
                             'value' => (string)$groupOnItem->ci_lineitemid
                         ],
-                         [
+                        [
                             'typeId' => 18,
                             'value' => (string)$groupOnItem->voucher_code
                         ],

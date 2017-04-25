@@ -11,5 +11,5 @@
   "pluginIcon":"icon_plugin_xs.png",
   "price":0.00,
   "authorIcon":"icon_author_xs.png",
-  "runOnBuild":["GroupON\\Migrations\\CreateGroupONTable"]
+  "runOnBuild":["GroupON\\Migrations\\CreateGrouponTable"]
 }
