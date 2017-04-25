@@ -406,7 +406,7 @@ class ContentController extends Controller
         {
             if($properties->typeId == 7)
             {
-                $order->externalOrderID = $properties->value
+                $order->externalOrderID = $properties->value;
             }
         }
         $database->save($order);
