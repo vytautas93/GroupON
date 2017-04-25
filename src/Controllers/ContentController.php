@@ -57,13 +57,12 @@ class ContentController extends Controller
     
     public function test(Twig $twig):string
     {
-       
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
             
             $exists = $this->checkIfExists($groupOnOrder->orderid);
-           /* if ($exists !== false) 
+            if ($exists == false) 
             {   
                 $this->getLogger(__FUNCTION__)->info("Nera", json_encode($exists)); 
                 $order = $this->generateOrder($groupOnOrder);
@@ -72,9 +71,9 @@ class ContentController extends Controller
             {
                 $this->getLogger(__FUNCTION__)->info("Yra", json_encode($exists)); 
                 $order = 'Nesukurti';
-            }*/
+            }
         }
-        $templateData = array("supplierID" => json_encode($exists));
+        $templateData = array("supplierID" => json_encode($order));
         return $twig->render('GroupON::content.test',$templateData);
     }    
     
@@ -373,31 +372,21 @@ class ContentController extends Controller
     
     public function checkIfExists($orderID)
     {
-        /*$database = pluginApp(DataBase::class);
- 
-        $order = $database->query(Groupon::class)
-            ->where('externalOrderID', '=', $orderID)
-            ->get();
-        if($order[0]->id)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }*/
         $this->authHelper->processUnguarded(
         function () use ($orderID) 
         {
             $contract = pluginApp(OrderRepositoryContract::class);
             $setFilter = $contract->setFilters(['externalOrderId' => '426310161']);
-            $this->getLogger(__FUNCTION__)->info('setFilter',json_encode($setFilter)); 
-            $getFilters = $contract->getFilters();
-            $this->getLogger(__FUNCTION__)->info('getFilters',json_encode($getFilters)); 
             $orderList = $contract->searchOrders();
-            $this->getLogger(__FUNCTION__)->info('searchOrders',json_encode($orderList)); 
+            if($orderList->totalsCount > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         });
-        
     }
     
     public function generateOrder($groupOnOrder)
