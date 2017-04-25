@@ -63,7 +63,7 @@ class ContentController extends Controller
         {
             
             $exists = $this->checkIfExists($groupOnOrder->orderid);
-            if ($exists !== false) 
+           /* if ($exists !== false) 
             {   
                 $this->getLogger(__FUNCTION__)->info("Nera", json_encode($exists)); 
                 $order = $this->generateOrder($groupOnOrder);
@@ -72,9 +72,9 @@ class ContentController extends Controller
             {
                 $this->getLogger(__FUNCTION__)->info("Yra", json_encode($exists)); 
                 $order = 'Nesukurti';
-            }
+            }*/
         }
-        $templateData = array("supplierID" => json_encode($order));
+        $templateData = array("supplierID" => json_encode($exists));
         return $twig->render('GroupON::content.test',$templateData);
     }    
     
@@ -373,7 +373,7 @@ class ContentController extends Controller
     
     public function checkIfExists($orderID)
     {
-        $database = pluginApp(DataBase::class);
+        /*$database = pluginApp(DataBase::class);
  
         $order = $database->query(Groupon::class)
             ->where('externalOrderID', '=', $orderID)
@@ -385,7 +385,16 @@ class ContentController extends Controller
         else
         {
             return false;
-        }
+        }*/
+        
+        
+        $contract = pluginApp(OrderRepositoryContract::class);
+        $contract->setFilters(['externalOrderId' => $orderID]);
+        $orderList = $contract->searchOrders();
+        
+        $this->getLogger(__FUNCTION__)->info('External',json_encode($orderList)); 
+        
+        
     }
     
     public function generateOrder($groupOnOrder)
