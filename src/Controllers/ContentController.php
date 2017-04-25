@@ -395,7 +395,7 @@ class ContentController extends Controller
         return $address;
     }
     
-    public saveOrder($orderData)
+    public function saveOrder($orderData)
     {
         $database = pluginApp(DataBase::class);
  
