@@ -34,6 +34,7 @@ class ContentController extends Controller
     private $contactRepositoryContract;
     private $contactAddressRepositoryContract;
     private $variationSkuRepositoryContract;
+    private $orderRelationReferenceRepositoryContract;
     private $authHelper;
     
     public function __construct(
@@ -44,6 +45,7 @@ class ContentController extends Controller
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
         ContactRepositoryContract $contactRepositoryContract,
         ContactAddressRepositoryContract $contactAddressRepositoryContract,
+        OrderRelationReferenceRepositoryContract $orderRelationReferenceRepositoryContract,
         AuthHelper $authHelper
     )
     {
@@ -55,6 +57,7 @@ class ContentController extends Controller
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
         $this->authHelper = $authHelper;
+        $this->orderRelationReferenceRepositoryContract = $orderRelationReferenceRepositoryContract;
     }
     
     public function test(Twig $twig):string
@@ -63,7 +66,8 @@ class ContentController extends Controller
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
-            
+            $findOrder = $this->orderRelationReferenceRepositoryContract->findByAnyValues(['referenceId'=>17],$page = 1,$itemsPerPage = 50);
+            $this->getLogger(__FUNCTION__)->info('FindOrder',json_encode($findOrder)); 
             $order = $this->authHelper->processUnguarded(
             function () use ($groupOnOrder) 
             {
