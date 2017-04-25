@@ -71,20 +71,9 @@ class ContentController extends Controller
             function () use ($groupOnOrder) 
             {
                 
-                $findOrder = $this->orderRepository->searchOrders(
-                    $page = 1, $itemsPerPage = 50, array $with = 
-                        [
-                             'properties' => 
-                            [
-                               [
-                                    "typeId" => 7,
-                                    "value" => $groupOnOrder->orderid
-                               ],
-                            ],
-                        ]
-                    );
+                $findOrder = $this->orderRepository->getFilters();
                 
-                $this->getLogger(__FUNCTION__)->info('FindOrder',json_encode($findOrder));
+                $this->getLogger(__FUNCTION__)->info('Filters',json_encode($findOrder));
                 
                 
                 $customer = $this->createCustomer($groupOnOrder);
