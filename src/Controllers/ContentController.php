@@ -395,7 +395,7 @@ class ContentController extends Controller
         $orderList = $contract->searchOrders();
         
         $this->getLogger(__FUNCTION__)->info('External',json_encode($orderList)); 
-        }
+        });
         
     }
     
