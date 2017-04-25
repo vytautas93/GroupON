@@ -376,7 +376,7 @@ class ContentController extends Controller
         function () use ($orderID) 
         {
             $contract = pluginApp(OrderRepositoryContract::class);
-            $setFilter = $contract->setFilters(['externalOrderId' => '426310161']);
+            $setFilter = $contract->setFilters(['externalOrderId' => (string)$orderID ]);
             $orderList = $contract->searchOrders();
             if($orderList->totalsCount > 0)
             {
