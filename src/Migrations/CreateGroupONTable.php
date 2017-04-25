@@ -2,7 +2,7 @@
  
 namespace GroupON\Migrations;
  
-use GroupON\Models\GroupON;
+use GroupON\Models\Groupon;
 use Plenty\Modules\Plugin\DataBase\Contracts\Migrate;
  
 /**
@@ -15,6 +15,6 @@ class CreateGroupONTable
      */
     public function run(Migrate $migrate)
     {
-        $migrate->createTable(GroupON::class);
+        $migrate->createTable(Groupon::class);
     }
 }

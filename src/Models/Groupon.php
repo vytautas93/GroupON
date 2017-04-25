@@ -12,7 +12,7 @@ use Plenty\Modules\Plugin\DataBase\Contracts\Model;
  * @property boolean $isDone
  * @property string  $createdAt
  */
-class GroupON extends Model
+class Groupon extends Model
 {
     /**
      * @var int
@@ -26,6 +26,6 @@ class GroupON extends Model
      */
     public function getTableName(): string
     {
-        return 'GroupON::GroupON';
+        return 'GroupON::Groupon';
     }
 }

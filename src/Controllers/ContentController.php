@@ -19,7 +19,7 @@ use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 
 use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
-use GroupON\Models\GroupON;
+use GroupON\Models\Groupon;
 use Plenty\Plugin\Log\Loggable;
 
 class ContentController extends Controller
@@ -393,7 +393,7 @@ class ContentController extends Controller
     {
         $database = pluginApp(DataBase::class);
  
-        $order = pluginApp(GroupON::class);
+        $order = pluginApp(Groupon::class);
  
         $order->orderID = $orderData->id;
         foreach($orderData->properties as $properties)
