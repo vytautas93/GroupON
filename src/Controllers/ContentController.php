@@ -63,59 +63,17 @@ class ContentController extends Controller
         {
             
             $exists = $this->checkIfExists($groupOnOrder->orderid);
-            $this->getLogger(__FUNCTION__)->error('Exists',json_encode($exists)); 
+            $this->getLogger(__FUNCTION__)->info('Exists',json_encode($exists)); 
+            if ($exists != false) 
+            {   
+                $this->getLogger(__FUNCTION__)->info('neegzistuoja',json_encode($exists)); 
+                $order = $this->generateOrder($groupOnOrder);
+            }
+            $this->getLogger(__FUNCTION__)->info('egzistuoja',json_encode($exists)); 
+            $order = 'Nesukuria';
             
             
-            
-            
-            $order = $this->authHelper->processUnguarded(
-            function () use ($groupOnOrder) 
-            {
-                
-                $customer = $this->createCustomer($groupOnOrder);
-                $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
-                if(!is_null($customer) && !is_null($deliveryAddress))
-                {
-                    $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
-                    if (!is_null($orderItems)) 
-                    {
-                        $addOrder = $this->orderRepository->createOrder(
-                        [
-                            'typeId' => 1,
-                            'methodOfPaymentId' => 4040,
-                            'shippingProfileId' => 6,
-                            'statusId' => 5.0, 
-                            'ownerId' => 107,
-                            'plentyId' => 0,
-                            'orderItems' => $orderItems,
-                            'properties' => 
-                            [
-                               [
-                                    "typeId" => 7,
-                                    "value" => $groupOnOrder->orderid
-                               ],
-                            ],
-                            "relations" =>
-                            [
-                                [
-                                    "referenceType" => "contact",
-                                    "relation" => "receiver",
-                                    "referenceId"=>$customer->id
-                                ],
-                            ],
-                            'addressRelations' => [
-                                ['typeId' => 1, 'addressId' => $deliveryAddress->id],
-                                ['typeId' => 2, 'addressId' => $deliveryAddress->id],
-                            ],
-                        ]);
-                            
-                        $exported = $this->markAsExported($groupOnOrder);
-                        $saveOrder = $this->saveOrder($addOrder);
-                        return $saveOrder;
-                    }
-                }
-                return null;
-            });
+           
         }
         $templateData = array("supplierID" => json_encode($order));
         return $twig->render('GroupON::content.test',$templateData);
@@ -421,12 +379,67 @@ class ContentController extends Controller
         $order = $database->query(Groupon::class)
             ->where('externalOrderID', '=', $orderID)
             ->get();
+        
+        if($order->id)
+        {
+            return true;
+        }
+        
             
-        return $order;
+        return false;
         
     }
     
-    
+    public function generateOrder()
+    {
+        $order = $this->authHelper->processUnguarded(
+        function () use ($groupOnOrder) 
+        {
+            $customer = $this->createCustomer($groupOnOrder);
+            $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
+            if(!is_null($customer) && !is_null($deliveryAddress))
+            {
+                $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
+                if (!is_null($orderItems)) 
+                {
+                    $addOrder = $this->orderRepository->createOrder(
+                    [
+                        'typeId' => 1,
+                        'methodOfPaymentId' => 4040,
+                        'shippingProfileId' => 6,
+                        'statusId' => 5.0, 
+                        'ownerId' => 107,
+                        'plentyId' => 0,
+                        'orderItems' => $orderItems,
+                        'properties' => 
+                        [
+                           [
+                                "typeId" => 7,
+                                "value" => $groupOnOrder->orderid
+                           ],
+                        ],
+                        "relations" =>
+                        [
+                            [
+                                "referenceType" => "contact",
+                                "relation" => "receiver",
+                                "referenceId"=>$customer->id
+                            ],
+                        ],
+                        'addressRelations' => [
+                            ['typeId' => 1, 'addressId' => $deliveryAddress->id],
+                            ['typeId' => 2, 'addressId' => $deliveryAddress->id],
+                        ],
+                    ]);
+                        
+                    $exported = $this->markAsExported($groupOnOrder);
+                    $saveOrder = $this->saveOrder($addOrder);
+                    return $saveOrder;
+                }
+            }
+            return null;
+        });
+    }
     
     
     
