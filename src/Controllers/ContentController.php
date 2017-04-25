@@ -390,7 +390,7 @@ class ContentController extends Controller
         
     }
     
-    public function generateOrder()
+    public function generateOrder($groupOnOrder)
     {
         $order = $this->authHelper->processUnguarded(
         function () use ($groupOnOrder) 
