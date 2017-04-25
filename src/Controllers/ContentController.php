@@ -15,13 +15,11 @@ use Plenty\Plugin\ConfigRepository;
 use Plenty\Modules\Order\Shipping\Countries\Contracts\CountryRepositoryContract;
 use Plenty\Modules\Account\Contact\Contracts\ContactRepositoryContract;
 use Plenty\Modules\Account\Contact\Contracts\ContactAddressRepositoryContract;
-
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
-
-use Plenty\Modules\Order\Property\Contracts\OrderPropertyRepositoryContract;
-
 use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 
+use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
+use GroupON\Models\GroupON;
 use Plenty\Plugin\Log\Loggable;
 
 class ContentController extends Controller
@@ -34,8 +32,6 @@ class ContentController extends Controller
     private $contactRepositoryContract;
     private $contactAddressRepositoryContract;
     private $variationSkuRepositoryContract;
-    private $orderPropertyRepositoryContract;
-    
     private $authHelper;
     
     public function __construct(
@@ -46,8 +42,6 @@ class ContentController extends Controller
         VariationSkuRepositoryContract $variationSkuRepositoryContract,
         ContactRepositoryContract $contactRepositoryContract,
         ContactAddressRepositoryContract $contactAddressRepositoryContract,
-        OrderPropertyRepositoryContract $orderPropertyRepositoryContract,
-        
         AuthHelper $authHelper
     )
     {
@@ -58,8 +52,6 @@ class ContentController extends Controller
         $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
-        $this->orderPropertyRepositoryContract = $orderPropertyRepositoryContract;
-        
         $this->authHelper = $authHelper;
     }
     
@@ -74,7 +66,7 @@ class ContentController extends Controller
             function () use ($groupOnOrder) 
             {
                 
-                $findOrder = $this->orderPropertyRepositoryContract->findByOrderId(371, $typeId = 7);
+                $findOrder = $this->orderPropertyRepositoryContract->findByOrderId($typeId = 7);
                 
                 $this->getLogger(__FUNCTION__)->info('Filter',json_encode($findOrder));
                 
@@ -115,10 +107,10 @@ class ContentController extends Controller
                                 ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                             ],
                         ]);
-                    
+                            
                         $exported = $this->markAsExported($groupOnOrder);
-
-                        return $addOrder;
+                        $saveOrder = $this->saveOrder($addOrder);
+                        return $saveOrder;
                     }
                 }
                 return null;
@@ -206,6 +198,10 @@ class ContentController extends Controller
                         [
                             'typeId' => 17,
                             'value' => (string)$groupOnItem->ci_lineitemid
+                        ],
+                         [
+                            'typeId' => 18,
+                            'value' => (string)$groupOnItem->voucher_code
                         ],
                     ]
                 ];    
@@ -399,7 +395,23 @@ class ContentController extends Controller
         return $address;
     }
     
-    
+    public saveOrder($orderData)
+    {
+        $database = pluginApp(DataBase::class);
+ 
+        $order = pluginApp(GroupON::class);
+ 
+        $order->orderID = $orderData->id;
+        foreach($orderData->properties as $properties)
+        {
+            if($properties->typeId == 7)
+            {
+                $order->externalOrderID = $properties->value
+            }
+        }
+        $database->save($order);
+        return $order; 
+    }
     
     
     
