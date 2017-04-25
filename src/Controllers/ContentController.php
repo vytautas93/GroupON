@@ -389,10 +389,11 @@ class ContentController extends Controller
         $this->authHelper->processUnguarded(
         function () use ($orderID) 
         {
-            $test = $this->orderRepository->setFilters(['externalOrderId' => "426310161"]);
-            $this->getLogger(__FUNCTION__)->info('setFilters',json_encode($test)); 
+            $setFilter = $this->orderRepository->setFilters(['externalOrderId' => 426310161]);
+            $this->getLogger(__FUNCTION__)->info('setFilter',json_encode($setFilter)); 
+            $getFilters = $this->orderRepository->getFilters();
+            $this->getLogger(__FUNCTION__)->info('getFilters',json_encode($getFilters)); 
             $orderList = $this->orderRepository->searchOrders();
-            
             $this->getLogger(__FUNCTION__)->info('searchOrders',json_encode($orderList)); 
         });
         
