@@ -26,6 +26,6 @@ class GroupON extends Model
      */
     public function getTableName(): string
     {
-        return 'ToDoList::ToDo';
+        return 'GroupON::GroupON';
     }
 }
