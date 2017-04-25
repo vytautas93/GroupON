@@ -5,11 +5,11 @@
   "author": "Hashtages",
   "type": "backend",
   "serviceProvider": "GroupON\\Providers\\GroupOnServiceProvider",
-  "runOnBuild":["GroupON\\Migrations\\CreateGroupONTable"],
   "version":"0.0.1",
   "license":"MIT",
   "keywords":["terra","backend", "groupON"],
   "pluginIcon":"icon_plugin_xs.png",
   "price":0.00,
-  "authorIcon":"icon_author_xs.png"
+  "authorIcon":"icon_author_xs.png",
+  "runOnBuild":["GroupON\\Migrations\\CreateGroupONTable"]
 }
