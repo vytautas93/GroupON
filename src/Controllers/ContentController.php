@@ -56,8 +56,8 @@ class ContentController extends Controller
         $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
         $this->contactRepositoryContract = $contactRepositoryContract;
         $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
-        $this->authHelper = $authHelper;
         $this->orderRelationReferenceRepositoryContract = $orderRelationReferenceRepositoryContract;
+        $this->authHelper = $authHelper;
     }
     
     public function test(Twig $twig):string
@@ -66,11 +66,15 @@ class ContentController extends Controller
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
-            $findOrder = $this->orderRelationReferenceRepositoryContract->findByAnyValues(['referenceId'=>17],$page = 1,$itemsPerPage = 50);
-            $this->getLogger(__FUNCTION__)->info('FindOrder',json_encode($findOrder)); 
+            
             $order = $this->authHelper->processUnguarded(
             function () use ($groupOnOrder) 
             {
+                
+                $findOrder = $this->orderRelationReferenceRepositoryContract->findByAnyValues(['referenceId'=>7,'value' => 426310161],$page = 1,$itemsPerPage = 50);
+                $this->getLogger(__FUNCTION__)->info('FindOrder',json_encode($findOrder));
+                
+                
                 $customer = $this->createCustomer($groupOnOrder);
                 $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
                 if(!is_null($customer) && !is_null($deliveryAddress))
