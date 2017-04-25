@@ -380,7 +380,7 @@ class ContentController extends Controller
             $orderList = $contract->searchOrders();
             $object = is_object($orderList);
             $array = is_array($orderList);
-            $this->getLogger(__FUNCTION__)->error('object ', json_encode($orderList)); 
+            $this->getLogger(__FUNCTION__)->error('object ', json_encode($object)); 
             $this->getLogger(__FUNCTION__)->error('array ', json_encode($array)); 
            /* 
             $this->getLogger(__FUNCTION__)->error('OrderLists',$orderList); 
