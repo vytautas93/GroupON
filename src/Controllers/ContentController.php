@@ -393,7 +393,7 @@ class ContentController extends Controller
             $this->getLogger(__FUNCTION__)->info('setFilter',json_encode($setFilter)); 
             $getFilters = $this->orderRepository->getFilters();
             $this->getLogger(__FUNCTION__)->info('getFilters',json_encode($getFilters)); 
-            $orderList = $setFilter->searchOrders();
+            $orderList = $getFilters->searchOrders();
             $this->getLogger(__FUNCTION__)->info('searchOrders',json_encode($orderList)); 
         });
         
