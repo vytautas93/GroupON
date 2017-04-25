@@ -380,7 +380,7 @@ class ContentController extends Controller
             $orderList = $contract->searchOrders();
             
             $this->getLogger(__FUNCTION__)->info('OrderLists',json_encode($orderList)); 
-            $this->getLogger(__FUNCTION__)->info('totalsCount',$orderList)); 
+            $this->getLogger(__FUNCTION__)->info('totalsCount',$orderList); 
             if($orderList->totalsCount != 0)
             {
                 return true;
