@@ -63,13 +63,10 @@ class ContentController extends Controller
         {
             
             $exists = $this->checkIfExists($groupOnOrder->orderid);
-            $this->getLogger(__FUNCTION__)->info('Exists',json_encode($exists)); 
             if ($exists != false) 
             {   
-                $this->getLogger(__FUNCTION__)->info('neegzistuoja',json_encode($exists)); 
                 $order = $this->generateOrder($groupOnOrder);
             }
-            $this->getLogger(__FUNCTION__)->info('egzistuoja',json_encode($exists)); 
             $order = 'Nesukuria';
             
             
@@ -379,7 +376,7 @@ class ContentController extends Controller
         $order = $database->query(Groupon::class)
             ->where('externalOrderID', '=', $orderID)
             ->get();
-        
+        $this->getLogger(__FUNCTION__)->info('OrderID',json_encode($order->id)); 
         if($order->id)
         {
             return true;
