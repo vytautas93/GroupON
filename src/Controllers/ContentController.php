@@ -437,8 +437,8 @@ class ContentController extends Controller
                         ],
                         'dates'=>
                         [
-                          ['typeId' => 3 , 'date' => $groupOnOrder->date]  
-                          ['typeId' => 7 , 'date' => $groupOnOrder->date]  
+                          ['typeId' => 3 , 'date' => $groupOnOrder->date], 
+                          ['typeId' => 7 , 'date' => $groupOnOrder->date],  
                         ],
                     ]);
                         
