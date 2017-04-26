@@ -265,7 +265,6 @@ class ContentController extends Controller
     public function Procedure(EventProceduresTriggered $eventTriggered)
     {
         $order = $eventTriggered->getOrder();
-        $this->getLogger(__FUNCTION__)->info('OrderID',json_encode($order)); 
         $datatopost = $this->formateFeedBack($order);
         if(!empty($datatopost))
         {
