@@ -413,9 +413,6 @@ class ContentController extends Controller
                         'typeId' => 1,
                         'methodOfPaymentId' => 4040,
                         'shippingProfileId' => 6,
-                        'statusId' => 5.0, 
-                        'ownerId' => 107,
-                        'plentyId' => 0,
                         'orderItems' => $orderItems,
                         'properties' => 
                         [
