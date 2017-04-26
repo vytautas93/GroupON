@@ -62,13 +62,13 @@ class ContentController extends Controller
         {
             foreach ($configurations as $country => $configuration) 
             {
-                $groupOnOrders = $this->getGroupOnOrders($country);
+                $groupOnOrders = $this->getGroupOnOrders($configuration);
                 foreach($groupOnOrders as $groupOnOrder)
                 {
-                    $exists = $this->checkIfExists($groupOnOrder->orderid);
+                    $exists = $this->checkIfExists($country,$groupOnOrder->orderid);
                     if ($exists == false) 
                     {   
-                        $order = $this->generateOrder($groupOnOrder);
+                        $order = $this->generateOrder($country,$configuration,$groupOnOrder);
                     }
                     else
                     {
@@ -86,10 +86,8 @@ class ContentController extends Controller
         return $twig->render('GroupON::content.test',$templateData);
     }    
     
-    public function markAsExported($groupOnOrder)
+    public function markAsExported($groupOnOrder,$configuration)
     {   
-        $supplierID = $this->configRepository->get('GroupON.supplierID');
-        $token = $this->configRepository->get('GroupON.token');
         $lineItemsIds = [];
         foreach($groupOnOrder->line_items as $item)
         {
@@ -97,8 +95,8 @@ class ContentController extends Controller
         }
         
         $datatopost = array (
-            "supplier_id" => $supplierID,
-            "token" => $token,
+            "supplier_id" => $configuration['supplierID'],
+            "token" => $configuration['token'],
             "ci_lineitem_ids" => json_encode ($lineItemsIds),
         );
         
@@ -117,17 +115,13 @@ class ContentController extends Controller
             
           }
         }
-       
        return $response;
     }
 
 
     public function getGroupOnOrders($configuration)
     {
-        $this->getLogger(__FUNCTION__)->info('Config',$configuration);
-        $supplierID = $this->configRepository->get('GroupON.DE-supplierID');
-        $token = $this->configRepository->get('GroupON.DE-token');
-        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=04/11/2017+00:01&end_datetime=04/11/2017+23:59';
+        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime=04/11/2017+00:01&end_datetime=04/11/2017+23:59';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -182,13 +176,13 @@ class ContentController extends Controller
     }
     
 
-    public function createDeliveryAddress($groupOnOrder,$customer)
+    public function createDeliveryAddress($groupOnOrder,$customer,$country)
     {
         $countryISO = $groupOnOrder->customer->country;
         
         if(empty($countryISO))
         {
-          $countryISO  = "DE";
+          $countryISO  = $country;
         }
         
         $formatAddress = $this->checkAddress($groupOnOrder->customer->address1);
@@ -204,11 +198,9 @@ class ContentController extends Controller
             $houseNumber = $groupOnOrder->customer->address1;
         }
         
-        
         $parts = explode(" ", $groupOnOrder->customer->name);
         $lastname = array_pop($parts);
         $firstname = implode(" ", $parts);
-
 
         $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
         $deliveryAddress = $this->addressRepository->createAddress([
@@ -380,13 +372,13 @@ class ContentController extends Controller
         return $order; 
     }*/
     
-    public function checkIfExists($orderID)
+    public function checkIfExists($country,$orderID)
     {
         $exist = $this->authHelper->processUnguarded(
         function () use ($orderID) 
         {
             $contract = pluginApp(OrderRepositoryContract::class);
-            $setFilter = $contract->setFilters(['externalOrderId' => (string)$orderID ]);
+            $setFilter = $contract->setFilters(['externalOrderId' => $country.$orderID ]);
             $orderList = $contract->searchOrders();
             $totalsCount = json_decode(json_encode($orderList),true);
             
@@ -402,13 +394,13 @@ class ContentController extends Controller
         return $exist;
     }
     
-    public function generateOrder($groupOnOrder)
+    public function generateOrder($country,$configuration,$groupOnOrder)
     {
         $order = $this->authHelper->processUnguarded(
         function () use ($groupOnOrder) 
         {
             $customer = $this->createCustomer($groupOnOrder);
-            $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer);
+            $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer,$country);
             if(!is_null($customer) && !is_null($deliveryAddress))
             {
                 $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
@@ -427,7 +419,7 @@ class ContentController extends Controller
                         [
                            [
                                 "typeId" => 7,
-                                "value" => $groupOnOrder->orderid
+                                "value" => $country.$groupOnOrder->orderid
                            ],
                         ],
                         "relations" =>
@@ -444,7 +436,7 @@ class ContentController extends Controller
                         ],
                     ]);
                         
-                    $exported = $this->markAsExported($groupOnOrder);
+                    $exported = $this->markAsExported($groupOnOrder,$configuration);
                    /* $saveOrder = $this->saveOrder($addOrder);*/
                     return $addOrder;
                 }
