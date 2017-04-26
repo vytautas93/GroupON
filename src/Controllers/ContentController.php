@@ -139,7 +139,11 @@ class ContentController extends Controller
         $orderItems = [];
         foreach($groupOnItems as $groupOnItem)
         {
-            $findVariationID = $this->variationSkuRepositoryContract->search(array("sku" => $groupOnItem->sku));
+            $findVariationID = $this->variationSkuRepositoryContract->search(
+                array(
+                    "sku" => $groupOnItem->sku,
+                    "marketId" => 9,
+                ));
             if (!is_null($findVariationID[0]->variationId)){
                 $amounts[] = [
                 'currency' => 'EU',
@@ -380,7 +384,8 @@ class ContentController extends Controller
             $contract = pluginApp(OrderRepositoryContract::class);
             $setFilter = $contract->setFilters(['externalOrderId' => (string)$country.$orderID ]);
             $orderList = $contract->searchOrders();
-            if($orderList->getTotalCount() > 0)
+            $totalsCount = json_decode(json_encode($orderList),true);
+            if($totalsCount['totalsCount'] > 0)
             {
                 return true;
             }
