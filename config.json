@@ -47,5 +47,22 @@
         "label"   : "Token for IT",
         "type"    : "text",
         "default" : ""
+    },
+    {
+        "tab"     : "Settings",
+        "key"     : "referrerID",
+        "label"   : "Referrer ID",
+        "type"    : "text",
+        "default" : "1"
+    },
+    {
+        "tab"     : "Settings",
+        "key"     : "payment",
+        "label"   : "Payment ID",
+        "type"    : "text",
+        "default" : "4040"
     }
+    
+    
+    
 ]
