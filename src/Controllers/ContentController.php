@@ -454,8 +454,8 @@ class ContentController extends Controller
         $configurationArray = [];
         foreach($countryArrays as $country)
         {
-            $supplierID = $this->configRepository->get("GroupON.".$country"_supplierID");
-            $token = $this->configRepository->get("GroupON.".$country"_supplierID");
+            $supplierID = $this->configRepository->get("GroupON."$country"_supplierID");
+            $token = $this->configRepository->get("GroupON."$country"_supplierID");
             if(!empty($supplierID) && !empty($token))
             {
                 $configurationArray[$country] = 
