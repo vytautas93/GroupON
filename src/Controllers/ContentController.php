@@ -115,8 +115,8 @@ class ContentController extends Controller
 
     public function getGroupOnOrders()
     {
-        $supplierID = $this->configRepository->get('GroupON.DE_supplierID');
-        $token = $this->configRepository->get('GroupON.DE_token');
+        $supplierID = $this->configRepository->getPrefix('GroupON.DE_supplierID');
+        $token = $this->configRepository->getPrefix('GroupON.DE_token');
         
         $this->getLogger(__FUNCTION__)->info('supplierID',json_encode($supplierID)); 
         $this->getLogger(__FUNCTION__)->info('token',json_encode($token)); 
