@@ -435,6 +435,10 @@ class ContentController extends Controller
                             ['typeId' => 1, 'addressId' => $deliveryAddress->id],
                             ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                         ],
+                        'dates'=>
+                        [
+                          ['typeId' => 3 , 'date' => $groupOnOrder->date]  
+                        ],
                     ]);
                         
                     $exported = $this->markAsExported($groupOnOrder,$configuration);
