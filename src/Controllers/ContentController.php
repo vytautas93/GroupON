@@ -57,6 +57,10 @@ class ContentController extends Controller
     
     public function test(Twig $twig):string
     {
+        $configuration = $this->getConfiguration();
+        
+        
+        
         $groupOnOrders = $this->getGroupOnOrders();
         foreach($groupOnOrders as $groupOnOrder)
         {
@@ -117,10 +121,6 @@ class ContentController extends Controller
     {
         $supplierID = $this->configRepository->get('GroupON.DE_supplierID');
         $token = $this->configRepository->get('GroupON.DE_token');
-        $supplierID2 = $this->configRepository->has('GroupON.FR_supplierID');
-        $token2 = $this->configRepository->has('GroupON.FR_token');
-        $this->getLogger(__FUNCTION__)->info('supplierID2',json_encode($supplierID2)); 
-        $this->getLogger(__FUNCTION__)->info('token2',json_encode($token2)); 
         $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=04/11/2017+00:01&end_datetime=04/11/2017+23:59';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -448,6 +448,24 @@ class ContentController extends Controller
         return $order;
     }
     
-    
+    public function getConfiguration()
+    {
+        $countryArrays = ["DE","FR","IT"];
+        $configurationArray = [];
+        foreach($countryArrays as $country)
+        {
+            $supplierID = $this->configRepository->get("GroupON.".$country"_supplierID");
+            $token = $this->configRepository->get("GroupON.".$country"_supplierID");
+            if(!empty($supplierID) && !empty($token))
+            {
+                $configurationArray[$country] = 
+                [
+                    "supplierID" => $supplierID,
+                    "token" => $token
+                ];        
+            }
+        }
+        $this->getLogger(__FUNCTION__)->info('Configuration',$configurationArray); 
+    }
     
 }
