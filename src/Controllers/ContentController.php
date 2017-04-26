@@ -278,11 +278,11 @@ class ContentController extends Controller
               $response_json = json_decode( $response );
               if( $response_json->success == true ) 
               {
-                /*$this->getLogger(__FUNCTION__)->info('Succesfull response From GroupON',"FeedBack was sended\n.$response"); */
+                $this->getLogger(__FUNCTION__)->info('Succesfull response From GroupON',"FeedBack was sended\n.$response"); 
               } 
               else 
               {
-               /* $this->getLogger(__FUNCTION__)->error('Bad Response From GroupON',"Something was wrong\n.$response"); */
+                $this->getLogger(__FUNCTION__)->error('Bad Response From GroupON',"Something was wrong\n.$response"); 
               }
             }        
         }
