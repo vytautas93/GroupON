@@ -62,7 +62,7 @@ class ContentController extends Controller
         {
             
             $exists = $this->checkIfExists($groupOnOrder->orderid);
-            if ($exists == false) 
+            /*if ($exists == false) 
             {   
                 $this->getLogger(__FUNCTION__)->info("Nera", json_encode($exists)); 
                 $order = $this->generateOrder($groupOnOrder);
@@ -71,7 +71,7 @@ class ContentController extends Controller
             {
                 $this->getLogger(__FUNCTION__)->info("Yra", json_encode($exists)); 
                 $order = 'Nesukurti';
-            }
+            }*/
         }
         $templateData = array("supplierID" => json_encode($exists));
         return $twig->render('GroupON::content.test',$templateData);
