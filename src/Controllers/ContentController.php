@@ -375,7 +375,7 @@ class ContentController extends Controller
     public function checkIfExists($country,$orderID)
     {
         $exist = $this->authHelper->processUnguarded(
-        function () use ($orderID) 
+        function () use ($orderID,$country) 
         {
             $contract = pluginApp(OrderRepositoryContract::class);
             $setFilter = $contract->setFilters(['externalOrderId' => (string)$country.$orderID ]);
