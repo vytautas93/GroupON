@@ -456,8 +456,8 @@ class ContentController extends Controller
         {
             $supplierID = $this->configRepository->get("GroupON.$country-supplierID");
             $token = $this->configRepository->get("GroupON.$country-supplierID");
-            $this->getLogger(__FUNCTION__)->info('$supplierID',$supplierID); 
-            $this->getLogger(__FUNCTION__)->info('$token',$token); 
+            $this->getLogger(__FUNCTION__)->info('$supplierID',json_encode($supplierID)); 
+            $this->getLogger(__FUNCTION__)->info('$token',json_encode($token)); 
             if(!empty($supplierID) && !empty($token))
             {
                 $configurationArray[$country] = 
@@ -467,7 +467,7 @@ class ContentController extends Controller
                 ];        
             }
         }
-        $this->getLogger(__FUNCTION__)->info('Configuration',$configurationArray); 
+        $this->getLogger(__FUNCTION__)->info('Configuration',json_encode($configurationArray)); 
     }
     
 }
