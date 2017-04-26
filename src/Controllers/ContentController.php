@@ -62,7 +62,7 @@ class ContentController extends Controller
         {
             
             $exists = $this->checkIfExists($groupOnOrder->orderid);
-            /*if ($exists == false) 
+            if ($exists == false) 
             {   
                 $this->getLogger(__FUNCTION__)->info("Nera", json_encode($exists)); 
                 $order = $this->generateOrder($groupOnOrder);
@@ -71,7 +71,7 @@ class ContentController extends Controller
             {
                 $this->getLogger(__FUNCTION__)->info("Yra", json_encode($exists)); 
                 $order = 'Nesukurti';
-            }*/
+            }
         }
         $templateData = array("supplierID" => json_encode($exists));
         return $twig->render('GroupON::content.test',$templateData);
@@ -379,25 +379,16 @@ class ContentController extends Controller
             $contract = pluginApp(OrderRepositoryContract::class);
             $setFilter = $contract->setFilters(['externalOrderId' => (string)$orderID ]);
             $orderList = $contract->searchOrders();
-            $test = json_decode(json_encode($orderList));
-            $dd = $test['totalsCount'];
-            $this->getLogger(__FUNCTION__)->error('OrderLists',$test); 
-            $this->getLogger(__FUNCTION__)->error('dd',$dd); 
-            $this->getLogger(__FUNCTION__)->info('totalsCount',json_encode($test->totalsCount));
+            $totalsCount = json_decode(json_encode($orderList),true);
             
-            return $orderList->totalsCount;
-            /*$test = $orderList->totalsCount;
-            $this->getLogger(__FUNCTION__)->info('OrderLists',json_encode($orderList)); 
-            $this->getLogger(__FUNCTION__)->info('totalsCount',json_encode($test)); 
-
-            if($orderList->totalsCount != 0)
+            if($totalsCount['totalsCount'] > 0)
             {
                 return true;
             }
             else
             {
                 return false;
-            }*/
+            }
         });
         return $exist;
     }
