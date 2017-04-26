@@ -142,7 +142,7 @@ class ContentController extends Controller
             $findVariationID = $this->variationSkuRepositoryContract->search(
                 array(
                     "sku" => $groupOnItem->sku,
-                    "marketId" => (int)$this->configRepository->get("GroupON.payment"),
+                    "marketId" => (int)$this->configRepository->get("GroupON.referrerID"),
                 ));
             if (!is_null($findVariationID[0]->variationId)){
                 $amounts[] = [
@@ -156,7 +156,7 @@ class ContentController extends Controller
                     'quantity' => $groupOnItem->quantity,
                     'orderItemName' => $groupOnItem->name,
                     'itemVariationId' => $findVariationID[0]->variationId,
-                    'referrerId' => (int)$this->configRepository->get("GroupON.payment"),
+                    'referrerId' => (int)$this->configRepository->get("GroupON.referrerID"),
                     'countryVatId' => 1,
                     'amounts' => $amounts,
                     'properties' => 
