@@ -380,9 +380,10 @@ class ContentController extends Controller
             $setFilter = $contract->setFilters(['externalOrderId' => (string)$orderID ]);
             $orderList = $contract->searchOrders();
             $test = json_decode(json_encode($orderList),true);
-            
+            $dd = $test['totalsCount'];
             $this->getLogger(__FUNCTION__)->error('OrderLists',$test); 
-            $this->getLogger(__FUNCTION__)->info('totalsCount',json_encode($orderList->totalCount));
+            $this->getLogger(__FUNCTION__)->error('OrderLists',$dd); 
+            $this->getLogger(__FUNCTION__)->info('totalsCount',json_encode($orderList->totalsCount));
             
             return $orderList->totalsCount;
             /*$test = $orderList->totalsCount;
