@@ -18,6 +18,8 @@ use Plenty\Modules\Account\Contact\Contracts\ContactAddressRepositoryContract;
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 
+use Plenty\Modules\Order\Shipping\Contracts\ParcelServicePresetRepositoryContract;
+
 use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
 use GroupON\Models\Groupon;
 use Plenty\Plugin\Log\Loggable;
@@ -271,7 +273,27 @@ class ContentController extends Controller
     public function Procedure(EventProceduresTriggered $eventTriggered)
     {
         $order = $eventTriggered->getOrder();
-        $datatopost = $this->formateFeedBack($order);
+        foreach ($order->properties as $config) {
+            
+            if((int)$config->typeId == 6)
+            {
+                 $preset = pluginApp(ParcelServicePresetRepositoryContract::class);
+                 $shippingProfile = $preset-> getPresetById($config->value);
+                 $carrier = $shippingProfile->backendName;
+                 $this->getLogger(__FUNCTION__)->info('ShippingProfile',json_encode($carrier));
+            }
+            
+            if((int)$config->typeId == 7)
+            {
+                $countryISO = substr($config->value, 0, 2);
+                $supplierID = $this->configRepository->get("GroupON.$countryISO-supplierID");
+                $token = $this->configRepository->get("GroupON.$countryISO-token");  
+                
+            }
+        }
+
+        $datatopost = $this->formateFeedBack($order,$carrier,$supplierID,$token);
+        
         if(!empty($datatopost))
         {
             $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
@@ -295,42 +317,33 @@ class ContentController extends Controller
     }
     
     
-    public function formateFeedBack($order)
+    public function formateFeedBack($order,$carrier,$supplierID,$token)
     {
         $lineItemIds = [];
         $packageNumber = $this->orderRepository->getPackageNumbers($order->id);
-        foreach ($order->properties as $config) 
+        foreach($order->orderItems as $orderItems)
         {
-            if((int)$config->typeId == 7)
+            foreach($orderItems->properties as $properties)
             {
-                $countryISO = substr($config->value, 0, 2);
-                $supplierID = $this->configRepository->get("GroupON.$countryISO-supplierID");
-                $token = $this->configRepository->get("GroupON.$countryISO-token");  
-                foreach($order->orderItems as $orderItems)
+                if((int)$properties->typeId == 17)
                 {
-                    foreach($orderItems->properties as $properties)
-                    {
-                        if((int)$properties->typeId == 17)
-                        {
-                            $lineItemIds[] = 
-                            [
-                                "ci_lineitem_id" => $properties->value,
-                                "carrier" => "UPS",
-                                "tracking" => $packageNumber[0],
-                                "quantity" => $orderItems->quantity
-                            ];
-                        }
-                    }
+                    $lineItemIds[] = 
+                    [
+                        "ci_lineitem_id" => $properties->value,
+                        "carrier" => $carrier,
+                        "tracking" => $packageNumber[0],
+                        "quantity" => $orderItems->quantity
+                    ];
                 }
-                $datatopost = array (
-                    "supplier_id" => $supplierID,
-                    "token" => $token,
-                    "tracking_info" => json_encode ($lineItemIds)
-                );
-                
-                
             }
         }
+        
+        $datatopost = array (
+            "supplier_id" => $supplierID,
+            "token" => $token,
+            "tracking_info" => json_encode ($lineItemIds)
+        );
+        
         return $datatopost;
     }
     
