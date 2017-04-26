@@ -57,26 +57,33 @@ class ContentController extends Controller
     
     public function test(Twig $twig):string
     {
-        $configuration = $this->getConfiguration();
-        
-        
-        
-        $groupOnOrders = $this->getGroupOnOrders();
-        foreach($groupOnOrders as $groupOnOrder)
+        $configurations = $this->getConfiguration();
+        if(!empty($configurations))
         {
-            
-            $exists = $this->checkIfExists($groupOnOrder->orderid);
-            if ($exists == false) 
-            {   
-                $this->getLogger(__FUNCTION__)->info("Nera", json_encode($exists)); 
-                $order = $this->generateOrder($groupOnOrder);
-            }
-            else
+            foreach ($configurations as $country => $configuration) 
             {
-                $this->getLogger(__FUNCTION__)->info("Yra", json_encode($exists)); 
-                $order = 'Nesukurti';
+                $groupOnOrders = $this->getGroupOnOrders($configuration);
+                foreach($groupOnOrders as $groupOnOrder)
+                {
+                    $exists = $this->checkIfExists($groupOnOrder->orderid);
+                    if ($exists == false) 
+                    {   
+                        $this->getLogger(__FUNCTION__)->info("Nera", json_encode($exists)); 
+                        $order = $this->generateOrder($groupOnOrder);
+                    }
+                    else
+                    {
+                        $this->getLogger(__FUNCTION__)->info("Yra", json_encode($exists)); 
+                        $order = 'Nesukurti';
+                    }
+                }
             }
         }
+        
+        
+        
+        
+        
         $templateData = array("supplierID" => json_encode($exists));
         return $twig->render('GroupON::content.test',$templateData);
     }    
@@ -117,8 +124,10 @@ class ContentController extends Controller
     }
 
 
-    public function getGroupOnOrders()
+    public function getGroupOnOrders($configuration)
     {
+        $this->getLogger(__FUNCTION__)->info('Config',$configuration);
+        $configuration
         $supplierID = $this->configRepository->get('GroupON.DE_supplierID');
         $token = $this->configRepository->get('GroupON.DE_token');
         $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=04/11/2017+00:01&end_datetime=04/11/2017+23:59';
@@ -356,7 +365,7 @@ class ContentController extends Controller
         return $address;
     }
     
-    public function saveOrder($orderData)
+   /* public function saveOrder($orderData)
     {
         $database = pluginApp(DataBase::class);
  
@@ -372,7 +381,7 @@ class ContentController extends Controller
         }
         $database->save($order);
         return $order; 
-    }
+    }*/
     
     public function checkIfExists($orderID)
     {
@@ -467,7 +476,7 @@ class ContentController extends Controller
                 ];        
             }
         }
-        $this->getLogger(__FUNCTION__)->info('Configuration',json_encode($configurationArray)); 
+        return $configurationArray;
     }
     
 }
