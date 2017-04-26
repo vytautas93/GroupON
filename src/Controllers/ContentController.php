@@ -62,18 +62,16 @@ class ContentController extends Controller
         {
             foreach ($configurations as $country => $configuration) 
             {
-                $groupOnOrders = $this->getGroupOnOrders($configuration);
+                $groupOnOrders = $this->getGroupOnOrders($country);
                 foreach($groupOnOrders as $groupOnOrder)
                 {
                     $exists = $this->checkIfExists($groupOnOrder->orderid);
                     if ($exists == false) 
                     {   
-                        $this->getLogger(__FUNCTION__)->info("Nera", json_encode($exists)); 
                         $order = $this->generateOrder($groupOnOrder);
                     }
                     else
                     {
-                        $this->getLogger(__FUNCTION__)->info("Yra", json_encode($exists)); 
                         $order = 'Nesukurti';
                     }
                 }
@@ -463,9 +461,7 @@ class ContentController extends Controller
         foreach($countryArrays as $country)
         {
             $supplierID = $this->configRepository->get("GroupON.$country-supplierID");
-            $token = $this->configRepository->get("GroupON.$country-supplierID");
-            $this->getLogger(__FUNCTION__)->info('$supplierID',json_encode($supplierID)); 
-            $this->getLogger(__FUNCTION__)->info('$token',json_encode($token)); 
+            $token = $this->configRepository->get("GroupON.$country-token");
             if(!empty($supplierID) && !empty($token))
             {
                 $configurationArray[$country] = 
