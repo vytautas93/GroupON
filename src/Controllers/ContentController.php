@@ -117,7 +117,10 @@ class ContentController extends Controller
     {
         $supplierID = $this->configRepository->get('GroupON.DE_supplierID');
         $token = $this->configRepository->get('GroupON.DE_token');
-        
+        $supplierID2 = $this->configRepository->has('GroupON.FR_supplierID');
+        $token2 = $this->configRepository->has('GroupON.FR_token');
+        $this->getLogger(__FUNCTION__)->info('supplierID2',json_encode($supplierID2)); 
+        $this->getLogger(__FUNCTION__)->info('token2',json_encode($token2)); 
         $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=04/11/2017+00:01&end_datetime=04/11/2017+23:59';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -379,8 +382,6 @@ class ContentController extends Controller
             $contract = pluginApp(OrderRepositoryContract::class);
             $setFilter = $contract->setFilters(['externalOrderId' => (string)$orderID ]);
             $orderList = $contract->searchOrders();
-            $test = $orderList['totalsCount'];
-            $this->getLogger(__FUNCTION__)->error('TEST',$test);
             $totalsCount = json_decode(json_encode($orderList),true);
             
             if($totalsCount['totalsCount'] > 0)
