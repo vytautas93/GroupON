@@ -380,7 +380,7 @@ class ContentController extends Controller
             $setFilter = $contract->setFilters(['externalOrderId' => (string)$orderID ]);
             $orderList = $contract->searchOrders();
             $test = $orderList['totalsCount'];
-            $this->getLogger(__FUNCTION__)->error('TEST',json_encode($test));
+            $this->getLogger(__FUNCTION__)->error('TEST',$test);
             $totalsCount = json_decode(json_encode($orderList),true);
             
             if($totalsCount['totalsCount'] > 0)
