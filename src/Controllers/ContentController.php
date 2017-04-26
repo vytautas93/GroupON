@@ -115,8 +115,12 @@ class ContentController extends Controller
 
     public function getGroupOnOrders()
     {
-        $supplierID = $this->configRepository->get('GroupON.supplierID');
-        $token = $this->configRepository->get('GroupON.token');
+        $supplierID = $this->configRepository->get('GroupON.DE_supplierID');
+        $token = $this->configRepository->get('GroupON.DE_token');
+        
+        $this->getLogger(__FUNCTION__)->info('supplierID',json_encode($supplierID)); 
+        $this->getLogger(__FUNCTION__)->info('token',json_encode($token)); 
+        
         $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$supplierID.'&token='.$token.'&start_datetime=04/11/2017+00:01&end_datetime=04/11/2017+23:59';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
