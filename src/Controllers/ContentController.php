@@ -301,9 +301,9 @@ class ContentController extends Controller
         $packageNumber = $this->orderRepository->getPackageNumbers($order->id);
         foreach ($order->properties as $config) 
         {
-            if((int)$properties->typeId == 7)
+            if((int)$config->typeId == 7)
             {
-                $countryISO = substr($properties->value, 0, 2);
+                $countryISO = substr($config->value, 0, 2);
                 $supplierID = $this->configRepository->get("GroupON.$countryISO-supplierID");
                 $token = $this->configRepository->get("GroupON.$countryISO-token");  
                 foreach($order->orderItems as $orderItems)
