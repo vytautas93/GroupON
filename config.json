@@ -8,42 +8,42 @@
     },
     {
         "tab"     : "Config For DE",
-        "key"     : "DE_supplierID",
+        "key"     : "DE-supplierID",
         "label"   : "Supplier ID for DE",
         "type"    : "text",
         "default" : ""
     },
     {
         "tab"     : "Config For DE",
-        "key"     : "DE_token",
+        "key"     : "DE-token",
         "label"   : "Your Token for DE",
         "type"    : "text",
         "default" : ""
     },
     {
         "tab"     : "Config For FR",
-        "key"     : "FR_supplierID",
+        "key"     : "FR-supplierID",
         "label"   : "Supplier ID for FR",
         "type"    : "text",
         "default" : ""
     },
     {
         "tab"     : "Config For FR",
-        "key"     : "FR_token",
+        "key"     : "FR-token",
         "label"   : "Token for FR",
         "type"    : "text",
         "default" : ""
     },
     {
         "tab"     : "Config For IT",
-        "key"     : "IT_supplierID",
+        "key"     : "IT-supplierID",
         "label"   : "Supplier ID for IT",
         "type"    : "text",
         "default" : ""
     },
     {
         "tab"     : "Config For IT",
-        "key"     : "IT_token",
+        "key"     : "IT-token",
         "label"   : "Token for IT",
         "type"    : "text",
         "default" : ""
