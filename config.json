@@ -1,53 +1,51 @@
 [
     {
-        "tab"     : "Settings",
+        "tab"     : "Config For DE",
         "key"     : "carrier",
         "label"   : "Carrier",
         "type"    : "text",
         "default" : "UPS"
     },
     {
-        "tab"     : "Settings",
+        "tab"     : "Config For DE",
         "key"     : "DE_supplierID",
         "label"   : "Supplier ID for DE",
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Settings",
+        "tab"     : "Config For DE",
         "key"     : "DE_token",
         "label"   : "Your Token for DE",
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Settings",
+        "tab"     : "Config For FR",
         "key"     : "FR_supplierID",
         "label"   : "Supplier ID for FR",
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Settings",
+        "tab"     : "Config For FR",
         "key"     : "FR_token",
         "label"   : "Token for FR",
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Settings",
+        "tab"     : "Config For IT",
         "key"     : "IT_supplierID",
         "label"   : "Supplier ID for IT",
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Settings",
+        "tab"     : "Config For IT",
         "key"     : "IT_token",
         "label"   : "Token for IT",
         "type"    : "text",
         "default" : ""
     }
-    
-    
 ]
