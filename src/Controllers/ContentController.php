@@ -456,6 +456,8 @@ class ContentController extends Controller
         {
             $supplierID = $this->configRepository->get("GroupON.$country-supplierID");
             $token = $this->configRepository->get("GroupON.$country-supplierID");
+            $this->getLogger(__FUNCTION__)->info('$supplierID',$supplierID); 
+            $this->getLogger(__FUNCTION__)->info('$token',$token); 
             if(!empty($supplierID) && !empty($token))
             {
                 $configurationArray[$country] = 
