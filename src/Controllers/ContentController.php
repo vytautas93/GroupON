@@ -382,7 +382,7 @@ class ContentController extends Controller
             $test = json_decode(json_encode($orderList),true);
             $dd = $test['totalsCount'];
             $this->getLogger(__FUNCTION__)->error('OrderLists',$test); 
-            $this->getLogger(__FUNCTION__)->error('OrderLists',$dd); 
+            $this->getLogger(__FUNCTION__)->error('dd',$dd); 
             $this->getLogger(__FUNCTION__)->info('totalsCount',json_encode($orderList->totalsCount));
             
             return $orderList->totalsCount;
