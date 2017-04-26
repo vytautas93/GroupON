@@ -379,11 +379,11 @@ class ContentController extends Controller
             $contract = pluginApp(OrderRepositoryContract::class);
             $setFilter = $contract->setFilters(['externalOrderId' => (string)$orderID ]);
             $orderList = $contract->searchOrders();
-            $test = json_decode(json_encode($orderList),true);
+            $test = json_decode(json_encode($orderList));
             $dd = $test['totalsCount'];
             $this->getLogger(__FUNCTION__)->error('OrderLists',$test); 
             $this->getLogger(__FUNCTION__)->error('dd',$dd); 
-            $this->getLogger(__FUNCTION__)->info('totalsCount',json_encode($orderList->totalsCount));
+            $this->getLogger(__FUNCTION__)->info('totalsCount',json_encode($test->totalsCount));
             
             return $orderList->totalsCount;
             /*$test = $orderList->totalsCount;
