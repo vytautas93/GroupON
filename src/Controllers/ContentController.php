@@ -397,7 +397,7 @@ class ContentController extends Controller
     public function generateOrder($country,$configuration,$groupOnOrder)
     {
         $order = $this->authHelper->processUnguarded(
-        function () use ($groupOnOrder) 
+        function () use ($groupOnOrder,$configuration,$country) 
         {
             $customer = $this->createCustomer($groupOnOrder);
             $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer,$country);
