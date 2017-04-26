@@ -121,7 +121,7 @@ class ContentController extends Controller
 
     public function getGroupOnOrders($configuration)
     {
-        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime=04/11/2017+00:01&end_datetime=04/11/2017+23:59';
+        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime=03/01/2017+12:01&end_datetime=03/01/2017+15:00';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
