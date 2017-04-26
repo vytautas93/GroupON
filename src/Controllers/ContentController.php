@@ -101,11 +101,12 @@ class ContentController extends Controller
         );
         
         
-        $ch = curl_init ("https://scm.commerceinterface.com/api/v2/mark_exported");
+        $ch = curl_init ("https://scm.commerceinterface.com/api/v4/mark_exported");
         curl_setopt ($ch, CURLOPT_POST, true);
         curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
         curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec ($ch);
+        $this->getLogger(__FUNCTION__)->info('Response From GroupON',json_encode($response));
         if($response) 
         {
           $response_json = json_decode( $response );
@@ -121,7 +122,7 @@ class ContentController extends Controller
 
     public function getGroupOnOrders($configuration)
     {
-        $url = 'https://scm.commerceinterface.com/api/v2/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime=03/01/2017+12:01&end_datetime=03/01/2017+15:00';
+        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime=03/01/2017+12:01&end_datetime=03/01/2017+15:00';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
