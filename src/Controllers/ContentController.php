@@ -242,7 +242,6 @@ class ContentController extends Controller
             'typeId'=>1,
             'firstName' => $firstname,
             'lastName' => $lastname,
-            'formOfAddress' => 0,
             'lang'=>'de',
             'referrerId' => 1,
             'plentyId' => 0,
