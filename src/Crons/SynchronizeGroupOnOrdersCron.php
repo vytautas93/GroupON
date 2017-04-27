@@ -171,6 +171,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
             }
             else
             {
+                $this->getLogger(__FUNCTION__)->info("Please Add missing SKU to your Items","SKU:$groupOnItem->sku");
                 return null;    
             }
         }
