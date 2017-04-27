@@ -4,7 +4,7 @@ namespace Groupon\Models;
  
 use Plenty\Modules\Plugin\DataBase\Contracts\Model;
  
-class GrouponModel extends Model
+class Groupon extends Model
 {
     public $createdAt = '';
  
