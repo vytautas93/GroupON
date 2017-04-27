@@ -60,7 +60,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
     
     public function handle()
     {
-       $configurations = $this->getConfiguration();
+        $configurations = $this->getConfiguration();
         if(!empty($configurations))
         {
             foreach ($configurations as $country => $configuration) 
@@ -75,14 +75,12 @@ class SynchronizeGroupOnOrdersCron extends Cron
                     }
                     else
                     {
-                        $order = 'Nesukurti';
+                        $this->getLogger(__FUNCTION__)->info("There aren't new orders From Groupon","No new orders from Groupon");
                     }
                 }
             }
         }
-        $templateData = array("supplierID" => json_encode($exists));
-        return $twig->render('GroupON::content.test',$templateData);
-        
+        $this->getLogger(__FUNCTION__)->info("Missing Required Prameters","Please add your credentials in Settings Page");
     }
     
     public function markAsExported($groupOnOrder,$configuration)
