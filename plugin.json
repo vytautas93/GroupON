@@ -4,8 +4,7 @@
   "serviceProvider": "Groupon\\Providers\\GroupOnServiceProvider",
   "marketplaceName"   : {"de":"German display name of plugin","en":"English display name of plugin"},
   "description": "Sprechen Sie mit Ihren Produkten eine riesige Zielgruppe an. Groupon Goods ist ein One-Stop-Shop für den täglichen Bedarf mit Markenprodukten und einmaligen, unschlagbaren Angeboten.Nutzen Sie Online-, E-Mail- und Telefonwerbung. Mit Groupon Goods werden Ihre Produkte für mehr als 15 Millionen aktive Kunden zugänglich.",
-
-  
+  "runOnBuild":["Groupon\\Migrations\\CreateGrouponTable"],
   "shortDescription"  : {"de":"German short description","en":"English short description"},
   "keywords":["terra","backend", "Groupon","integration"],
   "categories": ["3523", "3521"],

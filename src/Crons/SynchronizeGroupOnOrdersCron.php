@@ -265,7 +265,6 @@ class SynchronizeGroupOnOrdersCron extends Cron
     public function Procedure(EventProceduresTriggered $eventTriggered)
     {
         $configRepository = pluginApp(ConfigRepository::class);
-        
         $order = $eventTriggered->getOrder();
         $parameters = [];
         foreach ($order->properties as $config) {
@@ -276,7 +275,6 @@ class SynchronizeGroupOnOrdersCron extends Cron
                  {
                     $shippingProfile = $preset->getPresetById($config->value);
                     $carrier = $shippingProfile->parcelService->backend_name;    
-                    $this->getLogger(__FUNCTION__)->info('Shipping Profile',json_encode($shippingProfile)); 
                  } 
                  catch (\Exception $e) 
                  {
@@ -294,7 +292,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         
         if ($carrier && $supplierID && $token) 
         {
-            $this->getLogger(__FUNCTION__)->info('TestLOG',json_encode($carrier)); 
+
             $datatopost = $this->formateFeedBack($order,$carrier,$supplierID,$token);
             if(!empty($datatopost))
             {
