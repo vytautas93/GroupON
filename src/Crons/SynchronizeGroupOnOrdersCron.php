@@ -48,7 +48,10 @@ class SynchronizeGroupOnOrdersCron extends Cron
                 }
             }
         }
-        $this->getLogger(__FUNCTION__)->info("Missing Required Prameters","Please add your credentials in Settings Page");
+        else
+        {
+            $this->getLogger(__FUNCTION__)->info("Missing Required Prameters","Please add your credentials in Settings Page");
+        }
     }
     
     public function markAsExported($groupOnOrder,$configuration)
