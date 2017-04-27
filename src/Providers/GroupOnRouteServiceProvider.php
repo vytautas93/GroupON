@@ -16,7 +16,7 @@ class GroupOnRouteServiceProvider extends RouteServiceProvider
      */
     public function map(Router $router)
     {
-        $router->get('test', 'Groupon\Cron\SynchronizeGroupOnOrdersCron@checkTrial');
+        $router->get('test', 'Groupon\Crons\SynchronizeGroupOnOrdersCron@checkTrial');
     }
  
 }
