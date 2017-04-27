@@ -21,12 +21,12 @@ class TestController extends Controller
         if ($startTime) {
             $this->getLogger(__FUNCTION__)->error("Database in IF",json_encode($startTime));   
         }
-        /*else
+        else
         {
              $model = pluginApp(StartTime::class);
-             $model->createdAt = time();
+             $model->startTime = time();
              $database->save($model);
-        }*/
+        }
         
         
         
