@@ -4,7 +4,7 @@ namespace Groupon\Models;
  
 use Plenty\Modules\Plugin\DataBase\Contracts\Model;
  
-class Groupon extends Model
+class GrouponModel extends Model
 {
     public $id = 0;
     public $createdAt = '';
@@ -12,6 +12,6 @@ class Groupon extends Model
   
     public function getTableName(): string
     {
-        return 'Groupon::Groupon';
+        return 'Groupon::GrouponModel';
     }
 }
