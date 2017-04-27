@@ -281,7 +281,6 @@ class ContentController extends Controller
                  $shippingProfile = $preset-> getPresetById($config->value);
                  $carrier = $shippingProfile->backendName;
             }
-        
             if((int)$config->typeId == 7)
             {
                 $countryISO = substr($config->value, 0, 2);
@@ -289,7 +288,7 @@ class ContentController extends Controller
                 $token = $this->configRepository->get("GroupON.$countryISO-token");  
             }
         }
-        if (!$carrier && !$supplierID && !$token) 
+        if ($carrier && $supplierID && $token) 
         {
             $datatopost = $this->formateFeedBack($order,$carrier,$supplierID,$token);
             if(!empty($datatopost))
