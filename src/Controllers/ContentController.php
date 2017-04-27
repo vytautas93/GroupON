@@ -274,9 +274,9 @@ class ContentController extends Controller
     {
         $order = $eventTriggered->getOrder();
         $this->getLogger(__FUNCTION__)->info('$order',json_encode($order));
+        $this->getLogger(__FUNCTION__)->info('$config',json_encode($order->properties));
         foreach ($order->properties as $config) {
-            $this->getLogger(__FUNCTION__)->info('$config',json_encode($config));
-            if((int)$config->typeId == 6)
+            if((int)$config->typeId == 2)
             {
                  $preset = pluginApp(ParcelServicePresetRepositoryContract::class);
                  $shippingProfile = $preset-> getPresetById($config->value);
