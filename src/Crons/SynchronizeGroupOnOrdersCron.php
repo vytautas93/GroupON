@@ -4,9 +4,6 @@ namespace GroupON\Crons;
  
 use Plenty\Plugin\ServiceProvider;
 use Plenty\Modules\Cron\Contracts\CronHandler as Cron;
-use Plenty\Plugin\Templates\Twig;
-use Plenty\Modules\Order\Models\Order;
-
 
 use Plenty\Modules\Authorization\Services\AuthHelper;
 use Plenty\Modules\Order\Contracts\OrderRepositoryContract;
@@ -17,43 +14,18 @@ use Plenty\Modules\Account\Contact\Contracts\ContactRepositoryContract;
 use Plenty\Modules\Account\Contact\Contracts\ContactAddressRepositoryContract;
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
-
 use Plenty\Modules\Order\Shipping\Contracts\ParcelServicePresetRepositoryContract;
-
-use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
-use GroupON\Models\Groupon;
 use Plenty\Plugin\Log\Loggable;
 
 class SynchronizeGroupOnOrdersCron extends Cron
 {
     use Loggable;
-    private $orderRepository;
-    private $addressRepository;
-    private $configRepository;
-    private $countryRepositoryContract;
-    private $contactRepositoryContract;
-    private $contactAddressRepositoryContract;
-    private $variationSkuRepositoryContract;
     private $authHelper;
     
     public function __construct(
-        OrderRepositoryContract $orderRepository,
-        AddressRepositoryContract $addressRepository,
-        ConfigRepository $configRepository,
-        CountryRepositoryContract $countryRepositoryContract,
-        VariationSkuRepositoryContract $variationSkuRepositoryContract,
-        ContactRepositoryContract $contactRepositoryContract,
-        ContactAddressRepositoryContract $contactAddressRepositoryContract,
         AuthHelper $authHelper
     )
     {
-        $this->orderRepository = $orderRepository;
-        $this->addressRepository = $addressRepository;
-        $this->configRepository = $configRepository;
-        $this->countryRepositoryContract = $countryRepositoryContract;
-        $this->variationSkuRepositoryContract = $variationSkuRepositoryContract;
-        $this->contactRepositoryContract = $contactRepositoryContract;
-        $this->contactAddressRepositoryContract = $contactAddressRepositoryContract;
         $this->authHelper = $authHelper;
     }
     
@@ -72,10 +44,6 @@ class SynchronizeGroupOnOrdersCron extends Cron
                     if ($exists == false) 
                     {   
                         $order = $this->generateOrder($country,$configuration,$groupOnOrder);
-                    }
-                    else
-                    {
-                        $this->getLogger(__FUNCTION__)->info("There aren't new orders From Groupon","No new orders from Groupon");
                     }
                 }
             }
@@ -134,13 +102,23 @@ class SynchronizeGroupOnOrdersCron extends Cron
     {
         $amounts = [];
         $orderItems = [];
+        $variationSkuRepositoryContract = pluginApp(VariationSkuRepositoryContract::class);
+        $configRepository = pluginApp(ConfigRepository::class);
         foreach($groupOnItems as $groupOnItem)
         {
-            $findVariationID = $this->variationSkuRepositoryContract->search(
-                array(
-                    "sku" => $groupOnItem->sku,
-                    "marketId" => (int)$this->configRepository->get("GroupON.referrerID"),
-                ));
+            try 
+            {
+                $findVariationID = $variationSkuRepositoryContract->search(
+                    array(
+                        "sku" => $groupOnItem->sku,
+                        "marketId" => $configRepository->get("GroupON.referrerID"),
+                ));    
+            } 
+            catch (\Exception $e) 
+            {
+               $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+            }
+            
             if (!is_null($findVariationID[0]->variationId)){
                 $amounts[] = [
                 'currency' => 'EU',
@@ -153,7 +131,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                     'quantity' => $groupOnItem->quantity,
                     'orderItemName' => $groupOnItem->name,
                     'itemVariationId' => $findVariationID[0]->variationId,
-                    'referrerId' => (int)$this->configRepository->get("GroupON.referrerID"),
+                    'referrerId' => $configRepository->get("GroupON.referrerID"),
                     'countryVatId' => 1,
                     'amounts' => $amounts,
                     'properties' => 
@@ -181,6 +159,10 @@ class SynchronizeGroupOnOrdersCron extends Cron
 
     public function createDeliveryAddress($groupOnOrder,$customer,$country)
     {
+        $addressRepositoryContract = pluginApp(AddressRepositoryContract::class);
+        $countryRepositoryContract = pluginApp(CountryRepositoryContract::class);
+        $contactAddressRepositoryContract = pluginApp(ContactAddressRepositoryContract::class);
+        
         $countryISO = $groupOnOrder->customer->country;
         
         if(empty($countryISO))
@@ -204,30 +186,43 @@ class SynchronizeGroupOnOrdersCron extends Cron
         $parts = explode(" ", $groupOnOrder->customer->name);
         $lastname = array_pop($parts);
         $firstname = implode(" ", $parts);
-
-        $country = $this->countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
-        $deliveryAddress = $this->addressRepository->createAddress([
-            'name2' => $firstname,
-            'name3' => $lastname,
-            'address1' => $street,
-            'address2' => $houseNumber,
-            'street' => $street,
-            'houseNumber'=>$houseNumber,
-            'town' => $groupOnOrder->customer->city,
-            'postalCode' => $groupOnOrder->customer->zip,
-            'countryId' => $country->id,
-            'phone' => $groupOnOrder->customer->phone
-        ]);
         
+        try 
+        {
+            $country = $countryRepositoryContract->getCountryByIso($countryISO,"isoCode2");
+            $deliveryAddress = $addressRepositoryContract->createAddress([
+                'name2' => $firstname,
+                'name3' => $lastname,
+                'address1' => $street,
+                'address2' => $houseNumber,
+                'street' => $street,
+                'houseNumber'=>$houseNumber,
+                'town' => $groupOnOrder->customer->city,
+                'postalCode' => $groupOnOrder->customer->zip,
+                'countryId' => $country->id,
+                'phone' => $groupOnOrder->customer->phone
+            ]);    
+        } 
+        catch (\Exception $e) 
+        {
+            $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+        }
+        
+       
         if(isset($deliveryAddress->id) && isset($customer->id))
         {
-            $addContactAddress = $this->contactAddressRepositoryContract->addAddress($deliveryAddress->id,$customer->id,2);
-            /*$this->getLogger(__FUNCTION__)->info('Address Connected with Customer',"info : $addContactAddress"); */
-            return $deliveryAddress;
+            try 
+            {
+                $addContactAddress = $contactAddressRepositoryContract->addAddress($deliveryAddress->id,$customer->id,2);
+                return $deliveryAddress;    
+            } 
+            catch (\Exception $e) 
+            {
+                $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+            }
         }
         else
         {
-            /*$this->getLogger(__FUNCTION__)->error('Address not connected with Customer',json_encode($customer)); */
             return null;
         }
         
@@ -235,7 +230,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
     
     public function createCustomer($groupOnOrder)
     {
-        
+        $contactRepositoryContract = pluginApp(ContactRepositoryContract::class);
         $parts = explode(" ", $groupOnOrder->customer->name);
         $lastname = array_pop($parts);
         $firstname = implode(" ", $parts);
@@ -251,37 +246,52 @@ class SynchronizeGroupOnOrdersCron extends Cron
             'privatePhone' => $groupOnOrder->customer->phone,
         ];
 
-      
-        $customer = $this->contactRepositoryContract->createContact($data); 
-        if(isset($customer->id))
+        try 
         {
-            /*$this->getLogger(__FUNCTION__)->info('Customer Created Successfully',"Customer : $customer"); */
-            return $customer;        
-        }
-        else
+            $customer = $contactRepositoryContract->createContact($data); 
+            if(isset($customer->id))
+            {
+                return $customer;        
+            }
+            else
+            {
+                return null;
+            }
+        } 
+        catch (\Exception $e) 
         {
-           /* $this->getLogger(__FUNCTION__)->error('Customer not created',"Customer : $customer"); */
-            return null;
+            $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
         }
+        
     }
     
     
     public function Procedure(EventProceduresTriggered $eventTriggered)
     {
+        $configRepository = pluginApp(ConfigRepository::class);
+        
         $order = $eventTriggered->getOrder();
         $parameters = [];
         foreach ($order->properties as $config) {
             if((int)$config->typeId == 2)
             {
                  $preset = pluginApp(ParcelServicePresetRepositoryContract::class);
-                 $shippingProfile = $preset-> getPresetById($config->value);
-                 $carrier = $shippingProfile->backendName;
+                 try 
+                 {
+                    $shippingProfile = $preset->getPresetById($config->value);
+                    $carrier = $shippingProfile->backendName;    
+                 } 
+                 catch (\Exception $e) 
+                 {
+                    $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+                 }  
+                 
             }
             if((int)$config->typeId == 7)
             {
                 $countryISO = substr($config->value, 0, 2);
-                $supplierID = $this->configRepository->get("GroupON.$countryISO-supplierID");
-                $token = $this->configRepository->get("GroupON.$countryISO-token");  
+                $supplierID = $configRepository->get("GroupON.$countryISO-supplierID");
+                $token = $configRepository->get("GroupON.$countryISO-token");  
             }
         }
         
@@ -319,8 +329,18 @@ class SynchronizeGroupOnOrdersCron extends Cron
     
     public function formateFeedBack($order,$carrier,$supplierID,$token)
     {
+        $orderRepositoryContract = pluginApp(OrderRepositoryContract::class);
+        
         $lineItemIds = [];
-        $packageNumber = $this->orderRepository->getPackageNumbers($order->id);
+        try 
+        {
+            $packageNumber = $orderRepositoryContract->getPackageNumbers($order->id);
+        } 
+        catch (\Exception $e) 
+        {
+            $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
+        }
+        
         foreach($order->orderItems as $orderItems)
         {
             foreach($orderItems->properties as $properties)
@@ -363,34 +383,13 @@ class SynchronizeGroupOnOrdersCron extends Cron
             $houseNumber = $address;
             $street = $address;
         }
-        
         $address = 
         [
             'HouseNumber' => $houseNumber,
             'Street' => $street
         ];
-        
-      /*  $this->getLogger(__FUNCTION__)->info('House Number',json_encode($address)); */
         return $address;
     }
-    
-   /* public function saveOrder($orderData)
-    {
-        $database = pluginApp(DataBase::class);
- 
-        $order = pluginApp(Groupon::class);
- 
-        $order->orderID = $orderData->id;
-        foreach($orderData->properties as $properties)
-        {
-            if($properties->typeId == 7)
-            {
-                $order->externalOrderID = $properties->value;
-            }
-        }
-        $database->save($order);
-        return $order; 
-    }*/
     
     public function checkIfExists($country,$orderID)
     {
@@ -415,6 +414,9 @@ class SynchronizeGroupOnOrdersCron extends Cron
     
     public function generateOrder($country,$configuration,$groupOnOrder)
     {
+        $orderRepositoryContract = pluginApp(OrderRepositoryContract::class);
+        $configRepository = pluginApp(ConfigRepository::class);
+        
         $order = $this->authHelper->processUnguarded(
         function () use ($groupOnOrder,$configuration,$country) 
         {
@@ -425,41 +427,47 @@ class SynchronizeGroupOnOrdersCron extends Cron
                 $orderItems = $this->generateOrderItemLists($groupOnOrder->line_items);
                 if (!is_null($orderItems)) 
                 {
-                    $addOrder = $this->orderRepository->createOrder(
-                    [
-                        'typeId' => 1,
-                        'methodOfPaymentId' => (int)$this->configRepository->get("GroupON.payment"),
-                        'shippingProfileId' => 6,
-                        'plentyId' => 0,
-                        'orderItems' => $orderItems,
-                        'properties' => 
+                    try 
+                    {
+                        $addOrder = $orderRepositoryContract->createOrder(
                         [
-                           [
-                                "typeId" => 7,
-                                "value" => $country.$groupOnOrder->orderid
-                           ],
-                        ],
-                        "relations" =>
-                        [
+                            'typeId' => 1,
+                            'methodOfPaymentId' => $configRepository->get("GroupON.payment"),
+                            'shippingProfileId' => 6,
+                            'plentyId' => 0,
+                            'orderItems' => $orderItems,
+                            'properties' => 
                             [
-                                "referenceType" => "contact",
-                                "relation" => "receiver",
-                                "referenceId"=>$customer->id
+                               [
+                                    "typeId" => 7,
+                                    "value" => $country.$groupOnOrder->orderid
+                               ],
                             ],
-                        ],
-                        'addressRelations' => [
-                            ['typeId' => 1, 'addressId' => $deliveryAddress->id],
-                            ['typeId' => 2, 'addressId' => $deliveryAddress->id],
-                        ],
-                        'dates'=>
-                        [
-                          ['typeId' => 3 , 'createdAt' => $groupOnOrder->date], 
-                          ['typeId' => 7 , 'createdAt' => $groupOnOrder->date],  
-                        ],
-                    ]);
-                        
+                            "relations" =>
+                            [
+                                [
+                                    "referenceType" => "contact",
+                                    "relation" => "receiver",
+                                    "referenceId"=>$customer->id
+                                ],
+                            ],
+                            'addressRelations' => [
+                                ['typeId' => 1, 'addressId' => $deliveryAddress->id],
+                                ['typeId' => 2, 'addressId' => $deliveryAddress->id],
+                            ],
+                            'dates'=>
+                            [
+                              ['typeId' => 3 , 'createdAt' => $groupOnOrder->date], 
+                              ['typeId' => 7 , 'createdAt' => $groupOnOrder->date],  
+                            ],
+                        ]);
+                    }
+                    catch (\Exception $e) 
+                    {
+                         $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
+                    }
+    
                     $exported = $this->markAsExported($groupOnOrder,$configuration);
-                   /* $saveOrder = $this->saveOrder($addOrder);*/
                     return $addOrder;
                 }
             }
@@ -470,12 +478,22 @@ class SynchronizeGroupOnOrdersCron extends Cron
     
     public function getConfiguration()
     {
+        $configRepository = pluginApp(ConfigRepository::class);
+        
         $countryArrays = ["DE","FR","IT"];
         $configurationArray = [];
         foreach($countryArrays as $country)
         {
-            $supplierID = $this->configRepository->get("GroupON.$country-supplierID");
-            $token = $this->configRepository->get("GroupON.$country-token");
+            try 
+            {
+                $supplierID = $configRepository->get("GroupON.$country-supplierID");
+                $token = $configRepository->get("GroupON.$country-token");
+            } 
+            catch (\Exception $e) 
+            {
+                $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
+            }
+            
             if(!empty($supplierID) && !empty($token))
             {
                 $configurationArray[$country] = 
