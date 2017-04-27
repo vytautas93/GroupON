@@ -1,14 +1,20 @@
 {
   "name": "Groupon",
-  "description": "GroupON plugin for Plenty Market 7",
   "namespace": "Groupon",
-  "author": "Hashtages",
-  "type": "backend",
   "serviceProvider": "Groupon\\Providers\\GroupOnServiceProvider",
-  "version":"0.0.1",
+  "marketplaceName"   : {"de":"German display name of plugin","en":"English display name of plugin"},
+  "description": "GroupON plugin for Plenty Market 7",
+  "shortDescription"  : {"de":"German short description","en":"English short description"},
+  "keywords":["terra","backend", "Groupon","integration"],
+  "categories": ["3523", "3521"],
+  "isClosedSource":true,
+  "type": "backend",
   "license":"MIT",
-  "keywords":["terra","backend", "Groupon"],
-  "pluginIcon":"icon_plugin_xs.png",
+  "version":"0.0.1",
   "price":0.00,
-  "authorIcon":"icon_author_xs.png"
+  "pluginIcon":"groupon_xs.png",
+  "author": "hashtages",
+  "authorIcon":"hashtages_xs.png"
+  "email": "hello@hashtages.com",
+  "phone": "+49 (0) 4264-776949-5",
 }
