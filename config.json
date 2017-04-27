@@ -1,64 +1,64 @@
 [
     {
-        "tab"     : "Config For DE",//translate
-        "key"     : "carrier",//translate
-        "label"   : "Carrier",//translate
+        "tab"     : "Config For DE",/**translate**/
+        "key"     : "carrier",/**translate**/
+        "label"   : "Carrier",/**translate**/
         "type"    : "text",
         "default" : "UPS"
     },
     {
-        "tab"     : "Config For DE",//translate
-        "key"     : "DE-supplierID",//translate
-        "label"   : "Supplier ID for DE",//translate
+        "tab"     : "Config For DE",/**translate**/
+        "key"     : "DE-supplierID",/**translate**/
+        "label"   : "Supplier ID for DE",/**translate**/
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Config For DE",//translate
-        "key"     : "DE-token",//translate
-        "label"   : "Your Token for DE",//translate
+        "tab"     : "Config For DE",/**translate**/
+        "key"     : "DE-token",/**translate**/
+        "label"   : "Your Token for DE",/**translate**/
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Config For FR",//translate
-        "key"     : "FR-supplierID",//translate
-        "label"   : "Supplier ID for FR",//translate
+        "tab"     : "Config For FR",/**translate**/
+        "key"     : "FR-supplierID",/**translate**/
+        "label"   : "Supplier ID for FR",/**translate**/
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Config For FR",//translate
-        "key"     : "FR-token",//translate
-        "label"   : "Token for FR",//translate
+        "tab"     : "Config For FR",/**translate**/
+        "key"     : "FR-token",/**translate**/
+        "label"   : "Token for FR",/**translate**/
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Config For IT",//translate
-        "key"     : "IT-supplierID",//translate
-        "label"   : "Supplier ID for IT",//translate
+        "tab"     : "Config For IT",/**translate**/
+        "key"     : "IT-supplierID",/**translate**/
+        "label"   : "Supplier ID for IT",/**translate**/
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Config For IT",//translate
-        "key"     : "IT-token",//translate
-        "label"   : "Token for IT",//translate
+        "tab"     : "Config For IT",/**translate**/
+        "key"     : "IT-token",/**translate**/
+        "label"   : "Token for IT",/**translate**/
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Settings",//translate
-        "key"     : "referrerID",//translate
-        "label"   : "Referrer ID",//translate
+        "tab"     : "Settings",/**translate**/
+        "key"     : "referrerID",/**translate**/
+        "label"   : "Referrer ID",/**translate**/
         "type"    : "text",
         "default" : "1"
     },
     {
-        "tab"     : "Settings",//translate
-        "key"     : "payment",//translate
-        "label"   : "Payment ID",//translate
+        "tab"     : "Settings",/**translate**/
+        "key"     : "payment",/**translate**/
+        "label"   : "Payment ID",/**translate**/
         "type"    : "text",
         "default" : "4040"
     }
