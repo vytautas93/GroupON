@@ -46,6 +46,6 @@ class GroupOnServiceProvider extends ServiceProvider
             'de' => 'Send Feedback DE',//translate
             'en' => 'Send Feedback EN'//translate
 
-        ], 'Groupon\\Controllers\\ContentController@Procedure');
+        ], 'Groupon\\Crons\\SynchronizeGroupOnOrdersCron@Procedure');
     }
 }
