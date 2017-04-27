@@ -25,7 +25,8 @@ class TestController extends Controller
         {
              $model = pluginApp(StartTime::class);
              $model->startTime = time();
-             $database->save($model);
+             $test = $database->save($model);
+             $this->getLogger(__FUNCTION__)->error("Database in Else",json_encode($test));   
         }
         
         
