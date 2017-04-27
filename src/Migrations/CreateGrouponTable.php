@@ -1,6 +1,6 @@
 <?php
  
-namespace ToDoList\Migrations;
+namespace Groupon\Migrations;
  
 use Groupon\Models\GrouponModel;
 use Plenty\Modules\Plugin\DataBase\Contracts\Migrate;
