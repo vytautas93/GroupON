@@ -414,12 +414,14 @@ class SynchronizeGroupOnOrdersCron extends Cron
     
     public function generateOrder($country,$configuration,$groupOnOrder)
     {
-        $orderRepositoryContract = pluginApp(OrderRepositoryContract::class);
-        $configRepository = pluginApp(ConfigRepository::class);
+      
         
         $order = $this->authHelper->processUnguarded(
         function () use ($groupOnOrder,$configuration,$country) 
         {
+            $orderRepositoryContract = pluginApp(OrderRepositoryContract::class);
+            $configRepository = pluginApp(ConfigRepository::class);
+            
             $customer = $this->createCustomer($groupOnOrder);
             $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer,$country);
             if(!is_null($customer) && !is_null($deliveryAddress))
