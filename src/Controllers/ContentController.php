@@ -79,11 +79,6 @@ class ContentController extends Controller
                 }
             }
         }
-        
-        
-        
-        
-        
         $templateData = array("supplierID" => json_encode($exists));
         return $twig->render('GroupON::content.test',$templateData);
     }    
@@ -288,6 +283,7 @@ class ContentController extends Controller
                 $token = $this->configRepository->get("GroupON.$countryISO-token");  
             }
         }
+        
         if ($carrier && $supplierID && $token) 
         {
             $datatopost = $this->formateFeedBack($order,$carrier,$supplierID,$token);
@@ -312,6 +308,7 @@ class ContentController extends Controller
                 }        
             }
         }
+        
         else
         {
             $this->getLogger(__FUNCTION__)->info('Missing Parameters',"Add missing parameters"); 
