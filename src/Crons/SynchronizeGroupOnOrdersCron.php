@@ -268,7 +268,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         
         $order = $eventTriggered->getOrder();
         $parameters = [];
-        $this->getLogger(__FUNCTION__)->info('Properties',json_encode($order->propertie)); 
+        $this->getLogger(__FUNCTION__)->info('Properties',json_encode($order->properties)); 
         foreach ($order->properties as $config) {
             if((int)$config->typeId == 2)
             {
