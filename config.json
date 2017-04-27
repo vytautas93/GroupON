@@ -21,9 +21,9 @@
         "default" : ""
     },
     {
-        "tab"     : "Config For FR",
+        "tab"     : {"de":"German display name of plugin","en":"English display name of plugin"},
         "key"     : "FR-supplierID",
-        "label"   : "Supplier ID for FR",
+        "label"   : {"de":"German display name of plugin","en":"English display name of plugin"},
         "type"    : "text",
         "default" : ""
     },

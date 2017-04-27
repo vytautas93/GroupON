@@ -74,12 +74,10 @@ class SynchronizeGroupOnOrdersCron extends Cron
         curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
         curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec ($ch);
-        $this->getLogger(__FUNCTION__)->info('Response From GroupON',json_encode($response));
         if($response) 
         {
           $response_json = json_decode( $response );
           if( $response_json->success == true ) {
-            //Successfully marked as exported (only items which are not already marked exported
           } else {
             
           }
@@ -97,7 +95,6 @@ class SynchronizeGroupOnOrdersCron extends Cron
         $response = curl_exec($ch); 
         curl_close($ch);      
         $groupOnData = json_decode($response);
-        /*$this->getLogger(__FUNCTION__)->info('Orders From GroupON',"Order from $url  response: $response"); */
         return $groupOnData->data;
     }
     
