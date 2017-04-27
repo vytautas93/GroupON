@@ -11,6 +11,6 @@ class GrouponModel extends Model
   
     public function getTableName(): string
     {
-        return 'Groupon::GrouponModel';
+        return 'Groupon::Groupon';
     }
 }

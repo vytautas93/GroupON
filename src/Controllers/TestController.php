@@ -4,7 +4,6 @@ namespace Groupon\Controllers;
  
 use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Request;
-use Plenty\Plugin\Templates\Twig;
 
 use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
 use Groupon\Models\GrouponModel;
@@ -14,7 +13,7 @@ use Plenty\Plugin\Log\Loggable;
 class TestController extends Controller
 {
     use Loggable;
-     public function checkTrial()
+    public function checkTrial()
     {
         $database = pluginApp(DataBase::class);
         $startTime = $database->query(GrouponModel::class)->get();
