@@ -9,9 +9,11 @@ use Plenty\Plugin\Templates\Twig;
 use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
 use Groupon\Models\GrouponModel;
 
+use Plenty\Plugin\Log\Loggable;
 
 class TestController extends Controller
 {
+    use Loggable;
      public function checkTrial()
     {
         $database = pluginApp(DataBase::class);
