@@ -276,6 +276,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                  {
                     $shippingProfile = $preset->getPresetById($config->value);
                     $carrier = $shippingProfile->backendName;    
+                    $this->getLogger(__FUNCTION__)->info('Shipping Profile',json_encode($shippingProfile)); 
                  } 
                  catch (\Exception $e) 
                  {

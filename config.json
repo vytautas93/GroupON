@@ -1,43 +1,43 @@
 [
     {
-        "tab"     : "Config For DE", 
+        "tab"     : "Groupon Germany", 
         "key"     : "DE-supplierID", 
-        "label"   : "Supplier ID for DE", 
+        "label"   : "German Market supplier ID :", 
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Config For DE", 
+        "tab"     : "Groupon Germany", 
         "key"     : "DE-token", 
-        "label"   : "Your Token for DE", 
+        "label"   : "German Market Token:", 
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Config For FR", 
+        "tab"     : "Groupon France", 
         "key"     : "FR-supplierID", 
-        "label"   : "Supplier ID for FR", 
+        "label"   : "France Market supplier ID :", 
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Config For FR", 
+        "tab"     : "Groupon France", 
         "key"     : "FR-token", 
-        "label"   : "Token for FR", 
+        "label"   : "France Market Token :", 
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Config For IT", 
+        "tab"     : "Groupon Italy", 
         "key"     : "IT-supplierID", 
-        "label"   : "Supplier ID for IT", 
+        "label"   : "Italy Market supplier ID :", 
         "type"    : "text",
         "default" : ""
     },
     {
-        "tab"     : "Config For IT", 
+        "tab"     : "Groupon Italy", 
         "key"     : "IT-token", 
-        "label"   : "Token for IT", 
+        "label"   : "Italy Market Token :", 
         "type"    : "text",
         "default" : ""
     },
@@ -55,7 +55,4 @@
         "type"    : "text",
         "default" : "4040"
     }
-    
-    
-    
 ]
