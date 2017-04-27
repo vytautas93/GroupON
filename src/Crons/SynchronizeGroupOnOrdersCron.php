@@ -514,7 +514,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
     public function checkTrial()
     {
         $database = pluginApp(DataBase::class);
-        $startTime = $database->get();
+        $startTime = $database->query(GrouponModel::class)->get();
         $this->getLogger(__FUNCTION__)->error("Database",json_encode($startTime));   
         if ($startTime) {
             $this->getLogger(__FUNCTION__)->error("Database in IF",json_encode($startTime));   
