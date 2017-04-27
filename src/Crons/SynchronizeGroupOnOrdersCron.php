@@ -268,7 +268,6 @@ class SynchronizeGroupOnOrdersCron extends Cron
         
         $order = $eventTriggered->getOrder();
         $parameters = [];
-        $this->getLogger(__FUNCTION__)->info('Properties',json_encode($order->properties)); 
         foreach ($order->properties as $config) {
             if((int)$config->typeId == 2)
             {
@@ -276,7 +275,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                  try 
                  {
                     $shippingProfile = $preset->getPresetById($config->value);
-                    $carrier = $shippingProfile->backendName;    
+                    $carrier = $shippingProfile->parcelService->backend_name;    
                     $this->getLogger(__FUNCTION__)->info('Shipping Profile',json_encode($shippingProfile)); 
                  } 
                  catch (\Exception $e) 
@@ -299,6 +298,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
             $datatopost = $this->formateFeedBack($order,$carrier,$supplierID,$token);
             if(!empty($datatopost))
             {
+                $this->getLogger(__FUNCTION__)->info('FeedBackData',$datatopost); 
                 $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
                 curl_setopt ($ch, CURLOPT_POST, true);
                 curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
@@ -309,6 +309,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                   $response_json = json_decode( $response );
                   if( $response_json->success == true ) 
                   {
+                    
                     $this->getLogger(__FUNCTION__)->info('Succesfull response From Groupon',"FeedBack was sended\n.$response"); 
                   } 
                   else 
