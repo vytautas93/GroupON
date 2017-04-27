@@ -1,6 +1,6 @@
 <?php
 
-namespace GroupON\Crons;
+namespace Groupon\Crons;
  
 use Plenty\Plugin\ServiceProvider;
 use Plenty\Modules\Cron\Contracts\CronHandler as Cron;
@@ -47,10 +47,6 @@ class SynchronizeGroupOnOrdersCron extends Cron
                     }
                 }
             }
-        }
-        else
-        {
-            $this->getLogger(__FUNCTION__)->info("Missing Required Prameters","Please add your credentials in Settings Page");
         }
     }
     
@@ -111,7 +107,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                 $findVariationID = $variationSkuRepositoryContract->search(
                     array(
                         "sku" => $groupOnItem->sku,
-                        "marketId" => $configRepository->get("GroupON.referrerID"),
+                        "marketId" => $configRepository->get("Groupon.referrerID"),
                 ));    
             } 
             catch (\Exception $e) 
@@ -131,7 +127,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                     'quantity' => $groupOnItem->quantity,
                     'orderItemName' => $groupOnItem->name,
                     'itemVariationId' => $findVariationID[0]->variationId,
-                    'referrerId' => $configRepository->get("GroupON.referrerID"),
+                    'referrerId' => $configRepository->get("Groupon.referrerID"),
                     'countryVatId' => 1,
                     'amounts' => $amounts,
                     'properties' => 
@@ -290,8 +286,8 @@ class SynchronizeGroupOnOrdersCron extends Cron
             if((int)$config->typeId == 7)
             {
                 $countryISO = substr($config->value, 0, 2);
-                $supplierID = $configRepository->get("GroupON.$countryISO-supplierID");
-                $token = $configRepository->get("GroupON.$countryISO-token");  
+                $supplierID = $configRepository->get("Groupon.$countryISO-supplierID");
+                $token = $configRepository->get("Groupon.$countryISO-token");  
             }
         }
         
@@ -310,11 +306,11 @@ class SynchronizeGroupOnOrdersCron extends Cron
                   $response_json = json_decode( $response );
                   if( $response_json->success == true ) 
                   {
-                    $this->getLogger(__FUNCTION__)->info('Succesfull response From GroupON',"FeedBack was sended\n.$response"); 
+                    $this->getLogger(__FUNCTION__)->info('Succesfull response From Groupon',"FeedBack was sended\n.$response"); 
                   } 
                   else 
                   {
-                    $this->getLogger(__FUNCTION__)->error('Bad Response From GroupON',"Something was wrong\n.$response"); 
+                    $this->getLogger(__FUNCTION__)->error('Bad Response From Groupon',"Something was wrong\n.$response"); 
                   }
                 }        
             }
@@ -434,7 +430,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                         $addOrder = $orderRepositoryContract->createOrder(
                         [
                             'typeId' => 1,
-                            'methodOfPaymentId' => $configRepository->get("GroupON.payment"),
+                            'methodOfPaymentId' => $configRepository->get("Groupon.payment"),
                             'shippingProfileId' => 6,
                             'plentyId' => 0,
                             'orderItems' => $orderItems,
@@ -488,8 +484,8 @@ class SynchronizeGroupOnOrdersCron extends Cron
         {
             try 
             {
-                $supplierID = $configRepository->get("GroupON.$country-supplierID");
-                $token = $configRepository->get("GroupON.$country-token");
+                $supplierID = $configRepository->get("Groupon.$country-supplierID");
+                $token = $configRepository->get("Groupon.$country-token");
             } 
             catch (\Exception $e) 
             {

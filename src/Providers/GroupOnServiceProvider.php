@@ -1,6 +1,6 @@
 <?php
  
-namespace GroupON\Providers;
+namespace Groupon\Providers;
  
 use Plenty\Log\Services\ReferenceContainer;
 use Plenty\Plugin\ServiceProvider;
@@ -10,11 +10,11 @@ use Plenty\Modules\EventProcedures\Services\Entries\ProcedureEntry;
 use Plenty\Plugin\Log\Loggable;
 
 use Plenty\Modules\Cron\Services\CronContainer;
-use GroupON\Crons\SynchronizeGroupOnOrdersCron;
+use Groupon\Crons\SynchronizeGroupOnOrdersCron;
 
 /**
  * Class GroupOnServiceProvider
- * @package GroupON\Providers
+ * @package Groupon\Providers
  */
 class GroupOnServiceProvider extends ServiceProvider
 {
@@ -46,6 +46,6 @@ class GroupOnServiceProvider extends ServiceProvider
             'de' => 'Send Feedback DE',//translate
             'en' => 'Send Feedback EN'//translate
 
-        ], 'GroupON\\Controllers\\ContentController@Procedure');
+        ], 'Groupon\\Controllers\\ContentController@Procedure');
     }
 }
