@@ -6,7 +6,7 @@ use Plenty\Modules\Plugin\DataBase\Contracts\Model;
  
 class GrouponModel extends Model
 {
-    public $createdAt       = '';
+    public $createdAt = '';
  
   
     public function getTableName(): string

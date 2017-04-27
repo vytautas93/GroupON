@@ -521,9 +521,9 @@ class SynchronizeGroupOnOrdersCron extends Cron
         }
         else
         {
-             $time = pluginApp(GrouponModel::class);
-             $time->createdAt = time();
-             $database->save($time);
+             $model = pluginApp(GrouponModel::class);
+             $model->createdAt = time();
+             $database->save($model);
         }
         
         
