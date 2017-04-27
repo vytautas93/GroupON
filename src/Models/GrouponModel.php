@@ -7,6 +7,7 @@ use Plenty\Modules\Plugin\DataBase\Contracts\Model;
 class GrouponModel extends Model
 {
     public $id = 0;
+    public $startTime = '';
     public $createdAt = '';
  
   
