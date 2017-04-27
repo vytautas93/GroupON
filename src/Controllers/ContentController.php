@@ -288,7 +288,9 @@ class ContentController extends Controller
                 $countryISO = substr($config->value, 0, 2);
                 $supplierID = $this->configRepository->get("GroupON.$countryISO-supplierID");
                 $token = $this->configRepository->get("GroupON.$countryISO-token");  
-                
+                $this->getLogger(__FUNCTION__)->info('$countryISO',json_encode($countryISO));
+                $this->getLogger(__FUNCTION__)->info('$supplierID',json_encode($supplierID));
+                $this->getLogger(__FUNCTION__)->info('$token',json_encode($token));
             }
         }
 
