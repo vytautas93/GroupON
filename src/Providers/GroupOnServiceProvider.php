@@ -43,8 +43,8 @@ class GroupOnServiceProvider extends ServiceProvider
         */
         
         $eventProceduresService->registerProcedure('SendFeedBack',ProcedureEntry::PROCEDURE_GROUP_ORDER, [
-            'de' => 'Send Feedback DE',
-            'en' => 'Send Feedback EN'
+            'de' => 'Send Feedback DE',//translate
+            'en' => 'Send Feedback EN'//translate
 
         ], 'GroupON\\Controllers\\ContentController@Procedure');
     }

@@ -1,5 +1,5 @@
 <?php
- 
+/**
 namespace GroupON\Controllers;
  
 use Plenty\Plugin\Controller;
@@ -126,7 +126,7 @@ class ContentController extends Controller
         $response = curl_exec($ch); 
         curl_close($ch);      
         $groupOnData = json_decode($response);
-        /*$this->getLogger(__FUNCTION__)->info('Orders From GroupON',"Order from $url  response: $response"); */
+        
         return $groupOnData->data;
     }
     
@@ -221,12 +221,12 @@ class ContentController extends Controller
         if(isset($deliveryAddress->id) && isset($customer->id))
         {
             $addContactAddress = $this->contactAddressRepositoryContract->addAddress($deliveryAddress->id,$customer->id,2);
-            /*$this->getLogger(__FUNCTION__)->info('Address Connected with Customer',"info : $addContactAddress"); */
+            
             return $deliveryAddress;
         }
         else
         {
-            /*$this->getLogger(__FUNCTION__)->error('Address not connected with Customer',json_encode($customer)); */
+            
             return null;
         }
         
@@ -254,12 +254,12 @@ class ContentController extends Controller
         $customer = $this->contactRepositoryContract->createContact($data); 
         if(isset($customer->id))
         {
-            /*$this->getLogger(__FUNCTION__)->info('Customer Created Successfully',"Customer : $customer"); */
+            
             return $customer;        
         }
         else
         {
-           /* $this->getLogger(__FUNCTION__)->error('Customer not created',"Customer : $customer"); */
+
             return null;
         }
     }
@@ -369,7 +369,7 @@ class ContentController extends Controller
             'Street' => $street
         ];
         
-      /*  $this->getLogger(__FUNCTION__)->info('House Number',json_encode($address)); */
+      
         return $address;
     }
     
@@ -389,7 +389,7 @@ class ContentController extends Controller
         }
         $database->save($order);
         return $order; 
-    }*/
+    }
     
     public function checkIfExists($country,$orderID)
     {
@@ -458,7 +458,7 @@ class ContentController extends Controller
                     ]);
                         
                     $exported = $this->markAsExported($groupOnOrder,$configuration);
-                   /* $saveOrder = $this->saveOrder($addOrder);*/
+                   
                     return $addOrder;
                 }
             }
@@ -488,3 +488,4 @@ class ContentController extends Controller
     }
     
 }
+*/
