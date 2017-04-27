@@ -519,12 +519,12 @@ class SynchronizeGroupOnOrdersCron extends Cron
         if ($startTime) {
             $this->getLogger(__FUNCTION__)->error("Database in IF",json_encode($startTime));   
         }
-        else
+        /*else
         {
              $model = pluginApp(GrouponModel::class);
              $model->createdAt = time();
              $database->save($model);
-        }
+        }*/
         
         
         
