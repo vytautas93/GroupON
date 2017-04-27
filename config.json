@@ -1,13 +1,6 @@
 [
     {
         "tab"     : "Config For DE", 
-        "key"     : "carrier", 
-        "label"   : "Carrier", 
-        "type"    : "text",
-        "default" : "UPS"
-    },
-    {
-        "tab"     : "Config For DE", 
         "key"     : "DE-supplierID", 
         "label"   : "Supplier ID for DE", 
         "type"    : "text",
