@@ -273,49 +273,49 @@ class ContentController extends Controller
     public function Procedure(EventProceduresTriggered $eventTriggered)
     {
         $order = $eventTriggered->getOrder();
-        $this->getLogger(__FUNCTION__)->info('$order',json_encode($order));
-        $this->getLogger(__FUNCTION__)->info('$config',json_encode($order->properties));
+        $parameters = [];
         foreach ($order->properties as $config) {
             if((int)$config->typeId == 2)
             {
                  $preset = pluginApp(ParcelServicePresetRepositoryContract::class);
                  $shippingProfile = $preset-> getPresetById($config->value);
                  $carrier = $shippingProfile->backendName;
-                 $this->getLogger(__FUNCTION__)->info('ShippingProfile',json_encode($carrier));
             }
-            
+        
             if((int)$config->typeId == 7)
             {
                 $countryISO = substr($config->value, 0, 2);
                 $supplierID = $this->configRepository->get("GroupON.$countryISO-supplierID");
                 $token = $this->configRepository->get("GroupON.$countryISO-token");  
-                $this->getLogger(__FUNCTION__)->info('$countryISO',json_encode($countryISO));
-                $this->getLogger(__FUNCTION__)->info('$supplierID',json_encode($supplierID));
-                $this->getLogger(__FUNCTION__)->info('$token',json_encode($token));
             }
         }
-
-        $datatopost = $this->formateFeedBack($order,$carrier,$supplierID,$token);
-        
-        if(!empty($datatopost))
+        if (!$carrier && !$supplierID && !$token) 
         {
-            $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
-            curl_setopt ($ch, CURLOPT_POST, true);
-            curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
-            curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
-            $response = curl_exec ($ch);
-            if($response) 
+            $datatopost = $this->formateFeedBack($order,$carrier,$supplierID,$token);
+            if(!empty($datatopost))
             {
-              $response_json = json_decode( $response );
-              if( $response_json->success == true ) 
-              {
-                $this->getLogger(__FUNCTION__)->info('Succesfull response From GroupON',"FeedBack was sended\n.$response"); 
-              } 
-              else 
-              {
-                $this->getLogger(__FUNCTION__)->error('Bad Response From GroupON',"Something was wrong\n.$response"); 
-              }
-            }        
+                $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
+                curl_setopt ($ch, CURLOPT_POST, true);
+                curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
+                curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+                $response = curl_exec ($ch);
+                if($response) 
+                {
+                  $response_json = json_decode( $response );
+                  if( $response_json->success == true ) 
+                  {
+                    $this->getLogger(__FUNCTION__)->info('Succesfull response From GroupON',"FeedBack was sended\n.$response"); 
+                  } 
+                  else 
+                  {
+                    $this->getLogger(__FUNCTION__)->error('Bad Response From GroupON',"Something was wrong\n.$response"); 
+                  }
+                }        
+            }
+        }
+        else
+        {
+            $this->getLogger(__FUNCTION__)->info('Missing Parameters',"Add missing parameters"); 
         }
     }
     
