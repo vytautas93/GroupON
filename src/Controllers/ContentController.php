@@ -273,8 +273,9 @@ class ContentController extends Controller
     public function Procedure(EventProceduresTriggered $eventTriggered)
     {
         $order = $eventTriggered->getOrder();
+        $this->getLogger(__FUNCTION__)->info('$order',json_encode($order));
         foreach ($order->properties as $config) {
-            
+            $this->getLogger(__FUNCTION__)->info('$config',json_encode($config));
             if((int)$config->typeId == 6)
             {
                  $preset = pluginApp(ParcelServicePresetRepositoryContract::class);
