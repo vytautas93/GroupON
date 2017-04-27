@@ -19,11 +19,18 @@ class TestController extends Controller
         $startTime = $database->query(StartTime::class)->get();
         $this->getLogger(__FUNCTION__)->error("Database",json_encode($startTime));   
         if ($startTime) {
+             
+            $startTime[0]->startTime;
+            
+            
+            
+            
+            
             $this->getLogger(__FUNCTION__)->error("Database in IF",json_encode($startTime));   
         }
         else
         {  
-             $time = (string)time();
+             $time = (string)strtotime('+1 months');
              $this->getLogger(__FUNCTION__)->error("Time",json_encode($time));   
              $model = pluginApp(StartTime::class);
              $model->startTime = $time;
