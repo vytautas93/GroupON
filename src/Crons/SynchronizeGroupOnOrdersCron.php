@@ -15,6 +15,11 @@ use Plenty\Modules\Account\Contact\Contracts\ContactAddressRepositoryContract;
 use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 use Plenty\Modules\Order\Shipping\Contracts\ParcelServicePresetRepositoryContract;
+
+use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
+use Groupon\Models\GrouponModel;
+
+
 use Plenty\Plugin\Log\Loggable;
 
 class SynchronizeGroupOnOrdersCron extends Cron
@@ -505,4 +510,25 @@ class SynchronizeGroupOnOrdersCron extends Cron
         }
         return $configurationArray;
     }
+    
+    public function checkTrial()
+    {
+        $database = pluginApp(DataBase::class);
+        $startTime = $database->get();
+        $this->getLogger(__FUNCTION__)->error("Database",json_encode($startTime));   
+        if ($startTime) {
+            $this->getLogger(__FUNCTION__)->error("Database in IF",json_encode($startTime));   
+        }
+        else
+        {
+             $time = pluginApp(GrouponModel::class);
+             $time->createdAt = time();
+             $database->save($time);
+        }
+        
+        
+        
+       
+    }
+    
 }
