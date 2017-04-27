@@ -1,132 +1,50 @@
-# This is the headline of your user guide
+# Groupon Marketplace Plugin
  
-Below the headline, include a short introduction describing your plugin, the scope of functionality and link the main features.
+zunächst einmal, was ist Groupon?
  
-## Getting started and requirements
+Antwort: Ein Marktplatz ;-)
  
-In the first chapter, provide information about setting up the plugin. Provide a short **Getting started** section. Also, mention required plugins, that must be installed to run your plugin.
+,...Sprechen Sie mit Ihren Produkten eine riesige Zielgruppe an. Groupon Goods ist ein One-Stop-Shop für den täglichen Bedarf mit Markenprodukten und einmaligen, unschlagbaren Angeboten.
+Nutzen Sie Online-, E-Mail- und Telefonwerbung. Mit Groupon Goods werden Ihre Produkte für mehr als 15 Millionen aktive Kunden zugänglich.
  
-## Plugin configuration
+Wie melde ich mich dort an?
+https://www.groupon.de/merchant/marketing-solutions/goods -> **Los geht´s**
  
-Main chapters can be used to give a detailed description of the settings of your plugins. You can group settings descriptions.
+## Was muss ich machen, dass alles sauber läuft und ich ich im Forum keine Beiträge schreiben muss?
  
-### The first feature of the plugin
+Ganz eifach!
+1. Du registrierst dich bei Groupon (wie oben schon beschrieben)
+2. Du bekommst von Groupon einen Account wo Du die Händler ID und den Token einsehen kannst
+> Diese trägst Du dann in dem Plugin unter Einstellungen unter dem Marktplatz z.B. DE ein
+3. Du fügst unter "Einstellungen > Aufträge > Auftragsherkunft" Groupon hinzu und trägst die ID im Plugin unter Settings > Herkunft ID ein
+4. Jetzt wählst Du eine Zahlart aus, mit der die Bestellungen importiert werden sollen, z.B. 1700 für Coupon (aber aktivieren vorher) und trägst diese im Plugin unter Settings > Zahlart ID ein
  
-Single features are described in a sub-section. If you want to give instructions for setting up a function in the plentymarkets back end, use the following template:
+OK, damit der Versand bei Groupon auch bestätigt wird, musst du jetzt noch,...
+5. Erstelle eine Ereignisaktion unter "Einstellungen > Aufträge > Ereignisaktionen" für deine Versendeten Bestellungen!
+z.B. Statuswechsel auf die 7.0, Filter Herkunft "Groupon" und Aktionen Plugins "Groupon Versandbestätigung senden"
  
-##### Setting up a feature:
+### Und nu?
  
-1. Go to the **Start » Plugins** menu.
-2. Click on **My plugin**.<br />→ A new window will open.
-3. Select a value from the **My plugin feature** drop-down.
-4. **Save** the settings.
+Na, bei Groupon einen Deal starten natürlich!
+Dazu fügst Du einen Deal in deinem Groupon Merchant Center hinzu mit allem was nötig ist und dann,....<br>bekommst Du eine SKU von Groupon!
+Diese SKU trägst Du dann in deine zugehörige Variante unter **SKU** ein! Wichtig, die Herkunft muss deine oben unter 3 gewählte Auftragsherkunft **"Groupon"** sein!
  
-### Another feature
+#### Was Du wissen solltest
  
-Add the instructions. In this case we want to describe more than one setting, so we use a table below the instructions.
+Wenn Du merkst, dass keine Aufträge angelegt werden, wird das folgende Gründe haben:
+1. Du hast auf Groupon gar keine Aufträge
+2. Du hast zwar Aufträge da, aber hast die SKU nicht in dem Artikel eingetragen
+3. Du hast zwar Aufträge da, aber hast die SKU falsch eingetragen
+4. Du hast zwar Aufträge da, aber hast die falsche Herkunft zu deiner SKU eingetragen
+5. Kombinationen aus den gründen 1-4 in verschiedenster Form :-p
  
-![Add an image](http://placehold.it/350x150?text=Add+an+image)
+## Aktuell ist dieses die public Beta Version!
+**Wir limitieren diese Version aktuell pro Shop auf eine kostenfreie Nutzung von einem Monat!**
  
-##### Setting up another feature with multiple settings:
+Hierfür gibt es verschiedene Gründe und der wichtigste ist, Groupon ist sich aktuell noch nicht sicher, wie unsere Arbeit honoriert wird!
+Es kann demnach sein, dass wir das Plugin komplett von Groupon bezahlt bekommen oder wir es später kostenpflichtig einstellen müssen.
  
-1. Go to the **Start » Plugins** menu.
-2. Click on **My plugin**.<br />→ A new window will open.
-3. Carry out the settings. Pay attention to the information given in table 1.
-4. **Save** the settings.
- 
-<table>
-	<thead>
-		<th>
-			Settings
-		</th>
-		<th>
-			Explanation
-		</th>
-	</thead>
-	<tbody>
-		<tr>
-			<td>
-				<b>Setting 1</b>
-			</td>
-			<td>
-				Description 1
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<b>Setting 2</b>
-			</td>
-			<td>
-				Description 2
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<b>Setting 3</b>
-			</td>
-			<td>
-				Description 3
-			</td>
-		</tr>
-	</tbody>
-	<caption>
-		Table 1: Settings for another feature
-	</caption>
-</table>
- 
-## Highlighting
- 
-### Boldface
- 
-Use **bold** for highlighting UI texts, menus and options.
- 
-### Code
- 
-A single line of code is highlighted using <code>`</code> at the beginning and at the end of the line:
- 
-`This is a line of code`
- 
-If you want to include multiple lines of code, use <code>```</code> before and after a code example.
- 
-```
-Line 1 of code
-Line 2 of code
-Line 3 of code
-```
- 
- 
-### Warning
- 
-<div class="alert alert-danger" role="alert">
-    This is a red box. Use this box for warning messages.
-</div>
- 
-### Important
- 
-<div class="alert alert-warning" role="alert">
-    This is a yellow box. Use this box for important information.
-</div>
- 
-### Example
- 
-<div class="alert alert-success" role="alert">
-    This is a green box. Use this box for examples.
-</div>
- 
-### Note
- 
-<div class="alert alert-info" role="alert">
-    This is a blue box. Use this box for notes.
-</div>
- 
- 
-## Further reading
- 
-Add links to further information.
- 
-* Here you can find a [markdown cheatsheet](https://guides.github.com/pdfs/markdown-cheatsheet-online.pdf)
-* [More markdown](http://www.markdowntutorial.com/)
+**Je mehr Shops sich jetzt bei Groupon anmelden, desto höher ist die Wahrscheinlichkeit, dass Groupon das Plugin finanziert!**
  
 ## License
- 
-In this section, you can add information about your license, e.g. this project is licensed under the GNU AFFERO GENERAL PUBLIC LICENSE - see the [LICENSE.md](/LICENSE.md) file for details.
+Alles erlaubt, solange es in deinem System bleibt und du nicht versuchst es zu cracken ;-)

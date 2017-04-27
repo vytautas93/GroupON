@@ -268,6 +268,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         
         $order = $eventTriggered->getOrder();
         $parameters = [];
+        $this->getLogger(__FUNCTION__)->info('Properties',json_encode($order->propertie)); 
         foreach ($order->properties as $config) {
             if((int)$config->typeId == 2)
             {
@@ -294,6 +295,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         
         if ($carrier && $supplierID && $token) 
         {
+            $this->getLogger(__FUNCTION__)->info('TestLOG',json_encode($carrier)); 
             $datatopost = $this->formateFeedBack($order,$carrier,$supplierID,$token);
             if(!empty($datatopost))
             {
