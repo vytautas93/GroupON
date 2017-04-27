@@ -20,13 +20,14 @@ class TestController extends Controller
         $this->getLogger(__FUNCTION__)->error("Database",json_encode($startTime));   
         if ($startTime) {
              
-            $startTime[0]->startTime;
-            
+           
+              $time = (string)strtotime('+1 months');
             
             
             
             
             $this->getLogger(__FUNCTION__)->error("Database in IF",json_encode($startTime));   
+            $this->getLogger(__FUNCTION__)->error("time",json_encode($time));   
         }
         else
         {  
