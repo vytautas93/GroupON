@@ -409,6 +409,9 @@ class TestController extends Controller
             $contract = pluginApp(OrderRepositoryContract::class);
             $setFilter = $contract->setFilters(['externalOrderId' => (string)$country.$orderID ]);
             $orderList = $contract->searchOrders();
+            $getFilters = $contract->getFilters();
+            $this->getLogger(__FUNCTION__)->info("SET",(string)$country.$orderID);  
+            $this->getLogger(__FUNCTION__)->info("Filters",json_encode($getFilters));  
             $this->getLogger(__FUNCTION__)->info("orderList",json_encode($orderList));  
             $totalsCount = json_decode(json_encode($orderList),true);
 
