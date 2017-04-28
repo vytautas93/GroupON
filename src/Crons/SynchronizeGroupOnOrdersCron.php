@@ -466,7 +466,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                             ],
                             'dates'=>
                             [
-                              ['typeId' => 3 , 'createdAt' => date('Y-m-d G:i:s',strtotime('03/01/2017 02:02PM UTC'))]
+                              ["id"=>3, 'typeId' => 3 , 'createdAt' => date('Y-m-d G:i:s',strtotime('03/01/2017 02:02PM UTC'))]
                               
                             ],
                         ]);
