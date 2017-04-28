@@ -37,6 +37,7 @@ class TestController extends Controller
     public function test()
     {
         $trial = $this->checkTrial();
+        $this->getLogger(__FUNCTION__)->info("Trial",json_encode($trial));   
         if ($trial) 
         {
             $configurations = $this->getConfiguration();
@@ -48,6 +49,7 @@ class TestController extends Controller
                     foreach($groupOnOrders as $groupOnOrder)
                     {
                         $exists = $this->checkIfExists($country,$groupOnOrder->orderid);
+                        $this->getLogger(__FUNCTION__)->info("Exists",json_encode($exists));   
                         if ($exists == false) 
                         {   
                             $order = $this->generateOrder($country,$configuration,$groupOnOrder);
@@ -422,8 +424,7 @@ class TestController extends Controller
     
     public function generateOrder($country,$configuration,$groupOnOrder)
     {
-      
-        
+
         $order = $this->authHelper->processUnguarded(
         function () use ($groupOnOrder,$configuration,$country) 
         {
@@ -465,14 +466,9 @@ class TestController extends Controller
                                 ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                             ],
                         ]);
-                    }
-                    catch (\Exception $e) 
-                    {
-                         $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
-                    }
-                    
-                    
-                    
+                        
+                        
+                        
                     $paymentOrderRelationRepositoryContract = pluginApp(PaymentOrderRelationRepositoryContract::class);
                     $paymentRepositoryContract = pluginApp(PaymentRepositoryContract::class);
                     
@@ -494,7 +490,17 @@ class TestController extends Controller
                         ];
                     $createPayment = $paymentRepositoryContract->createPayment($data);
                     $this->getLogger(__FUNCTION__)->error("TEst",json_encode($createPayment)); 
-                    // $orderRelation = $paymentOrderRelationRepositoryContract->createOrderRelation($createPayment,$addOrder);
+                    $orderRelation = $paymentOrderRelationRepositoryContract->createOrderRelation($createPayment,$addOrder);    
+                    $this->getLogger(__FUNCTION__)->error("Test2",json_encode($orderRelation));   
+                    }
+                    catch (\Exception $e) 
+                    {
+                         $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
+                    }
+                    
+                    
+                    
+                   
                     $exported = $this->markAsExported($groupOnOrder,$configuration);
                     return $addOrder;
                 }
