@@ -481,11 +481,10 @@ class TestController extends Controller
                     $data = 
                         [
                             "amount" => $groupOnOrder->amount->total,
-                            "hash" => $groupOnOrder->orderid,
                             "receivedAt" => date('Y-m-d G:i:s',time()),
                             "currency" => "EUR",
                             "status" => 2,
-                            "transactionType" => 2,
+                            "transactionType" => 1,
                             "mopId" => 4040,
                         ];
                     $createPayment = $paymentRepositoryContract->createPayment($data);
