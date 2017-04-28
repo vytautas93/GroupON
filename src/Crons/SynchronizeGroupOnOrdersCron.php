@@ -489,13 +489,8 @@ class SynchronizeGroupOnOrdersCron extends Cron
                             "mopId" => 4040,
                         ];
                     $createPayment = $paymentRepositoryContract->createPayment($data);
-                    $paymentOrderRelationRepositoryContract->createOrderRelation(
-                        [
-                            "paymentId"=>$createPayment->id,
-                            "orderId" => $addOrder->orderId,
-                        ]
-                    );
-                    
+                    $paymentOrderRelationRepositoryContract->createOrderRelation($createPayment,$addOrder);
+                    $this->getLogger(__FUNCTION__)->error("TEst",json_encode($paymentOrderRelationRepositoryContract));   
                     $exported = $this->markAsExported($groupOnOrder,$configuration);
                     return $addOrder;
                 }
