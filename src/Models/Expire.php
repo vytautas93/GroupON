@@ -6,22 +6,20 @@ use Plenty\Modules\Plugin\DataBase\Contracts\Model;
  
  
 /**
- * Class StartTime
+ * Class Expire
  *
  * @property int     $id
- * @property string  $startTime
- * @property string  $createdAt
+ * @property int     $plentyID
+ * @property string  $expiredtime
  */ 
  
-class StartTime extends Model
+class Expire extends Model
 {
     public $id = 0;
-    public $plentyID = 0;
-    public $expiredtime = '';
+    public $expiredtime = 0;
 
- 
     public function getTableName(): string
     {
-        return 'Groupon::StartTime';
+        return 'Groupon::Expire';
     }
 }

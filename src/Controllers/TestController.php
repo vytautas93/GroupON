@@ -6,7 +6,7 @@ use Plenty\Plugin\Controller;
 use Plenty\Plugin\Http\Request;
 
 use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
-use Groupon\Models\StartTime;
+use Groupon\Models\Expire;
 
 use Plenty\Plugin\Log\Loggable;
 
@@ -16,32 +16,27 @@ class TestController extends Controller
     public function checkTrial()
     {
         $database = pluginApp(DataBase::class);
-        $startTime = $database->query(StartTime::class)->get();
-        /*$delete = $database->delete(StartTime::class);*/
-        $this->getLogger(__FUNCTION__)->error("Database",json_encode($startTime));   
-       /* if ($startTime) {
-             
-           
-              $time = (string)strtotime('+1 months');
+        $startTime = $database->query(Expire::class)->get();
+        
+        if ($startTime) {
             
-            
-            
-            
-            $this->getLogger(__FUNCTION__)->error("Database in IF",json_encode($startTime));   
-            $this->getLogger(__FUNCTION__)->error("time",json_encode($time));   
+            if ($startTime[0]->expireTime > time()) 
+            {
+                return true;
+            } 
+            else
+            {
+                $this->getLogger(__FUNCTION__)->info("Trial Expired","Your Trial expired, Please buy Full version of Groupon Plugin");   
+                return false;
+            }
         }
         else
         {  
-             $time = (string)strtotime('+1 months');
-             $this->getLogger(__FUNCTION__)->error("Time",json_encode($time));   
+             $expireTime = (int)strtotime('+1 months');
              $model = pluginApp(StartTime::class);
-             $model->startTime = $time;
-             $test = $database->save($model);
-             $this->getLogger(__FUNCTION__)->error("Database in Else",json_encode($test));   
-        }*/
-        
-        
-        
-       
+             $model->expiredtime = $expireTime;
+             $save = $database->save($model);
+             $this->getLogger(__FUNCTION__)->error("Database in Else",json_encode($save));   
+        }
     }
 }
