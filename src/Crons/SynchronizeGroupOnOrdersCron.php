@@ -473,18 +473,28 @@ class SynchronizeGroupOnOrdersCron extends Cron
                     }
                     
                     $this->getLogger(__FUNCTION__)->info("addOrder",json_encode($addOrder)); 
+                    
                     $paymentRepositoryContract = pluginApp(PaymentRepositoryContract::class);
-                    $createPayment = $paymentRepositoryContract->createPayment(
+                    $data = 
                         [
                             "amount" => $groupOnOrder->amount->total,
+                            "type" => "credit"
                             "hash" => $groupOnOrder->orderid,
-                            "status" => 2
-                        ]);
+                            "status" => 2,
+                            "transactionType" => 2,
+                            "mopId" => 4040,
+                        ];
+                    $createPayment = $paymentRepositoryContract->createPayment($data);
                         
                     $this->getLogger(__FUNCTION__)->info("createPayment",json_encode($createPayment));   
                     
-                    /*$paymentOrderRelationRepositoryContract = pluginApp(PaymentOrderRelationRepositoryContract::class);*/
-                    //$paymentOrderRelationRepositoryContract->createOrderRelation();
+                    /*$paymentOrderRelationRepositoryContract = pluginApp(PaymentOrderRelationRepositoryContract::class);
+                    $paymentOrderRelationRepositoryContract->createOrderRelation(
+                        [
+                            "paymentId"=>1,
+                            "orderId" => $addOrder->orderId
+                        ]
+                    );*/
                     $exported = $this->markAsExported($groupOnOrder,$configuration);
                     return $addOrder;
                 }
