@@ -16,6 +16,7 @@ use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 use Plenty\Modules\Order\Shipping\Contracts\ParcelServicePresetRepositoryContract;
 
+
 use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
 use Groupon\Models\Expire;
 
@@ -37,18 +38,22 @@ class SynchronizeGroupOnOrdersCron extends Cron
     
     public function handle()
     {
-        $configurations = $this->getConfiguration();
-        if(!empty($configurations))
+        $trial = $this->checkTrial();
+        if ($trial) 
         {
-            foreach ($configurations as $country => $configuration) 
+            $configurations = $this->getConfiguration();
+            if(!empty($configurations))
             {
-                $groupOnOrders = $this->getGroupOnOrders($configuration);
-                foreach($groupOnOrders as $groupOnOrder)
+                foreach ($configurations as $country => $configuration) 
                 {
-                    $exists = $this->checkIfExists($country,$groupOnOrder->orderid);
-                    if ($exists == false) 
-                    {   
-                        $order = $this->generateOrder($country,$configuration,$groupOnOrder);
+                    $groupOnOrders = $this->getGroupOnOrders($configuration);
+                    foreach($groupOnOrders as $groupOnOrder)
+                    {
+                        $exists = $this->checkIfExists($country,$groupOnOrder->orderid);
+                        if ($exists == false) 
+                        {   
+                            $order = $this->generateOrder($country,$configuration,$groupOnOrder);
+                        }
                     }
                 }
             }
@@ -424,7 +429,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         {
             $orderRepositoryContract = pluginApp(OrderRepositoryContract::class);
             $configRepository = pluginApp(ConfigRepository::class);
-            
+            $this->getLogger(__FUNCTION__)->error("Date",json_encode($groupOnOrder->date));   
             $customer = $this->createCustomer($groupOnOrder);
             $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer,$country);
             if(!is_null($customer) && !is_null($deliveryAddress))
@@ -462,8 +467,8 @@ class SynchronizeGroupOnOrdersCron extends Cron
                             ],
                             'dates'=>
                             [
-                              ['typeId' => 3 , 'createdAt' => $groupOnOrder->date], 
-                              ['typeId' => 7 , 'createdAt' => $groupOnOrder->date],  
+                              ['typeId' => 3 , 'createdAt' => $groupOnOrder->date]
+                              
                             ],
                         ]);
                     }
@@ -514,21 +519,33 @@ class SynchronizeGroupOnOrdersCron extends Cron
     public function checkTrial()
     {
         $database = pluginApp(DataBase::class);
-        $startTime = $database->query(Expire::class)->get();
-        $this->getLogger(__FUNCTION__)->error("Database",json_encode($startTime));   
-        if ($startTime) {
-            $this->getLogger(__FUNCTION__)->error("Database in IF",json_encode($startTime));   
+        $expire = $database->query(Expire::class)->get();
+        if ($expire) {
+            if ((int)$expire[0]->expiredtime > time()) 
+            {
+                $this->getLogger(__FUNCTION__)->info("Trial Still verified","Veikia");   
+                return true;
+            } 
+            else
+            {
+                $this->getLogger(__FUNCTION__)->info("Trial Expired","Your Trial expired, Please buy Full version of Groupon Plugin");   
+                return false;
+            }
         }
-        /*else
-        {
-             $model = pluginApp(GrouponModel::class);
-             $model->createdAt = time();
-             $database->save($model);
-        }*/
-        
-        
-        
-       
+        else
+        {  
+            $expiredTime = (int)strtotime('+1 months');
+            $model = pluginApp(Expire::class);
+            $model->expiredtime = $expiredTime;
+            try 
+            {
+                $database->save($model);
+                return true;
+            } 
+            catch (\Exception $e) 
+            {
+                $this->getLogger(__FUNCTION__)->error("Database Error",json_encode($e->getMessage()));   
+            }  
+        }
     }
-    
 }

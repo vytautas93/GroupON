@@ -17,32 +17,34 @@ class TestController extends Controller
     public function checkTrial()
     {
         $database = pluginApp(DataBase::class);
-        $startTime = $database->query(StartTime::class)->get();
-        $this->getLogger(__FUNCTION__)->info("Database",json_encode($startTime));   
-        /*if ($startTime) {
-            
+        $startTime = $database->query(Expire::class)->get();
+        
+        if ($startTime) {
             if ((int)$startTime[0]->expiredtime > time()) 
             {
-                $this->getLogger(__FUNCTION__)->info("IF Statement Expired Time",json_encode($startTime[0]->expiredtime ));   
-                $this->getLogger(__FUNCTION__)->info("IF Statement Time",json_encode(time()));   
                 $this->getLogger(__FUNCTION__)->info("Trial Still verified","Veikia");   
-                //return true;
+                return true;
             } 
             else
             {
-                $this->getLogger(__FUNCTION__)->info("Else Statement Expired Time ",json_encode($startTime[0]->expiredtime ));   
-                $this->getLogger(__FUNCTION__)->info("Else Statement Time",json_encode(time()));   
                 $this->getLogger(__FUNCTION__)->info("Trial Expired","Your Trial expired, Please buy Full version of Groupon Plugin");   
-                //return false;
+                return false;
             }
         }
         else
         {  
-             $expiredTime = (int)strtotime('+1 months');
-             $model = pluginApp(Expire::class);
-             $model->expiredtime = $expiredTime;
-             $save = $database->save($model);
-             $this->getLogger(__FUNCTION__)->error("Database in Else",json_encode($save));   
-        }*/
+            $expiredTime = (int)strtotime('+1 months');
+            $model = pluginApp(Expire::class);
+            $model->expiredtime = $expiredTime;
+            try 
+            {
+                $database->save($model);
+                return true;
+            } 
+            catch (\Exception $e) 
+            {
+                $this->getLogger(__FUNCTION__)->error("Database Error",json_encode($e->getMessage()));   
+            }  
+        }
     }
 }
