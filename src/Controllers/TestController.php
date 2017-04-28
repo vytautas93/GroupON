@@ -7,6 +7,7 @@ use Plenty\Plugin\Http\Request;
 
 use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
 use Groupon\Models\Expire;
+use Groupon\Models\StartTime;
 
 use Plenty\Plugin\Log\Loggable;
 
@@ -16,9 +17,9 @@ class TestController extends Controller
     public function checkTrial()
     {
         $database = pluginApp(DataBase::class);
-        $startTime = $database->query(Expire::class)->get();
+        $startTime = $database->query(StartTime::class)->get();
         $this->getLogger(__FUNCTION__)->info("Database",json_encode($startTime));   
-        if ($startTime) {
+        /*if ($startTime) {
             
             if ((int)$startTime[0]->expiredtime > time()) 
             {
@@ -42,6 +43,6 @@ class TestController extends Controller
              $model->expiredtime = $expiredTime;
              $save = $database->save($model);
              $this->getLogger(__FUNCTION__)->error("Database in Else",json_encode($save));   
-        }
+        }*/
     }
 }
