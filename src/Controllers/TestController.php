@@ -410,6 +410,9 @@ class TestController extends Controller
             $setFilter = $contract->setFilters(['externalOrderId' => (string)$country.$orderID ]);
             $orderList = $contract->searchOrders();
             $totalsCount = json_decode(json_encode($orderList),true);
+
+            $this->getLogger(__FUNCTION__)->info("Totals",json_encode($totalsCount));  
+            
             if($totalsCount['totalsCount'] > 0)
             {
                 return true;
