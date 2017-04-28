@@ -443,6 +443,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                             'typeId' => 1,
                             'methodOfPaymentId' => $configRepository->get("Groupon.payment"),
                             'shippingProfileId' => 6,
+                            'paymentStatus' => "Approved",
                             'plentyId' => 0,
                             'orderItems' => $orderItems,
                             'properties' => 
@@ -464,11 +465,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                                 ['typeId' => 1, 'addressId' => $deliveryAddress->id],
                                 ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                             ],
-                            'dates'=>
-                            [
-                              ["id"=>3, 'typeId' => 3 , 'createdAt' => date('Y-m-d G:i:s',strtotime('03/01/2017 02:02PM UTC'))]
-                              
-                            ],
+                            
                         ]);
                     }
                     catch (\Exception $e) 
