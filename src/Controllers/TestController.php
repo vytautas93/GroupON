@@ -28,6 +28,14 @@ use Plenty\Plugin\Log\Loggable;
 class TestController extends Controller
 {
     use Loggable;
+    private $authHelper;
+    
+    public function __construct(
+        AuthHelper $authHelper
+    )
+    {
+        $this->authHelper = $authHelper;
+    }
     public function test()
     {
         $trial = $this->checkTrial();
