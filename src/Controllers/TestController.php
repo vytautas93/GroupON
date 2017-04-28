@@ -482,7 +482,7 @@ class TestController extends Controller
                         [
                             "amount" => $groupOnOrder->amount->total,
                             "origin" => 6,
-                            "receivedAt" => date('Y-m-d G:i:s',$time),
+                            "receivedAt" => date('Y-m-d G:i:s',strtotime($time)),
                             "currency" => "EUR",
                             "status" => 2,
                             "transactionType" => 1,
