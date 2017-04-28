@@ -16,7 +16,8 @@ use Plenty\Modules\Item\VariationSku\Contracts\VariationSkuRepositoryContract;
 use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 use Plenty\Modules\Order\Shipping\Contracts\ParcelServicePresetRepositoryContract;
 
-
+use Plenty\Modules\Payment\Contracts\PaymentRepositoryContract;
+use Plenty\Modules\Payment\Contracts\PaymentOrderRelationRepositoryContract;
 use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
 use Groupon\Models\Expire;
 
@@ -443,7 +444,6 @@ class SynchronizeGroupOnOrdersCron extends Cron
                             'typeId' => 1,
                             'methodOfPaymentId' => $configRepository->get("Groupon.payment"),
                             'shippingProfileId' => 6,
-                            'paymentStatus' => 2,
                             'plentyId' => 0,
                             'orderItems' => $orderItems,
                             'properties' => 
@@ -465,14 +465,27 @@ class SynchronizeGroupOnOrdersCron extends Cron
                                 ['typeId' => 1, 'addressId' => $deliveryAddress->id],
                                 ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                             ],
-                            
                         ]);
                     }
                     catch (\Exception $e) 
                     {
                          $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
                     }
-    
+                    
+                    $this->getLogger(__FUNCTION__)->info("addOrder",json_encode($addOrder));   
+                    
+                    $paymentRepositoryContract = pluginApp(PaymentRepositoryContract::class);
+                    $createPayment = $paymentRepositoryContract->createPayment(
+                        [
+                            "amount" => $groupOnOrder->amount->total,
+                            "hash" => $groupOnOrder->orderid,
+                            "status" => 2
+                        ]);
+                        
+                    $this->getLogger(__FUNCTION__)->info("createPayment",json_encode($createPayment));   
+                    
+                    /*$paymentOrderRelationRepositoryContract = pluginApp(PaymentOrderRelationRepositoryContract::class);*/
+                    //$paymentOrderRelationRepositoryContract->createOrderRelation();
                     $exported = $this->markAsExported($groupOnOrder,$configuration);
                     return $addOrder;
                 }
