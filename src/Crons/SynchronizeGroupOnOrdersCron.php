@@ -17,7 +17,7 @@ use Plenty\Modules\EventProcedures\Events\EventProceduresTriggered;
 use Plenty\Modules\Order\Shipping\Contracts\ParcelServicePresetRepositoryContract;
 
 use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
-use Groupon\Models\StartTime;
+use Groupon\Models\Expire;
 
 
 use Plenty\Plugin\Log\Loggable;
@@ -514,7 +514,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
     public function checkTrial()
     {
         $database = pluginApp(DataBase::class);
-        $startTime = $database->query(StartTime::class)->get();
+        $startTime = $database->query(Expire::class)->get();
         $this->getLogger(__FUNCTION__)->error("Database",json_encode($startTime));   
         if ($startTime) {
             $this->getLogger(__FUNCTION__)->error("Database in IF",json_encode($startTime));   

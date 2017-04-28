@@ -33,7 +33,7 @@ class TestController extends Controller
         else
         {  
              $expireTime = (int)strtotime('+1 months');
-             $model = pluginApp(StartTime::class);
+             $model = pluginApp(Expire::class);
              $model->expiredtime = $expireTime;
              $save = $database->save($model);
              $this->getLogger(__FUNCTION__)->error("Database in Else",json_encode($save));   
