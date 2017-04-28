@@ -478,7 +478,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                     $data = 
                         [
                             "amount" => $groupOnOrder->amount->total,
-                            "type" => "credit"
+                            "type" => "credit",
                             "hash" => $groupOnOrder->orderid,
                             "status" => 2,
                             "transactionType" => 2,
