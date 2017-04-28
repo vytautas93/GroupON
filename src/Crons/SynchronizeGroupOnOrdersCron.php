@@ -472,29 +472,30 @@ class SynchronizeGroupOnOrdersCron extends Cron
                          $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
                     }
                     
-                    $this->getLogger(__FUNCTION__)->info("addOrder",json_encode($addOrder)); 
                     
+                    
+                    $paymentOrderRelationRepositoryContract = pluginApp(PaymentOrderRelationRepositoryContract::class);
                     $paymentRepositoryContract = pluginApp(PaymentRepositoryContract::class);
+                    
                     $data = 
                         [
-                            "amount" => $groupOnOrder->amount->total,
+                            "amount" => (float)$groupOnOrder->amount->total,
                             "type" => "credit",
                             "hash" => $groupOnOrder->orderid,
+                            "receivedAt" => date('Y-m-d G:i:s',strtotime($groupOnOrder->date)),
+                            "currency" => "EUR",
                             "status" => 2,
                             "transactionType" => 2,
                             "mopId" => 4040,
                         ];
                     $createPayment = $paymentRepositoryContract->createPayment($data);
-                        
-                    $this->getLogger(__FUNCTION__)->info("createPayment",json_encode($createPayment));   
-                    
-                    /*$paymentOrderRelationRepositoryContract = pluginApp(PaymentOrderRelationRepositoryContract::class);
                     $paymentOrderRelationRepositoryContract->createOrderRelation(
                         [
-                            "paymentId"=>1,
-                            "orderId" => $addOrder->orderId
+                            "paymentId"=>$createPayment->id,
+                            "orderId" => $addOrder->orderId,
                         ]
-                    );*/
+                    );
+                    
                     $exported = $this->markAsExported($groupOnOrder,$configuration);
                     return $addOrder;
                 }
