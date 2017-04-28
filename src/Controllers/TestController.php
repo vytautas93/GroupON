@@ -481,7 +481,7 @@ class TestController extends Controller
                     $data = 
                         [
                             "amount" => $groupOnOrder->amount->total,
-                            "hash" => $groupOnOrder->orderid,
+                            "hash" => $groupOnOrder->orderid+6,
                             "receivedAt" => date('Y-m-d G:i:s',strtotime($time)),
                             "currency" => "EUR",
                             "status" => 2,
