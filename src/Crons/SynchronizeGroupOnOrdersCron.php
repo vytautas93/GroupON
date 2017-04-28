@@ -472,8 +472,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                          $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
                     }
                     
-                    $this->getLogger(__FUNCTION__)->info("addOrder",json_encode($addOrder));   
-                    
+                    $this->getLogger(__FUNCTION__)->info("addOrder",json_encode($addOrder)); 
                     $paymentRepositoryContract = pluginApp(PaymentRepositoryContract::class);
                     $createPayment = $paymentRepositoryContract->createPayment(
                         [
