@@ -489,8 +489,8 @@ class TestController extends Controller
                             "mopId" => 4040,
                         ];
                     $createPayment = $paymentRepositoryContract->createPayment($data);
-                    /*$orderRelation = $paymentOrderRelationRepositoryContract->createOrderRelation($createPayment,$addOrder);
-                    $this->getLogger(__FUNCTION__)->error("TEst",json_encode($orderRelation));   */
+                    $orderRelation = $paymentOrderRelationRepositoryContract->createOrderRelation($createPayment,$addOrder);
+                    $this->getLogger(__FUNCTION__)->error("TEst",json_encode($orderRelation)); 
                     $exported = $this->markAsExported($groupOnOrder,$configuration);
                     return $addOrder;
                 }
