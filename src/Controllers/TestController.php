@@ -17,8 +17,8 @@ class TestController extends Controller
     {
         $database = pluginApp(DataBase::class);
         $startTime = $database->query(StartTime::class)->get();
-        $delete = $database->delete(StartTime::class);
-        $this->getLogger(__FUNCTION__)->error("Database",json_encode($delete));   
+        /*$delete = $database->delete(StartTime::class);*/
+        $this->getLogger(__FUNCTION__)->error("Database",json_encode($startTime));   
        /* if ($startTime) {
              
            
