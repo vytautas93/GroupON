@@ -429,7 +429,6 @@ class SynchronizeGroupOnOrdersCron extends Cron
         {
             $orderRepositoryContract = pluginApp(OrderRepositoryContract::class);
             $configRepository = pluginApp(ConfigRepository::class);
-            $this->getLogger(__FUNCTION__)->error("Date",json_encode($groupOnOrder->date));   
             $customer = $this->createCustomer($groupOnOrder);
             $deliveryAddress = $this->createDeliveryAddress($groupOnOrder,$customer,$country);
             if(!is_null($customer) && !is_null($deliveryAddress))
@@ -467,7 +466,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                             ],
                             'dates'=>
                             [
-                              ['typeId' => 3 , 'createdAt' => $groupOnOrder->date]
+                              ['typeId' => 3 , 'createdAt' => date('Y-m-d G:i:s',strtotime('03/01/2017 02:02PM UTC'))]
                               
                             ],
                         ]);
