@@ -17,8 +17,9 @@ class TestController extends Controller
     {
         $database = pluginApp(DataBase::class);
         $startTime = $database->query(StartTime::class)->get();
-        $this->getLogger(__FUNCTION__)->error("Database",json_encode($startTime));   
-        if ($startTime) {
+        $delete = $database->delete(StartTime::class);
+        $this->getLogger(__FUNCTION__)->error("Database",json_encode($delete));   
+       /* if ($startTime) {
              
            
               $time = (string)strtotime('+1 months');
@@ -37,7 +38,7 @@ class TestController extends Controller
              $model->startTime = $time;
              $test = $database->save($model);
              $this->getLogger(__FUNCTION__)->error("Database in Else",json_encode($test));   
-        }
+        }*/
         
         
         
