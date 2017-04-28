@@ -20,7 +20,7 @@ class TestController extends Controller
         $this->getLogger(__FUNCTION__)->info("Database",json_encode($startTime));   
         if ($startTime) {
             
-            if ((int)$startTime[0]->expireTime > time()) 
+            if ((int)$startTime[0]->expiredtime > time()) 
             {
                 $this->getLogger(__FUNCTION__)->info("IF Statement Expired Time",json_encode($startTime[0]->expiredtime ));   
                 $this->getLogger(__FUNCTION__)->info("IF Statement Time",json_encode(time()));   
