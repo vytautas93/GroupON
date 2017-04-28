@@ -483,7 +483,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                         [
                             "amount" => $groupOnOrder->amount->total,
                             "hash" => $groupOnOrder->orderid,
-                            "receivedAt" => date('Y-m-d G:i:s',$time),
+                            "receivedAt" => date('Y-m-d G:i:s',(string)$time),
                             "currency" => "EUR",
                             "status" => 2,
                             "transactionType" => 2,
