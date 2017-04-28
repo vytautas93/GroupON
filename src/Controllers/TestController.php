@@ -20,7 +20,7 @@ class TestController extends Controller
         $this->getLogger(__FUNCTION__)->info("Database",json_encode($startTime));   
         if ($startTime) {
             
-            if ($startTime[0]->expireTime > time()) 
+            if ((int)$startTime[0]->expireTime > time()) 
             {
                 $this->getLogger(__FUNCTION__)->info("IF Statement Expired Time",json_encode($startTime[0]->expiredtime ));   
                 $this->getLogger(__FUNCTION__)->info("IF Statement Time",json_encode(time()));   
@@ -37,9 +37,9 @@ class TestController extends Controller
         }
         else
         {  
-             $expireTime = (int)strtotime('+1 months');
+             $expiredTime = (int)strtotime('+1 months');
              $model = pluginApp(Expire::class);
-             $model->expiredtime = $expireTime;
+             $model->expiredtime = $expiredTime;
              $save = $database->save($model);
              $this->getLogger(__FUNCTION__)->error("Database in Else",json_encode($save));   
         }
