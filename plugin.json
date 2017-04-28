@@ -17,5 +17,8 @@
   "authorIcon":"hashtages_xs.png",
   "email": "hello@hashtages.com",
   "phone": "+49 (0) 4264-776949-5",
-  "runOnBuild":["Groupon\\Migrations\\CreateGrouponTable"]
+  "runOnBuild":[
+    "Groupon\\Migrations\\CreateGrouponTable",
+    "Groupon\\Migrations\\CreateExpireTable",
+  ]
 }
