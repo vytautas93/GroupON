@@ -22,14 +22,14 @@ class TestController extends Controller
             
             if ($startTime[0]->expireTime > time()) 
             {
-                $this->getLogger(__FUNCTION__)->info("IF Statement Expired Time",json_encode($startTime[0]->expireTime ));   
+                $this->getLogger(__FUNCTION__)->info("IF Statement Expired Time",json_encode($startTime[0]->expiredtime ));   
                 $this->getLogger(__FUNCTION__)->info("IF Statement Time",json_encode(time()));   
                 $this->getLogger(__FUNCTION__)->info("Trial Still verified","Veikia");   
                 //return true;
             } 
             else
             {
-                $this->getLogger(__FUNCTION__)->info("Else Statement Expired Time ",json_encode($startTime[0]->expireTime ));   
+                $this->getLogger(__FUNCTION__)->info("Else Statement Expired Time ",json_encode($startTime[0]->expiredtime ));   
                 $this->getLogger(__FUNCTION__)->info("Else Statement Time",json_encode(time()));   
                 $this->getLogger(__FUNCTION__)->info("Trial Expired","Your Trial expired, Please buy Full version of Groupon Plugin");   
                 //return false;
