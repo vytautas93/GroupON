@@ -17,16 +17,20 @@ class TestController extends Controller
     {
         $database = pluginApp(DataBase::class);
         $startTime = $database->query(Expire::class)->get();
-        
+        $this->getLogger(__FUNCTION__)->info("Database",json_encode($startTime));   
         if ($startTime) {
             
             if ($startTime[0]->expireTime > time()) 
             {
+                $this->getLogger(__FUNCTION__)->info("IF Statement Expired Time",json_encode($startTime[0]->expireTime ));   
+                $this->getLogger(__FUNCTION__)->info("IF Statement Time",json_encode(time()));   
                 $this->getLogger(__FUNCTION__)->info("Trial Still verified","Veikia");   
                 //return true;
             } 
             else
             {
+                $this->getLogger(__FUNCTION__)->info("Else Statement Expired Time ",json_encode($startTime[0]->expireTime ));   
+                $this->getLogger(__FUNCTION__)->info("Else Statement Time",json_encode(time()));   
                 $this->getLogger(__FUNCTION__)->info("Trial Expired","Your Trial expired, Please buy Full version of Groupon Plugin");   
                 //return false;
             }
