@@ -482,7 +482,7 @@ class TestController extends Controller
                         [
                             "amount" => $groupOnOrder->amount->total,
                             "origin" => 6,
-                            "receivedAt" => date('Y-m-d G:i:s',time()),
+                            "receivedAt" => date('Y-m-d G:i:s',$time),
                             "currency" => "EUR",
                             "status" => 2,
                             "transactionType" => 1,
@@ -493,7 +493,7 @@ class TestController extends Controller
                             "mopId" => 4040,
                         ];
                     $createPayment = $paymentRepositoryContract->createPayment($data);
-                    $orderRelation = $paymentOrderRelationRepositoryContract->createOrderRelation($createPayment,$addOrder);
+                    $orderRelation = $paymentOrderRelationRepositoryContract->createOrderRelation($createPayment->id,$addOrder->id);
                     $this->getLogger(__FUNCTION__)->error("TEst",json_encode($orderRelation)); 
                     $exported = $this->markAsExported($groupOnOrder,$configuration);
                     return $addOrder;
