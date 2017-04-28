@@ -443,7 +443,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                             'typeId' => 1,
                             'methodOfPaymentId' => $configRepository->get("Groupon.payment"),
                             'shippingProfileId' => 6,
-                            'paymentStatus' => "Approved",
+                            'paymentStatus' => 2,
                             'plentyId' => 0,
                             'orderItems' => $orderItems,
                             'properties' => 
