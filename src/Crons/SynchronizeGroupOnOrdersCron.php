@@ -523,7 +523,6 @@ class SynchronizeGroupOnOrdersCron extends Cron
         if ($expire) {
             if ((int)$expire[0]->expiredtime > time()) 
             {
-                $this->getLogger(__FUNCTION__)->info("Trial Still verified","Veikia");   
                 return true;
             } 
             else
