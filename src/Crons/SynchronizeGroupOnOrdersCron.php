@@ -490,7 +490,6 @@ class SynchronizeGroupOnOrdersCron extends Cron
                     }
                     catch (\Exception $e) 
                     {
-                        $this->getLogger(__FUNCTION__)->error("Order Relation",json_encode($orderRelation));   
                         $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
                     }
                     $exported = $this->markAsExported($groupOnOrder,$configuration);
