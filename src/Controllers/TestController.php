@@ -472,12 +472,13 @@ class TestController extends Controller
                     $paymentRepositoryContract = pluginApp(PaymentRepositoryContract::class);
                     
                     
-                    /*$time = date('Y-m-d G:i:s',strtotime($groupOnOrder->date));*/
+                    $time = date('Y-m-d G:i:s',strtotime($groupOnOrder->date));
+                    
                     $data = 
                         [
                             "amount" => $groupOnOrder->amount->total,
                             "origin" => 6,
-                            "receivedAt" => date('Y-m-d G:i:s',time()),
+                            "receivedAt" => date('Y-m-d G:i:s',strtotime($time)),
                             "currency" => "EUR",
                             "status" => 2,
                             "transactionType" => 1,
