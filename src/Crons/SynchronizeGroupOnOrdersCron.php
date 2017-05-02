@@ -95,7 +95,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
 
     public function getGroupOnOrders($configuration)
     {
-        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime=03/01/2017+12:01&end_datetime=03/01/2017+15:00';
+        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'];
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
