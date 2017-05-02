@@ -307,7 +307,6 @@ class SynchronizeGroupOnOrdersCron extends Cron
             $datatopost = $this->formateFeedBack($order,$carrier,$supplierID,$token);
             if(!empty($datatopost))
             {
-                $this->getLogger(__FUNCTION__)->info('FeedBackData',$datatopost); 
                 $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
                 curl_setopt ($ch, CURLOPT_POST, true);
                 curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
