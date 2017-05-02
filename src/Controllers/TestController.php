@@ -473,12 +473,11 @@ class TestController extends Controller
                     
                     
                     /*$time = date('Y-m-d G:i:s',strtotime($groupOnOrder->date));*/
-                    $time = time();
                     $data = 
                         [
                             "amount" => $groupOnOrder->amount->total,
                             "origin" => 6,
-                            "receivedAt" => date('Y-m-d G:i:s',strtotime($time)),
+                            "receivedAt" => date('Y-m-d G:i:s',time()),
                             "currency" => "EUR",
                             "status" => 2,
                             "transactionType" => 1,
