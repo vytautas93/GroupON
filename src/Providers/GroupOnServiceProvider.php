@@ -24,7 +24,7 @@ class GroupOnServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->getApplication()->register(GroupOnRouteServiceProvider::class);
+        
     }
     
     public function boot(
@@ -43,8 +43,8 @@ class GroupOnServiceProvider extends ServiceProvider
         */
         
         $eventProceduresService->registerProcedure('SendFeedBack',ProcedureEntry::PROCEDURE_GROUP_ORDER, [
-            'de' => 'Send Feedback DE',//translate
-            'en' => 'Send Feedback EN'//translate
+            'de' => 'Feedback abschicken',//translate
+            'en' => 'Send Feedback'//translate
 
         ], 'Groupon\\Crons\\SynchronizeGroupOnOrdersCron@Procedure');
     }

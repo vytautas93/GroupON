@@ -421,10 +421,9 @@ class SynchronizeGroupOnOrdersCron extends Cron
         return $exist;
     }
     
-    public function generateOrder($country,$configuration,$groupOnOrder)
+     public function generateOrder($country,$configuration,$groupOnOrder)
     {
-      
-        
+
         $order = $this->authHelper->processUnguarded(
         function () use ($groupOnOrder,$configuration,$country) 
         {
@@ -439,11 +438,14 @@ class SynchronizeGroupOnOrdersCron extends Cron
                 {
                     try 
                     {
+                        $time = date('Y-m-d G:i:s',strtotime($groupOnOrder->date));
+                        
                         $addOrder = $orderRepositoryContract->createOrder(
                         [
                             'typeId' => 1,
                             'methodOfPaymentId' => $configRepository->get("Groupon.payment"),
                             'shippingProfileId' => 6,
+                            'createdAt' => date('Y-m-d G:i:s',strtotime($time)),
                             'plentyId' => 0,
                             'orderItems' => $orderItems,
                             'properties' => 
@@ -466,32 +468,31 @@ class SynchronizeGroupOnOrdersCron extends Cron
                                 ['typeId' => 2, 'addressId' => $deliveryAddress->id],
                             ],
                         ]);
+
+                        $paymentOrderRelationRepositoryContract = pluginApp(PaymentOrderRelationRepositoryContract::class);
+                        $paymentRepositoryContract = pluginApp(PaymentRepositoryContract::class);
+                        $data = 
+                            [
+                                "amount" => $groupOnOrder->amount->total,
+                                "origin" => 6,
+                                "receivedAt" => date('Y-m-d G:i:s',strtotime($time)),
+                                "currency" => "EUR",
+                                "status" => 2,
+                                "transactionType" => 1,
+                                "properties" => 
+                                [
+                                    ["typeId" =>1 ,"value" =>$country.$groupOnOrder->orderid],
+                                ],
+                                "mopId" => 4040,
+                            ];
+                        $createPayment = $paymentRepositoryContract->createPayment($data);
+                        $orderRelation = $paymentOrderRelationRepositoryContract->createOrderRelation($createPayment,$addOrder);    
                     }
                     catch (\Exception $e) 
                     {
-                         $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
+                        $this->getLogger(__FUNCTION__)->error("Order Relation",json_encode($orderRelation));   
+                        $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
                     }
-                    
-                    
-                    
-                    $paymentOrderRelationRepositoryContract = pluginApp(PaymentOrderRelationRepositoryContract::class);
-                    $paymentRepositoryContract = pluginApp(PaymentRepositoryContract::class);
-                    
-                    
-                    $time = date('Y-m-d G:i:s',strtotime($groupOnOrder->date));
-                    $data = 
-                        [
-                            "amount" => $groupOnOrder->amount->total,
-                            "hash" => $groupOnOrder->orderid,
-                            "receivedAt" => date('Y-m-d G:i:s',strtotime($time)),
-                            "currency" => "EUR",
-                            "status" => 2,
-                            "transactionType" => 2,
-                            "mopId" => 4040,
-                        ];
-                    $createPayment = $paymentRepositoryContract->createPayment($data);
-                    /*$orderRelation = $paymentOrderRelationRepositoryContract->createOrderRelation($createPayment,$addOrder);
-                    $this->getLogger(__FUNCTION__)->error("TEst",json_encode($orderRelation));   */
                     $exported = $this->markAsExported($groupOnOrder,$configuration);
                     return $addOrder;
                 }
