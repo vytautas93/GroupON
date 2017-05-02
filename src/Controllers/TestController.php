@@ -37,7 +37,6 @@ class TestController extends Controller
     public function test()
     {
         $trial = $this->checkTrial();
-        $this->getLogger(__FUNCTION__)->info("Trial",json_encode($trial));   
         if ($trial) 
         {
             $configurations = $this->getConfiguration();
@@ -49,7 +48,6 @@ class TestController extends Controller
                     foreach($groupOnOrders as $groupOnOrder)
                     {
                         $exists = $this->checkIfExists($country,$groupOnOrder->orderid);
-                        $this->getLogger(__FUNCTION__)->info("Exists",json_encode($exists));   
                         if ($exists == false) 
                         {   
                             $order = $this->generateOrder($country,$configuration,$groupOnOrder);
@@ -410,13 +408,7 @@ class TestController extends Controller
             $setFilter = $contract->setFilters(['externalOrderId' => (string)$country.$orderID ]);
             $orderList = $contract->searchOrders();
             $getFilters = $contract->getFilters();
-            $this->getLogger(__FUNCTION__)->info("SET",(string)$country.$orderID);  
-            $this->getLogger(__FUNCTION__)->info("Filters",json_encode($getFilters));  
-            $this->getLogger(__FUNCTION__)->info("orderList",json_encode($orderList));  
             $totalsCount = json_decode(json_encode($orderList),true);
-
-            $this->getLogger(__FUNCTION__)->info("Totals",json_encode($totalsCount));  
-            
             if($totalsCount['totalsCount'] > 0)
             {
                 return true;
@@ -480,7 +472,8 @@ class TestController extends Controller
                     $paymentRepositoryContract = pluginApp(PaymentRepositoryContract::class);
                     
                     
-                    $time = date('Y-m-d G:i:s',strtotime($groupOnOrder->date));
+                    /*$time = date('Y-m-d G:i:s',strtotime($groupOnOrder->date));*/
+                    $time = time();
                     $data = 
                         [
                             "amount" => $groupOnOrder->amount->total,
