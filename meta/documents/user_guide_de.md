@@ -4,30 +4,41 @@ zunächst einmal, was ist Groupon?
  
 Antwort: Ein Marktplatz ;-)
  
+Groupon ist ein sehr interessanter Marktplatz für Deals und hat eine sehr gute Reichweite im Ausland.
+ 
 ,...Sprechen Sie mit Ihren Produkten eine riesige Zielgruppe an. Groupon Goods ist ein One-Stop-Shop für den täglichen Bedarf mit Markenprodukten und einmaligen, unschlagbaren Angeboten.
 Nutzen Sie Online-, E-Mail- und Telefonwerbung. Mit Groupon Goods werden Ihre Produkte für mehr als 15 Millionen aktive Kunden zugänglich.
  
 Wie melde ich mich dort an?
 https://www.groupon.de/merchant/marketing-solutions/goods -> **Los geht´s**
  
-## Was muss ich machen, dass alles sauber läuft und ich ich im Forum keine Beiträge schreiben muss?
+WICHTIG: Da es ab uns zu mal etwas länger dauert mit der kompletten Anmeldung, installiert das Plugin (wegen der 30 Tage Trail) erst dann, ** wenn Ihr die Zugangsdaten bekommen habt und euren Ersten Auftrag verkauft habt! **
+So könnt Ihr diese am besten ausnutzen.
+ 
+## Was muss ich machen, dass alles sauber läuft und ich im Forum keine Beiträge schreiben muss?
  
 Ganz eifach!
 1. Du registrierst dich bei Groupon (wie oben schon beschrieben)
-2. Du bekommst von Groupon einen Account wo Du die Händler ID und den Token einsehen kannst
+2. Du bekommst von Groupon die folgenden Accounts:
+-   https://www.groupon.de/merchant/ <- Dieses ist das Merchant Center, für Bewertungen und Abrechnungen
+-   https://deal-centre.groupon.de/ <- Hier tragt Ihr eure Deals ein!
+-   https://scm.commerceinterface.com/accounts/ Hier bekommt Ihr nach dem erstem Verkauf eure SupplierID und den Token für das Plugin!
 > Diese trägst Du dann in dem Plugin unter Einstellungen unter dem Marktplatz z.B. DE ein
 3. Du fügst unter "Einstellungen > Aufträge > Auftragsherkunft" Groupon hinzu und trägst die ID im Plugin unter Settings > Herkunft ID ein
 4. Jetzt wählst Du eine Zahlart aus, mit der die Bestellungen importiert werden sollen, z.B. 1700 für Coupon (aber aktivieren vorher) und trägst diese im Plugin unter Settings > Zahlart ID ein
  
 OK, damit der Versand bei Groupon auch bestätigt wird, musst du jetzt noch,...
 5. Erstelle eine Ereignisaktion unter "Einstellungen > Aufträge > Ereignisaktionen" für deine Versendeten Bestellungen!
-z.B. Statuswechsel auf die 7.0, Filter Herkunft "Groupon" und Aktionen Plugins "Groupon Versandbestätigung senden"
+z.B. Statuswechsel auf die 7.0, Filter Herkunft "Groupon" und Aktionen > Plugins "Versandbestätigung an Groupon senden"
  
 ### Und nu?
  
 Na, bei Groupon einen Deal starten natürlich!
 Dazu fügst Du einen Deal in deinem Groupon Merchant Center hinzu mit allem was nötig ist und dann,....<br>bekommst Du eine SKU von Groupon!
 Diese SKU trägst Du dann in deine zugehörige Variante unter **SKU** ein! Wichtig, die Herkunft muss deine oben unter 3 gewählte Auftragsherkunft **"Groupon"** sein!
+ 
+Hier die Anleitung von Groupon:
+https://groupon.s3.amazonaws.com/seimages/guide/DealCentre/DE_DealCentre_MerchantManual_DEv2.pdf
  
 #### Was Du wissen solltest
  
@@ -37,6 +48,17 @@ Wenn Du merkst, dass keine Aufträge angelegt werden, wird das folgende Gründe 
 3. Du hast zwar Aufträge da, aber hast die SKU falsch eingetragen
 4. Du hast zwar Aufträge da, aber hast die falsche Herkunft zu deiner SKU eingetragen
 5. Kombinationen aus den gründen 1-4 in verschiedenster Form :-p
+ 
+#### Was du noch wissen solltest!
+ 
+Bei Groupon gibt es verschiedene Abrechnungsmodelle.
+1. SOR = Groupon vertreibt deine "Neuware" unter dem Namen "Groupon". Dieses ist bei Groupon die normale Abrechnungsmethode.
+Wichtig hier: Keine Paketbeilagen, keine von euch bedruckten Kartons verwenden und im Absender muss die Absenderadresse von Groupon stehen.
+Mit der Absender Adresse ist aktuell noch ein Problem, da wir dieses "noch" nicht in das Plugin einbauen können, da die Funktion bei Plenty fehlt. Hier müsstet Ihr leider eure Absenderadresse überkleben :-(
+Bei dieser Abrechnungsmethode bekommt Ihr dann eine pdf Rechnung von Groupon in euer System gedrückt (aktuell offener Punkt im Plugin).
+2. DCO = Hier agiert Ihr als Händler wie üblich. Diese Methode ist z.B. für B-Ware.
+Hier dürft Ihr dann als Absender der Ware auch auf dem Paket stehen und Plenty generiert dann eine normale Rechnung.
+** Wenn Ihr demnach B-Ware verkaufen wollt, meldet das gleich mit an, damit Groupon euch im Merchant Center für B-Ware freigibt **
  
 ## Aktuell ist dieses die public Beta Version!
 **Wir limitieren diese Version aktuell pro Shop auf eine kostenfreie Nutzung von einem Monat!**

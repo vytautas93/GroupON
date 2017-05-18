@@ -2,29 +2,34 @@
  
 First of all, what is Groupon?
  
-It´s a marketplace :-)
+It´s a really interesting marketplace for deals :-)
  
 Where I have to register?
 https://www.groupon.de/merchant/marketing-solutions/goods -> ** Get Started **
  
 ## What do I have to do, that everything runs perfect and I do not have to write some posts into the forum?
  
-That´s easy :-)
-1. You register your store at Groupon (as described above)
-2. You get an account from Groupon where you can see the dealer ID and the token
-> These are then in the plugin under Settings under the marketplace. DE
-3. You add "Groupon" in "Settings > Orders > Order origin" and enter the ID in the plugin Settings > Origin ID
-4. Now you select a payment type where you will import the orders with. e.g. 1700 for coupon (but activate this before) and take this ID to the Settings > Payment ID
+1. Register in Groupon (as described above)
+2. You will get the following accounts from Groupon:
+- https://www.groupon.de/merchant/ <- This is the Merchant Center for ratings and billing
+- https://deal-centre.groupon.de/ <- Here you enter your deals!
+- https://scm.commerceinterface.com/accounts/ Here you get your SupplierID and the token for the plugin after the first sale!
+> These are then in the plugin under Settings under the marketplace, for example DE / EN,...
+3. You add "Groupon" under "Settings> Orders> Order origin" and enter the ID in the plugin under Settings> Origin ID
+4. Now you select a payment type with which the orders are to be imported, e.g. 1700 for coupon (but activate before) and enters this in the plugin under Settings> Zahlart ID
  
 OK to confirm the shipping at Groupon you have to add a event,....
 5. Create an event action in "Settings > Orders > events" for your shipped orders!
-(for example, add change State to 7.0, filter origin "Groupon" and actions Plugins "confirm Shipping at Groupon"
+(for example, add change State to 7.0, filter origin "Groupon" and actions Plugins "Send shipping confirmation to Groupon"
  
 ### So, what´s next?
  
 Well, you have to start a deal at Groupon!
 Add a deal to your Groupon Merchant Center with everything you need, and then .... you get a SKU from Groupon!
 This SKU you have to enter into your variant in the **SKU selection**. Important, the origin must be the same like your selected orgin in plugin settings ** "Groupon" **!
+ 
+Here is the manual from Groupon:
+https://groupon.s3.amazonaws.com/seimages/guide/DealCentre/DE_DealCentre_MerchantManual_ENv2.pdf
  
 #### What you should know
  

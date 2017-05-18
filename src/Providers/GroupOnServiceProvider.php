@@ -36,15 +36,15 @@ class GroupOnServiceProvider extends ServiceProvider
         /**
         * Register Cron Jobs.
         */
-        $cron = $container->add(CronContainer::HOURLY,SynchronizeGroupOnOrdersCron::class);
+        $cron = $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);
     
         /**
         * Create Procedure in Settings/Orders/EventProcedures
         */
         
         $eventProceduresService->registerProcedure('SendFeedBack',ProcedureEntry::PROCEDURE_GROUP_ORDER, [
-            'de' => 'Feedback abschicken',//translate
-            'en' => 'Send Feedback'//translate
+            'de' => 'Versandbestätigung an Groupon senden',//translate
+            'en' => 'Send shipping confirmation to Groupon'//translate
 
         ], 'Groupon\\Crons\\SynchronizeGroupOnOrdersCron@Procedure');
     }

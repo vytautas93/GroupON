@@ -47,13 +47,18 @@ class SynchronizeGroupOnOrdersCron extends Cron
             {
                 foreach ($configurations as $country => $configuration) 
                 {
-                    $groupOnOrders = $this->getGroupOnOrders($configuration);
-                    foreach($groupOnOrders as $groupOnOrder)
+                    $pageNumber = $this->getPageNumber($configuration);
+                    $this->getLogger(__FUNCTION__)->info("Page Number",json_encode($pageNumber));
+                    for ($i = 1; $i <= (int)$pageNumber; $i++) 
                     {
-                        $exists = $this->checkIfExists($country,$groupOnOrder->orderid);
-                        if ($exists == false) 
-                        {   
-                            $order = $this->generateOrder($country,$configuration,$groupOnOrder);
+                        $groupOnOrders = $this->getGroupOnOrders($configuration);
+                        foreach($groupOnOrders as $groupOnOrder)
+                        {
+                            $exists = $this->checkIfExists($country,$groupOnOrder->orderid);
+                            if ($exists == false) 
+                            {   
+                                $order = $this->generateOrder($country,$configuration,$groupOnOrder);
+                            }
                         }
                     }
                 }
@@ -561,4 +566,17 @@ class SynchronizeGroupOnOrdersCron extends Cron
             }  
         }
     }
+    
+    public function getPackageNumber($configuration)
+    {
+        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'];
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch); 
+        curl_close($ch);      
+        $groupOnData = json_decode($response);
+        return $groupOnData->meta->no_of_pages;
+    }
+    
 }
