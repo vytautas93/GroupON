@@ -51,21 +51,32 @@ class TestController extends Controller
                 foreach ($configurations as $country => $configuration) 
                 {
                     $pageNumber = $this->getPageNumber($configuration);
-                    $this->getLogger(__FUNCTION__)->error("pageNumber",json_encode($pageNumber));
-                    for ($i = 1; $i <= (int)$pageNumber; $i++) 
+                    if ((int)$pageNumber > 0) 
                     {
-                        $groupOnOrders = $this->getGroupOnOrders($configuration,$i);
-                        $this->getLogger(__FUNCTION__)->error("Orders",json_encode($groupOnOrders));
-                        foreach($groupOnOrders as $groupOnOrder)
+                        $this->getLogger(__FUNCTION__)->error("pageNumber",json_encode($pageNumber));
+                        for ($i = 1; $i <= (int)$pageNumber; $i++) 
                         {
-                            $exists = $this->checkIfExists($country,$groupOnOrder->orderid);
-                            if ($exists == false) 
-                            {   
-                                $order = $this->generateOrder($country,$configuration,$groupOnOrder);
+                            $groupOnOrders = $this->getGroupOnOrders($configuration,$i);
+                            $this->getLogger(__FUNCTION__)->error("Orders",json_encode($groupOnOrders));
+                            foreach($groupOnOrders as $groupOnOrder)
+                            {
+                                $exists = $this->checkIfExists($country,$groupOnOrder->orderid);
+                                if ($exists == false) 
+                                {   
+                                    $order = $this->generateOrder($country,$configuration,$groupOnOrder);
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        
+                    }
                 }
+            }
+            else
+            {
+                 $this->getLogger(__FUNCTION__)->error("Configurations","Please enter required configurations");
             }
         }
     }
