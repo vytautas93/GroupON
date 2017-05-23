@@ -49,7 +49,7 @@ class TestController extends Controller
                 foreach ($configurations as $country => $configuration) 
                 {
                     $pageNumber = $this->getPageNumber($configuration);
-                    $this->getLogger(__FUNCTION__)->info("Page Number",json_encode($pageNumber));
+                    $this->getLogger(__FUNCTION__)->error("Page Number",json_encode($pageNumber));
                     for ($i = 1; $i <= (int)$pageNumber; $i++) 
                     {
                         $groupOnOrders = $this->getGroupOnOrders($configuration);
@@ -129,7 +129,7 @@ class TestController extends Controller
             } 
             catch (\Exception $e) 
             {
-               $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+               $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
             }
             
             if (!is_null($findVariationID[0]->variationId)){
@@ -162,7 +162,7 @@ class TestController extends Controller
             }
             else
             {
-                $this->getLogger(__FUNCTION__)->info("Please Add missing SKU to your Items","SKU:$groupOnItem->sku");
+                $this->getLogger(__FUNCTION__)->error("Please Add missing SKU to your Items","SKU:$groupOnItem->sku");
                 return null;    
             }
         }
@@ -218,7 +218,7 @@ class TestController extends Controller
         } 
         catch (\Exception $e) 
         {
-            $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+            $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
         }
         
        
@@ -231,7 +231,7 @@ class TestController extends Controller
             } 
             catch (\Exception $e) 
             {
-                $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+                $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
             }
         }
         else
@@ -273,7 +273,7 @@ class TestController extends Controller
         } 
         catch (\Exception $e) 
         {
-            $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+            $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
         }
         
     }
@@ -295,7 +295,7 @@ class TestController extends Controller
                  } 
                  catch (\Exception $e) 
                  {
-                    $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+                    $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
                  }  
                  
             }
@@ -324,7 +324,7 @@ class TestController extends Controller
                   if( $response_json->success == true ) 
                   {
                     
-                    $this->getLogger(__FUNCTION__)->info('Succesfull response From Groupon',"FeedBack was sended\n.$response"); 
+                    $this->getLogger(__FUNCTION__)->error('Succesfull response From Groupon',"FeedBack was sended\n.$response"); 
                   } 
                   else 
                   {
@@ -336,7 +336,7 @@ class TestController extends Controller
         
         else
         {
-            $this->getLogger(__FUNCTION__)->info('Missing Parameters',"Add missing parameters"); 
+            $this->getLogger(__FUNCTION__)->error('Missing Parameters',"Add missing parameters"); 
         }
     }
     
@@ -547,7 +547,7 @@ class TestController extends Controller
             } 
             else
             {
-                $this->getLogger(__FUNCTION__)->info("Trial Expired","Your Trial expired, Please buy Full version of Groupon Plugin");   
+                $this->getLogger(__FUNCTION__)->error("Trial Expired","Your Trial expired, Please buy Full version of Groupon Plugin");   
                 return false;
             }
         }
