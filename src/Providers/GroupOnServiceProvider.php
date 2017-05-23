@@ -24,7 +24,7 @@ class GroupOnServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->getApplication()->register(GroupOnRouteServiceProvider::class);
+
     }
     
     public function boot(
@@ -36,7 +36,7 @@ class GroupOnServiceProvider extends ServiceProvider
         /**
         * Register Cron Jobs.
         */
-        //$cron = $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);
+        $cron = $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);
     
         /**
         * Create Procedure in Settings/Orders/EventProcedures

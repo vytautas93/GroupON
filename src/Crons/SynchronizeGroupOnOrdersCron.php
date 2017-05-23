@@ -37,9 +37,10 @@ class SynchronizeGroupOnOrdersCron extends Cron
     }
     
     
-    public function handle()
+     public function handle()
     {
         $trial = $this->checkTrial();
+       
         if ($trial) 
         {
             $configurations = $this->getConfiguration();
@@ -48,20 +49,30 @@ class SynchronizeGroupOnOrdersCron extends Cron
                 foreach ($configurations as $country => $configuration) 
                 {
                     $pageNumber = $this->getPageNumber($configuration);
-                    $this->getLogger(__FUNCTION__)->info("Page Number",json_encode($pageNumber));
-                    for ($i = 1; $i <= (int)$pageNumber; $i++) 
+                    if((int)$pageNumber>0) 
                     {
-                        $groupOnOrders = $this->getGroupOnOrders($configuration);
-                        foreach($groupOnOrders as $groupOnOrder)
+                        for ($i = 1; $i <= (int)$pageNumber; $i++) 
                         {
-                            $exists = $this->checkIfExists($country,$groupOnOrder->orderid);
-                            if ($exists == false) 
-                            {   
-                                $order = $this->generateOrder($country,$configuration,$groupOnOrder);
+                            $groupOnOrders = $this->getGroupOnOrders($configuration,$i);
+                            foreach($groupOnOrders as $groupOnOrder)
+                            {
+                                $exists = $this->checkIfExists($country,$groupOnOrder->orderid);
+                                if ($exists == false) 
+                                {   
+                                    $order = $this->generateOrder($country,$configuration,$groupOnOrder);
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        $this->getLogger(__FUNCTION__)->error("Groupon Data","There are no orders for $country groupon");
+                    }
                 }
+            }
+            else
+            {
+                 $this->getLogger(__FUNCTION__)->error("Configurations","Please enter required configurations");
             }
         }
     }
@@ -98,9 +109,9 @@ class SynchronizeGroupOnOrdersCron extends Cron
     }
 
 
-    public function getGroupOnOrders($configuration)
+    public function getGroupOnOrders($configuration,$page)
     {
-        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'];
+        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&page='.$page;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -128,7 +139,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
             } 
             catch (\Exception $e) 
             {
-               $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+               $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
             }
             
             if (!is_null($findVariationID[0]->variationId)){
@@ -161,7 +172,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
             }
             else
             {
-                $this->getLogger(__FUNCTION__)->info("Please Add missing SKU to your Items","SKU:$groupOnItem->sku");
+                $this->getLogger(__FUNCTION__)->error("Please Add missing SKU to your Items","SKU:$groupOnItem->sku");
                 return null;    
             }
         }
@@ -217,7 +228,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         } 
         catch (\Exception $e) 
         {
-            $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+            $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
         }
         
        
@@ -230,7 +241,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
             } 
             catch (\Exception $e) 
             {
-                $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+                $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
             }
         }
         else
@@ -272,7 +283,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         } 
         catch (\Exception $e) 
         {
-            $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+            $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
         }
         
     }
@@ -294,7 +305,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                  } 
                  catch (\Exception $e) 
                  {
-                    $this->getLogger(__FUNCTION__)->info("Something went wrong!",$e->getMessage());   
+                    $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
                  }  
                  
             }
@@ -323,7 +334,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                   if( $response_json->success == true ) 
                   {
                     
-                    $this->getLogger(__FUNCTION__)->info('Succesfull response From Groupon',"FeedBack was sended\n.$response"); 
+                    $this->getLogger(__FUNCTION__)->error('Succesfull response From Groupon',"FeedBack was sended\n.$response"); 
                   } 
                   else 
                   {
@@ -335,7 +346,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         
         else
         {
-            $this->getLogger(__FUNCTION__)->info('Missing Parameters',"Add missing parameters"); 
+            $this->getLogger(__FUNCTION__)->error('Missing Parameters',"Add missing parameters"); 
         }
     }
     
@@ -487,7 +498,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                                 [
                                     ["typeId" =>1 ,"value" =>$country.$groupOnOrder->orderid],
                                 ],
-                                "mopId" => 4040,
+                                "mopId" => $configRepository->get("Groupon.payment")
                             ];
                         $createPayment = $paymentRepositoryContract->createPayment($data);
                         $orderRelation = $paymentOrderRelationRepositoryContract->createOrderRelation($createPayment,$addOrder);    
@@ -546,7 +557,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
             } 
             else
             {
-                $this->getLogger(__FUNCTION__)->info("Trial Expired","Your Trial expired, Please buy Full version of Groupon Plugin");   
+                $this->getLogger(__FUNCTION__)->error("Trial Expired","Your Trial expired, Please buy Full version of Groupon Plugin");   
                 return false;
             }
         }
@@ -576,7 +587,11 @@ class SynchronizeGroupOnOrdersCron extends Cron
         $response = curl_exec($ch); 
         curl_close($ch);      
         $groupOnData = json_decode($response);
-        return $groupOnData->meta->no_of_pages;
+        $page = $groupOnData->meta->no_of_pages;
+        if ($page) 
+        {
+            return $page;
+        }
+        else return 0;
     }
-    
 }
