@@ -489,7 +489,7 @@ class TestController extends Controller
                                 [
                                     ["typeId" =>1 ,"value" =>$country.$groupOnOrder->orderid],
                                 ],
-                                "mopId" => $configRepository->get("Groupon.payment"),
+                                "mopId" => $configRepository->get("Groupon.payment")
                             ];
                         $createPayment = $paymentRepositoryContract->createPayment($data);
                         $orderRelation = $paymentOrderRelationRepositoryContract->createOrderRelation($createPayment,$addOrder);    
