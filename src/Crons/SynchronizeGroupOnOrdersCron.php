@@ -567,7 +567,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
         }
     }
     
-    public function getPackageNumber($configuration)
+    public function getPageNumber($configuration)
     {
         $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'];
         $ch = curl_init();
