@@ -41,16 +41,17 @@ class TestController extends Controller
     public function handle()
     {
         $trial = $this->checkTrial();
-       $this->getLogger(__FUNCTION__)->error("work",json_encode($trial));
+       
         if ($trial) 
         {
             $configurations = $this->getConfiguration();
+            $this->getLogger(__FUNCTION__)->error("configurations",json_encode($configurations));
             if(!empty($configurations))
             {
                 foreach ($configurations as $country => $configuration) 
                 {
                     $pageNumber = $this->getPageNumber($configuration);
-                    
+                    $this->getLogger(__FUNCTION__)->error("pageNumber",json_encode($pageNumber));
                     for ($i = 1; $i <= (int)$pageNumber; $i++) 
                     {
                         $groupOnOrders = $this->getGroupOnOrders($configuration,$i);
