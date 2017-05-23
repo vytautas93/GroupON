@@ -49,6 +49,7 @@ class TestController extends Controller
             {
                 foreach ($configurations as $country => $configuration) 
                 {
+                    $this->getLogger(__FUNCTION__)->error("Test",json_encode($configuration));
                     $pageNumber = $this->getPageNumber($configuration);
                     if (isset($pageNumber)) 
                     {
@@ -590,6 +591,7 @@ class TestController extends Controller
         $response = curl_exec($ch); 
         curl_close($ch);      
         $groupOnData = json_decode($response);
+           $this->getLogger(__FUNCTION__)->error("Response",json_encode($response));
         return $groupOnData->meta->no_of_pages;
     }
 }
