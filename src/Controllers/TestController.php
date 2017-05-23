@@ -41,6 +41,7 @@ class TestController extends Controller
     public function handle()
     {
         $trial = $this->checkTrial();
+       $this->getLogger(__FUNCTION__)->error("work",json_encode($trial));
         if ($trial) 
         {
             $configurations = $this->getConfiguration();
