@@ -70,7 +70,7 @@ class TestController extends Controller
                     }
                     else
                     {
-                        $this->getLogger(__FUNCTION__)->error("Groupon Data","There are no orders");
+                        $this->getLogger(__FUNCTION__)->error("Groupon Data","There are no orders for $country groupon");
                     }
                 }
             }
