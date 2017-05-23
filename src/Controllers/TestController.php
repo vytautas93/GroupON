@@ -591,8 +591,8 @@ class TestController extends Controller
         $response = curl_exec($ch); 
         curl_close($ch);      
         $groupOnData = json_decode($response);
-        $page = $groupOnData->meta->current_page;
-        $this->getLogger(__FUNCTION__)->error("Response",json_encode($page));
+        $page = $groupOnData->meta->no_of_pages;
+        $this->getLogger(__FUNCTION__)->error("Response",$page);
         return $page;
     }
 }
