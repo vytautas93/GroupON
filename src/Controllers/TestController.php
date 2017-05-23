@@ -49,10 +49,11 @@ class TestController extends Controller
                 foreach ($configurations as $country => $configuration) 
                 {
                     $pageNumber = $this->getPageNumber($configuration);
-                    $this->getLogger(__FUNCTION__)->error("Page Number",json_encode($pageNumber));
+                    
                     for ($i = 1; $i <= (int)$pageNumber; $i++) 
                     {
-                        $groupOnOrders = $this->getGroupOnOrders($configuration);
+                        $groupOnOrders = $this->getGroupOnOrders($configuration,$i);
+                        $this->getLogger(__FUNCTION__)->error("Orders",json_encode($groupOnOrders));
                         foreach($groupOnOrders as $groupOnOrder)
                         {
                             $exists = $this->checkIfExists($country,$groupOnOrder->orderid);
@@ -99,9 +100,9 @@ class TestController extends Controller
     }
 
 
-    public function getGroupOnOrders($configuration)
+    public function getGroupOnOrders($configuration,$page)
     {
-        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'];
+        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&page='.$page;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -488,7 +489,7 @@ class TestController extends Controller
                                 [
                                     ["typeId" =>1 ,"value" =>$country.$groupOnOrder->orderid],
                                 ],
-                                "mopId" => 4040,
+                                "mopId" => $configRepository->get("Groupon.payment"),
                             ];
                         $createPayment = $paymentRepositoryContract->createPayment($data);
                         $orderRelation = $paymentOrderRelationRepositoryContract->createOrderRelation($createPayment,$addOrder);    
