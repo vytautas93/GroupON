@@ -22,7 +22,7 @@ use Plenty\Modules\Payment\Contracts\PaymentOrderRelationRepositoryContract;
 use Plenty\Modules\Plugin\DataBase\Contracts\DataBase;
 use Groupon\Models\Expire;
 
-
+use Plenty\Plugin\Log\Loggable;
 
 class TestController extends Controller
 {
