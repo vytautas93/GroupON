@@ -45,13 +45,12 @@ class TestController extends Controller
         if ($trial) 
         {
             $configurations = $this->getConfiguration();
-            $this->getLogger(__FUNCTION__)->error("configurations",json_encode($configurations));
             if(!empty($configurations))
             {
                 foreach ($configurations as $country => $configuration) 
                 {
                     $pageNumber = $this->getPageNumber($configuration);
-                    if ((int)$pageNumber > 0) 
+                    if (isset($pageNumber)) 
                     {
                         $this->getLogger(__FUNCTION__)->error("pageNumber",json_encode($pageNumber));
                         for ($i = 1; $i <= (int)$pageNumber; $i++) 
@@ -70,7 +69,7 @@ class TestController extends Controller
                     }
                     else
                     {
-                        
+                        $this->getLogger(__FUNCTION__)->error("Groupon Data","There are no orders");
                     }
                 }
             }
