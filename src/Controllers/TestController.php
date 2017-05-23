@@ -51,7 +51,7 @@ class TestController extends Controller
                 {
                     $this->getLogger(__FUNCTION__)->error("Test",json_encode($configuration));
                     $pageNumber = $this->getPageNumber($configuration);
-                    if (isset($pageNumber)) 
+                    if ((int)$pageNumber>0) 
                     {
                         $this->getLogger(__FUNCTION__)->error("pageNumber",json_encode($pageNumber));
                         for ($i = 1; $i <= (int)$pageNumber; $i++) 
@@ -592,7 +592,10 @@ class TestController extends Controller
         curl_close($ch);      
         $groupOnData = json_decode($response);
         $page = $groupOnData->meta->no_of_pages;
-        $this->getLogger(__FUNCTION__)->error("Response",$page);
-        return $page;
+        if ($page) 
+        {
+            return $page;
+        }
+        else return 0;
     }
 }
