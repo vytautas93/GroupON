@@ -10,7 +10,7 @@
   "isClosedSource":true,
   "type": "backend",
   "license":"MIT",
-  "version":"1.0.0",
+  "version":"1.0.1",
   "price":0.00,
   "pluginIcon":"icon_plugin.png",
   "author": "hashtagES GmbH",
