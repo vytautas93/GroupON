@@ -553,6 +553,8 @@ class SynchronizeGroupOnOrdersCron extends Cron
         if ($expire) {
             if ((int)$expire[0]->expiredtime > time()) 
             {
+                $willExpire = date("Y-m-d H:i:s",(int)$expire[0]->expiredtime);
+                $this->getLogger(__FUNCTION__)->error("Trial version","Your trial will expire on $willExpire");   
                 return true;
             } 
             else
