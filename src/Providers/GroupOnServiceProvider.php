@@ -36,7 +36,7 @@ class GroupOnServiceProvider extends ServiceProvider
         /**
         * Register Cron Jobs.
         */
-        $cron = $container->add(CronContainer::EVERY_FIFTEEN_MINUTES,SynchronizeGroupOnOrdersCron::class);
+         $cron = $container->add(CronContainer::HOURLY,SynchronizeGroupOnOrdersCron::class);
     
         /**
         * Create Procedure in Settings/Orders/EventProcedures
