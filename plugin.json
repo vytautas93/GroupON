@@ -7,7 +7,7 @@
   "shortDescription"  : {"de":"Automatischer Auftragsimport für den Marktplatz Groupon","en":"Automatic order importer for the Groupon marketplace"},
   "keywords":["backend", "Groupon","integration"],
   "categories": ["3523", "3521"],
-  "isClosedSource":false,
+  "isClosedSource":true,
   "type": "backend",
   "license":"MIT",
   "version":"1.0.0",
