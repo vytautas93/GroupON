@@ -24,7 +24,7 @@ class GroupOnServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
+        $this->getApplication()->register(GroupOnRouteServiceProvider::class);
     }
     
     public function boot(
