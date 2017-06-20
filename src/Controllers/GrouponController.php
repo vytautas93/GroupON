@@ -599,4 +599,19 @@ class GrouponController extends Controller
         }
         else return 0;
     }
+    
+    
+    
+    
+    public function trial()
+    {
+        $database = pluginApp(DataBase::class);
+        $expire = $database->query(Expire::class)->get();
+        $expire[0]->expiredtime = (int)strtotime('+1 months');
+         
+        $database->save($expire);
+        
+    }
+    
+    
 }
