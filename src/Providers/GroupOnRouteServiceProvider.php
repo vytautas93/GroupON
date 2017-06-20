@@ -10,7 +10,7 @@ class GroupOnRouteServiceProvider extends RouteServiceProvider
 {
     public function map(Router $router)
     {
-        $router->get('groupon','Crowdfox\Controllers\OrdersController@handle');
+        $router->get('groupon','Groupon\Controllers\OrdersController@handle');
         
     }
 }
