@@ -27,7 +27,7 @@ use Groupon\Models\Expire;
 
 use Plenty\Plugin\Log\Loggable;
 
-class OrdersController extends Controller
+class GrouponController extends Controller
 {
     use Loggable;
     private $authHelper;
