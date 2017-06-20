@@ -12,7 +12,7 @@ Nutzen Sie Online-, E-Mail- und Telefonwerbung. Mit Groupon Goods werden Ihre Pr
 Wie melde ich mich dort an?
 https://www.groupon.de/merchant/marketing-solutions/goods -> **Los geht´s**
  
-WICHTIG: Da es ab uns zu mal etwas länger dauert mit der kompletten Anmeldung, installiert das Plugin (wegen der 30 Tage Trail) erst dann, ** wenn Ihr die Zugangsdaten bekommen habt und euren Ersten Auftrag verkauft habt! **
+WICHTIG: Da es ab uns zu mal etwas länger dauert mit der kompletten Anmeldung, installiert das Plugin (wegen der 30 Tage Trail) erst dann, **wenn Ihr die Zugangsdaten bekommen habt und euren Ersten Auftrag verkauft habt!**
 So könnt Ihr diese am besten ausnutzen.
  
 ## Was muss ich machen, dass alles sauber läuft und ich im Forum keine Beiträge schreiben muss?
@@ -22,10 +22,11 @@ Ganz eifach!
 2. Du bekommst von Groupon die folgenden Accounts:
 -   https://www.groupon.de/merchant/ <- Dieses ist das Merchant Center, für Bewertungen und Abrechnungen
 -   https://deal-centre.groupon.de/ <- Hier tragt Ihr eure Deals ein!
--   https://scm.commerceinterface.com/accounts/ Hier bekommt Ihr nach dem erstem Verkauf eure SupplierID und den Token für das Plugin!
+-   https://scm.commerceinterface.com/accounts/ <- Da die SupplierID, die benötigt wird leider nicht im Account angezeigt wird, musst du folgendes machen.
+- Einloggen in https://scm.commerceinterface.com/dashboard/ und dann mit der rechten Maustaste den Seitenquelltext anzeigen lassen. Hier wird dir dann wenn du die Suche nutzt und nach id_supplier suchst die Supplier ID unter value angezeigt.
+<img src = "http://i.imgur.com/WdCr0nn.png" alt="image 1">
+- Einen Token generierst Du unter: [https://scm.commerceinterface.com/access_tokens/](https://scm.commerceinterface.com/access_tokens/)
 > Diese trägst Du dann in dem Plugin unter Einstellungen unter dem Marktplatz z.B. DE ein
-3. Du fügst unter "Einstellungen > Aufträge > Auftragsherkunft" Groupon hinzu und trägst die ID im Plugin unter Settings > Herkunft ID ein
-4. Jetzt wählst Du eine Zahlart aus, mit der die Bestellungen importiert werden sollen, z.B. 1700 für Coupon (aber aktivieren vorher) und trägst diese im Plugin unter Settings > Zahlart ID ein
  
 OK, damit der Versand bei Groupon auch bestätigt wird, musst du jetzt noch,...
 5. Erstelle eine Ereignisaktion unter "Einstellungen > Aufträge > Ereignisaktionen" für deine Versendeten Bestellungen!
@@ -35,8 +36,12 @@ z.B. Statuswechsel auf die 7.0, Filter Herkunft "Groupon" und Aktionen > Plugins
  
 Na, bei Groupon einen Deal starten natürlich!
 Dazu fügst Du einen Deal in deinem Groupon Merchant Center hinzu mit allem was nötig ist und dann,....<br>bekommst Du eine SKU von Groupon!
-Diese SKU trägst Du dann in deine zugehörige Variante unter **SKU** ein! Wichtig, die Herkunft muss deine oben unter 3 gewählte Auftragsherkunft **"Groupon"** sein!
- 
+Diese SKU trägst Du dann in deine zugehörige Variante unter **SKU** und Herkunft Groupon ein!
+
+Hast Du einmal vergessen die SKU einzugeben, können keine Aufträge generiert werden bzw. diese werden ausgelassen. 
+Unter Daten > Log > Groupon > generateOrderItemList findest du dann die SKU, die noch mit dem Artikel verknüpft werden muss. 
+<img src = "http://i.imgur.com/mL94EW3.png" alt="image 1">
+
 Hier die Anleitung von Groupon:
 https://groupon.s3.amazonaws.com/seimages/guide/DealCentre/DE_DealCentre_MerchantManual_DEv2.pdf
  
