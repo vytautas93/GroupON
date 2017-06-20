@@ -1,11 +1,3 @@
-## Web page
- 
-http://hashtages.com/
- 
-## Email
- 
-hello@hashtages.com 
- 
-## Phone
- 
-+49 (0) 4264-776949-5 
+## Forum
+- Für Technische Probleme könnt Ihr gerne im Forum einen Beitrag erstellen.
+https://forum.plentymarkets.com/t/issue-fehler-groupon-marketplace-plugin/
