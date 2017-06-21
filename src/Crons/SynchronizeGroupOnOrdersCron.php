@@ -376,7 +376,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                     $lineItemIds[] = 
                     [
                         "quantity" => $orderItems->quantity,
-                        "carrier" => $carrier,
+                        "carrier" => "DHLG",
                         "ci_lineitem_id" => $properties->value,
                         "tracking" => (string)$packageNumber[0]
                     ];
