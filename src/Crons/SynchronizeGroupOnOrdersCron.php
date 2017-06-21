@@ -322,7 +322,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
 
             $datatopost = $this->formateFeedBack($order,$carrier,$supplierID,$token);
             $this->getLogger(__FUNCTION__)->error('Feedback',json_encode($datatopost)); 
-            /*if(!empty($datatopost))
+            if(!empty($datatopost))
             {
                 $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
                 curl_setopt ($ch, CURLOPT_POST, true);
@@ -342,7 +342,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                     $this->getLogger(__FUNCTION__)->error('Bad Response From Groupon',"Something was wrong\n.$response"); 
                   }
                 }        
-            }*/
+            }
         }
         
         else
@@ -374,10 +374,10 @@ class SynchronizeGroupOnOrdersCron extends Cron
                 {
                     $lineItemIds[] = 
                     [
-                        "ci_lineitem_id" => $properties->value,
+                        "quantity" => $orderItems->quantity,
                         "carrier" => $carrier,
-                        "tracking" => $packageNumber[0],
-                        "quantity" => $orderItems->quantity
+                        "ci_lineitem_id" => $properties->value,
+                        "tracking" => $packageNumber[0]
                     ];
                 }
             }
