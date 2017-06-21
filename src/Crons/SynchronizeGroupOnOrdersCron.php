@@ -301,7 +301,8 @@ class SynchronizeGroupOnOrdersCron extends Cron
                  try 
                  {
                     $shippingProfile = $preset->getPresetById($config->value);
-                    $carrier = $shippingProfile->parcelService->backend_name;    
+                    //$carrier = $shippingProfile->parcelService->backend_name;    
+                    $carrier = "DHL Germany";    
                  } 
                  catch (\Exception $e) 
                  {
