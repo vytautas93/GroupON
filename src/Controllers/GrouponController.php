@@ -322,9 +322,10 @@ class GrouponController extends Controller
         
         if ($carrier && $supplierID && $token) 
         {
-
+             
             $datatopost = $this->formateFeedBack($order,$carrier,$supplierID,$token);
-            if(!empty($datatopost))
+            $this->getLogger(__FUNCTION__)->error('Feedback',json_encode($datatopost)); 
+           /* if(!empty($datatopost))
             {
                 $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
                 curl_setopt ($ch, CURLOPT_POST, true);
@@ -344,7 +345,7 @@ class GrouponController extends Controller
                     $this->getLogger(__FUNCTION__)->error('Bad Response From Groupon',"Something was wrong\n.$response"); 
                   }
                 }        
-            }
+            }*/
         }
         
         else
