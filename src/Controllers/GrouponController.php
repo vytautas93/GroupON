@@ -609,7 +609,7 @@ class GrouponController extends Controller
         $expire = $database->query(Expire::class)->get();
         $expire[0]->expiredtime = (int)strtotime('+1 months');
          
-        $database->save($expire);
+        $database->save($expire[0]);
         
     }
     
