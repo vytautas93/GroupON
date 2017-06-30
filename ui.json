@@ -1,0 +1,12 @@
+{
+    "defaultEntryPoint": "index.html",
+    "namespace": "Groupon",
+    "menuEntries": [
+        {
+        "label": "Groupon",
+        "menu": "settings/markets",
+        "urlKey": "groupon-orders",
+        "entryPoint": "index.html"
+        }
+    ]
+}

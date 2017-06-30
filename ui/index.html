@@ -1,0 +1,37 @@
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<div class="container">
+    <div class="row">
+        <a onClick = "addOrders()" class = "btn btn-md btn-success">Add Orders</a>         
+    </div>
+</div>
+
+  
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous">
+</script>
+
+<script type="text/javascript">
+    function addOrders()
+    {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) 
+            {
+                var object = JSON.parse(this.responseText);
+                console.log(this.responseText);
+            }
+            else
+            {
+                console.log(this.responseText);
+            }
+        };
+        var url = "https://" + window.location.hostname+"/groupon";
+        xhttp.open("GET", url, true);
+        xhttp.send();
+    }
+</script>
+  
