@@ -114,13 +114,35 @@ class GrouponController extends Controller
 
     public function getGroupOnOrders($configuration,$page)
     {
-        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime=06/13/2017+03:24&end_datetime=06/13/2017+08:24&page='.$page;
+        $configRepository = pluginApp(ConfigRepository::class);
+        
+        $start_time = $configRepository->get("Groupon.start_time");
+        
+        $end_time = $configRepository->get("Groupon.end_time");
+        
+        if (!$start_time || !$end_time) 
+        {
+            $time = time();
+            $end_time = date ( "m/d/Y+H:i",$time );
+            $start_time_timestamp = strtotime('-23 hours', $time);
+            $start_time = date ( "m/d/Y+H:i", $start_time_timestamp ); 
+        }
+        
+        $this->getLogger(__FUNCTION__)->error("Start Time",json_encode($start_time));
+        $this->getLogger(__FUNCTION__)->error("End Time",json_encode($end_time));   
+        
+        
+        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime='.$start_time.'&end_datetime='.$end_time'&page='.$page;
+        
+        $this->getLogger(__FUNCTION__)->error("Url",json_encode($url));   
+        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch); 
         curl_close($ch);      
         $groupOnData = json_decode($response);
+        $this->getLogger(__FUNCTION__)->error("Groupon data",json_encode($groupOnData));   
         return $groupOnData->data;
     }
     
@@ -147,7 +169,7 @@ class GrouponController extends Controller
             
             if (!is_null($findVariationID[0]->variationId)){
                 $amounts[] = [
-                'currency' => 'EU',
+                'currency' => 'EUR',
                 'priceOriginalGross' => $groupOnItem->unit_price,
                 'priceOriginalNet' => $groupOnItem->unit_price
                 ];

@@ -55,4 +55,18 @@
         "type"    : "text",
         "default" : "4040"
     }
+    {
+        "tab"     : "Settings", 
+        "key"     : "start_time", 
+        "label"   : "Enter start time. (format MM/DD/YYYY+HH:MM)", 
+        "type"    : "text",
+        "default" : ""
+    }
+    {
+        "tab"     : "Settings", 
+        "key"     : "end_time", 
+        "label"   : "Enter end time. (format MM/DD/YYYY+HH:MM)", 
+        "type"    : "text",
+        "default" : ""
+    }
 ]
