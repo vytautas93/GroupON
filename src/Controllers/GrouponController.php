@@ -131,8 +131,7 @@ class GrouponController extends Controller
         $this->getLogger(__FUNCTION__)->error("Start Time",json_encode($start_time));
         $this->getLogger(__FUNCTION__)->error("End Time",json_encode($end_time));   
         
-        
-        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime='.$start_time.'&end_datetime='.$end_time'&page='.$page;
+        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime='.$start_time.'&end_datetime='.$end_time.'&page='.$page;
         
         $this->getLogger(__FUNCTION__)->error("Url",json_encode($url));   
         
