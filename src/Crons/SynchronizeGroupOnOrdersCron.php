@@ -618,7 +618,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
             $start_time = date ( "m/d/Y+H:i", $start_time_timestamp ); 
         }
 
-        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime='.$start_time.'&end_datetime='.$end_time.'&page='.$page;
+        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime='.$start_time.'&end_datetime='.$end_time;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
