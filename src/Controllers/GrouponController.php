@@ -630,8 +630,8 @@ class GrouponController extends Controller
     public function getPageNumber($configuration,Request $request)
     {
      
-        $test = json_decode($request->get("start_time"));
-        $test2 = json_decode($request->get("end_time"));
+        $test = $request->get('start_time');
+        $test2 = $request->get('end_time');
         
         $this->getLogger(__FUNCTION__)->error("Request",json_encode($test));
         
