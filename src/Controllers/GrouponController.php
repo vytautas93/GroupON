@@ -43,11 +43,6 @@ class GrouponController extends Controller
     public function handle(Request $request)
     {
         
-        $this->getLogger(__FUNCTION__)->error("Start Time",json_encode($request->get("start_time")));
-        
-        $this->getLogger(__FUNCTION__)->error("End Time",json_encode($request->get("end_time")));
-        
-        /*
         $trial = $this->checkTrial();
        
         if ($trial) 
@@ -57,12 +52,12 @@ class GrouponController extends Controller
             {
                 foreach ($configurations as $country => $configuration) 
                 {
-                    $pageNumber = $this->getPageNumber($configuration);
+                    $pageNumber = $this->getPageNumber($configuration,$request);
                     if((int)$pageNumber>0) 
                     {
                         for ($i = 1; $i <= (int)$pageNumber; $i++) 
                         {
-                            $groupOnOrders = $this->getGroupOnOrders($configuration,$i);
+                            $groupOnOrders = $this->getGroupOnOrders($configuration,$i,$request);
                             foreach($groupOnOrders as $groupOnOrder)
                             {
                                 $exists = $this->checkIfExists($country,$groupOnOrder->orderid);
@@ -83,7 +78,7 @@ class GrouponController extends Controller
             {
                  $this->getLogger(__FUNCTION__)->error("Configurations","Please enter required configurations");
             }
-        }*/
+        }
     }
     
     public function markAsExported($groupOnOrder,$configuration)
@@ -118,23 +113,36 @@ class GrouponController extends Controller
     }
 
 
-    public function getGroupOnOrders($configuration,$page)
+    public function getGroupOnOrders($configuration,$page, Request $request)
     {
-        $configRepository = pluginApp(ConfigRepository::class);
+        $time = time();
         
-        $start_time = $configRepository->get("Groupon.start_time");
+        $start_time = ($request->get("start_time")) ? strtotime($request->get("start_time")) : strtotime('-24 hours', $time);
         
-        $end_time = $configRepository->get("Groupon.end_time");
+        $end_time = ($request->get("end_time")) ? strtotime( $request->get("end_time")) : $time;
         
-        if (!$start_time || !$end_time) 
+            
+        $limit = strtotime('-24 hours', $end_time);
+        
+        if ($start_time < $time && $end_time < $time && $start_time > $limit) 
         {
-            $time = time();
-            $end_time = date ( "m/d/Y+H:i",$time );
-            $start_time_timestamp = strtotime('-23 hours', $time);
-            $start_time = date ( "m/d/Y+H:i", $start_time_timestamp ); 
+            $start_time = date ( "m/d/Y+H:i", $start_time); 
+            
+            $end_time = date ( "m/d/Y+H:i",$end_time );
         }
+        else
+        {
+            
+            $start_time_timestamp = strtotime('-23 hours', $time);
+            
+            $start_time = date ( "m/d/Y+H:i", $start_time_timestamp ); 
         
+            $end_time = date ( "m/d/Y+H:i", $time );
+            
+        }
+            
         $this->getLogger(__FUNCTION__)->error("Start Time",json_encode($start_time));
+        
         $this->getLogger(__FUNCTION__)->error("End Time",json_encode($end_time));   
         
         $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime='.$start_time.'&end_datetime='.$end_time.'&page='.$page;
@@ -142,12 +150,19 @@ class GrouponController extends Controller
         $this->getLogger(__FUNCTION__)->error("Url",json_encode($url));   
         
         $ch = curl_init();
+        
         curl_setopt($ch, CURLOPT_URL, $url);
+        
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
         $response = curl_exec($ch); 
+        
         curl_close($ch);      
+        
         $groupOnData = json_decode($response);
+        
         $this->getLogger(__FUNCTION__)->error("Groupon data",json_encode($groupOnData));   
+        
         return $groupOnData->data;
     }
     
@@ -611,52 +626,75 @@ class GrouponController extends Controller
         }
     }
     
-    public function getPageNumber($configuration)
+    public function getPageNumber($configuration,Request $request)
     {
+     
+        $time = time();
         
-        $configRepository = pluginApp(ConfigRepository::class);
+        $start_time = ($request->get("start_time")) ? strtotime($request->get("start_time")) : strtotime('-24 hours', $time);
         
-        $start_time = $configRepository->get("Groupon.start_time");
+        $end_time = ($request->get("end_time")) ? strtotime( $request->get("end_time")) : $time;
         
-        $end_time = $configRepository->get("Groupon.end_time");
-        
-        if (!$start_time || !$end_time) 
-        {
-            $time = time();
             
-            $end_time = date ( "m/d/Y+H:i",$time );
+        $limit = strtotime('-24 hours', $end_time);
+        
+        if ($start_time < $time && $end_time < $time && $start_time > $limit) 
+        {
+            $start_time = date ( "m/d/Y+H:i", $start_time); 
+            
+            $end_time = date ( "m/d/Y+H:i",$end_time );
+        }
+        else
+        {
             
             $start_time_timestamp = strtotime('-23 hours', $time);
             
             $start_time = date ( "m/d/Y+H:i", $start_time_timestamp ); 
+        
+            $end_time = date ( "m/d/Y+H:i", $time );
+            
         }
+            
+        $this->getLogger(__FUNCTION__)->error("Start Time",json_encode($start_time));
+        
+        $this->getLogger(__FUNCTION__)->error("End Time",json_encode($end_time));   
+        
         $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime='.$start_time.'&end_datetime='.$end_time;
         
+        $this->getLogger(__FUNCTION__)->error("Url",json_encode($url));   
+        
         $ch = curl_init();
+        
         curl_setopt($ch, CURLOPT_URL, $url);
+        
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
         $response = curl_exec($ch); 
+        
         curl_close($ch);      
+        
         $groupOnData = json_decode($response);
+        
         $page = $groupOnData->meta->no_of_pages;
+        
         if ($page) 
         {
             return $page;
         }
+        
         else return 0;
     }
     
-    
-    
-    
+
     public function trial()
     {
         $database = pluginApp(DataBase::class);
+        
         $expire = $database->query(Expire::class)->get();
+        
         $expire[0]->expiredtime = (int)strtotime('+1 months');
          
         $database->save($expire[0]);
-        
     }
     
     

@@ -8,7 +8,7 @@
             <label for="start_time">Start Time</label>    
             <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></div>
-                <input class="flatpickr flatpickr-input active start_time form-control" type="date" placeholder="Select Start Time.." name = "start_time">
+                <input class="flatpickr flatpickr-input active start_time form-control" type="date" placeholder="Select Start Time.." name = "start_time" required>
             </div>
         </div>
         
@@ -16,7 +16,7 @@
             <label for="end_time">End Time</label>
             <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></div>
-                <input class="flatpickr flatpickr-input active end_time form-control" type="date" placeholder="Select End Time.." name = "end_time">
+                <input class="flatpickr flatpickr-input active end_time form-control" type="date" placeholder="Select End Time.." name = "end_time" required>
             </div>
             
         </div>
@@ -55,26 +55,22 @@
         });    
     
     
-       
+    $("#timeForm").submit(function(e) {
+        var url = "https://" + window.location.hostname+"/groupon";
         
-        // this is the id of the form
-        $("#timeForm").submit(function(e) {
-            var url = "https://" + window.location.hostname+"/groupon";
-            //var url = "path/to/your/script.php"; // the script where you handle the form input.
-        
-            $.ajax({
-                   type: "POST",
-                   url: url,
-                   data: $("#timeForm").serialize(), // serializes the form's elements.
-                   success: function(data)
-                   {
-                       alert(data); // show response from the php script.
-                   }
-                 });
-        
-            e.preventDefault(); // avoid to execute the actual submit of the form.
-        });
+        $.ajax({
+               type: "POST",
+               url: url,
+               data: $("#timeForm").serialize(), 
+               success: function(data)
+               {
+                   alert(data); 
+               }
+             });
     
+        e.preventDefault(); 
+    });
+
     
     
     
