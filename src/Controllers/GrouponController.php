@@ -117,9 +117,9 @@ class GrouponController extends Controller
     {
         $time = time();
         
-        $start_time = ($request->get("start_time")) ? strtotime(json_decode($request->get("start_time"))) : strtotime('-24 hours', $time);
+        $start_time = ($request->get("start_time") ? strtotime(json_decode($request->get("start_time"))) : strtotime('-24 hours', $time) );
         
-        $end_time = ($request->get("end_time")) ? strtotime(json_decode($request->get("end_time"))) : $time;
+        $end_time = ($request->get("end_time") ? strtotime(json_decode($request->get("end_time"))) : $time );
         
             
         $limit = strtotime('-24 hours', $end_time);
@@ -632,9 +632,9 @@ class GrouponController extends Controller
      
         $time = time();
         
-        $start_time = ($request->get("start_time")) ? strtotime(json_decode($request->get("start_time"))) : strtotime('-24 hours', $time);
+        $start_time = ($request->get("start_time") ? strtotime(json_decode($request->get("start_time"))) : strtotime('-24 hours', $time ));
         
-        $end_time = ($request->get("end_time")) ? strtotime(json_decode($request->get("end_time"))) : $time;
+        $end_time = ($request->get("end_time") ? strtotime(json_decode($request->get("end_time"))) : $time );
         
             
         $limit = strtotime('-24 hours', $end_time);
