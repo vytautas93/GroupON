@@ -127,8 +127,9 @@ class GrouponController extends Controller
         if ($start_time < $time && $end_time < $time && $start_time > $limit) 
         {
             $start_time = date ( "m/d/Y+H:i", $start_time); 
-            
+            $this->getLogger(__FUNCTION__)->error("IF",json_encode($start_time));   
             $end_time = date ( "m/d/Y+H:i",$end_time );
+            $this->getLogger(__FUNCTION__)->error("IF",json_encode($end_time));   
         }
         
         else
@@ -139,6 +140,7 @@ class GrouponController extends Controller
             $start_time = date ( "m/d/Y+H:i", $start_time_timestamp ); 
         
             $end_time = date ( "m/d/Y+H:i", $time );
+            $this->getLogger(__FUNCTION__)->error("ELSE",json_encode($end_time));   
             
         }
             
@@ -644,10 +646,10 @@ class GrouponController extends Controller
         if ($start_time < $time && $end_time < $time && $start_time > $limit) 
         {
             $start_time = date ( "m/d/Y+H:i", $start_time); 
-            $this->getLogger(__FUNCTION__)->error("IF",json_encode($start_time));   
+            
             
             $end_time = date ( "m/d/Y+H:i",$end_time );
-            $this->getLogger(__FUNCTION__)->error("IF",json_encode($end_time));   
+            
         }
         else
         {
@@ -657,7 +659,7 @@ class GrouponController extends Controller
             $start_time = date ( "m/d/Y+H:i", $start_time_timestamp ); 
         
             $end_time = date ( "m/d/Y+H:i", $time );
-            $this->getLogger(__FUNCTION__)->error("ELSE",json_encode($end_time));   
+            
         }
             
         $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime='.$start_time.'&end_datetime='.$end_time;
