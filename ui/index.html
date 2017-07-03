@@ -59,11 +59,11 @@
         
       
         
-        var data = 
+        /*var data = 
         {
             'start_time' : startTime,
             'end_time' : endTime
-        };
+        };*/
         var xhttp = new XMLHttpRequest();
         /*xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) 
@@ -79,7 +79,10 @@
         
         var url = "https://" + window.location.hostname+"/groupon";
         xhttp.open("POST", url, true);
-        xhttp.send(JSON.stringify(data));
+        xhttp.send(JSON.stringify({
+            'start_time' : startTime,
+            'end_time' : endTime
+        }));
     }
 </script>
   
