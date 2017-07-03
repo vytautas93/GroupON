@@ -42,7 +42,7 @@ class GrouponController extends Controller
     
     public function handle(Request $request)
     {
-         $this->getLogger(__FUNCTION__)->error("Request",json_encode($request->all()));
+         $this->getLogger(__FUNCTION__)->error("Request",json_encode($request->get()));
         
         /*
         $trial = $this->checkTrial();

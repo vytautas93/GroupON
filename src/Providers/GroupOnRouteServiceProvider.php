@@ -10,7 +10,7 @@ class GroupOnRouteServiceProvider extends RouteServiceProvider
 {
     public function map(Router $router)
     {
-        $router->get('groupon','Groupon\Controllers\GrouponController@handle');
+        $router->post('groupon','Groupon\Controllers\GrouponController@handle');
         $router->post('trial','Groupon\Controllers\GrouponController@trial');
         
     }
