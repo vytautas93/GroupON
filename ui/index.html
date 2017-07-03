@@ -3,11 +3,12 @@
 <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
 <div class="container col-md-4">
     <div class="row">
+    <form method = "POST" id = "timeForm">
         <div class="col-12 form-group">
             <label for="start_time">Start Time</label>    
             <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></div>
-                <input class="flatpickr flatpickr-input active start_time form-control" type="date" placeholder="Select Start Time.." id ="start">
+                <input class="flatpickr flatpickr-input active start_time form-control" type="date" placeholder="Select Start Time.." name = "start_time">
             </div>
         </div>
         
@@ -15,12 +16,15 @@
             <label for="end_time">End Time</label>
             <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></div>
-                <input class="flatpickr flatpickr-input active end_time form-control" type="date" placeholder="Select End Time.." id = "end">
+                <input class="flatpickr flatpickr-input active end_time form-control" type="date" placeholder="Select End Time.." name = "end_time">
             </div>
             
         </div>
         
-        <a onClick = "addOrders()" class = "btn btn-md btn-success">Add Orders</a>         
+        <a onClick = "addOrders()" class = "btn btn-md btn-success"></a>         
+        <input type="submit" value= "Add Orders" class ="btn btn-success">
+        </form>  
+        
     </div>
 </div>
 
@@ -31,7 +35,7 @@
   crossorigin="anonymous">
 </script>
 <script src="https://unpkg.com/flatpickr"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <script type="text/javascript">
     
@@ -52,37 +56,25 @@
             time_24hr :true 
         });    
     
-    function addOrders()
+    
+    // this is the id of the form
+    document.getElementsByClassName("timeForm").onsubmit(function(e) 
     {
-        var startTime = document.getElementById('start').value;
-        var endTime = document.getElementById('end').value;
-        
-      
-        
-        /*var data = 
-        {
-            'start_time' : startTime,
-            'end_time' : endTime
-        };*/
-        var xhttp = new XMLHttpRequest();
-        /*xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) 
-            {
-                var object = JSON.parse(this.responseText);
-                console.log(this.responseText);
-            }
-            else
-            {
-                console.log(this.responseText);
-            }
-        };*/
-        
         var url = "https://" + window.location.hostname+"/groupon";
-        xhttp.open("POST", url, true);
-        xhttp.send(JSON.stringify({
-            'start_time' : startTime,
-            'end_time' : endTime
-        }));
-    }
+        //var url = "path/to/your/script.php"; // the script where you handle the form input.
+    
+        $.ajax({
+               type: "POST",
+               url: url,
+               data: $("#timeForm").serialize(), // serializes the form's elements.
+               success: function(data)
+               {
+                   alert(data); // show response from the php script.
+               }
+             });
+    
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
+    
 </script>
   
