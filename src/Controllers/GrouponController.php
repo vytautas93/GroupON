@@ -53,7 +53,7 @@ class GrouponController extends Controller
                 foreach ($configurations as $country => $configuration) 
                 {
                     $pageNumber = $this->getPageNumber($configuration,$request);
-                    /*if((int)$pageNumber>0) 
+                    if((int)$pageNumber>0) 
                     {
                         for ($i = 1; $i <= (int)$pageNumber; $i++) 
                         {
@@ -71,7 +71,7 @@ class GrouponController extends Controller
                     else
                     {
                         $this->getLogger(__FUNCTION__)->error("Groupon Data","There are no orders for $country groupon");
-                    }*/
+                    }
                 }
             }
             else
