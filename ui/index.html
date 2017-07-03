@@ -1,13 +1,20 @@
 
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
-<div class="container">
+<div class="container col-md-6">
     <div class="row">
+        <div class="col-12 form-group">
+            <label for="start_time">Start Time</label>    
+            <input class="flatpickr flatpickr-input active start_time form-control" type="date" placeholder="Select Start Time.." readonly="readonly">
+        </div>
+        
+        <div class="col-12 form-group">
+            <label for="end_time">End Time</label>    
+            <input class="flatpickr flatpickr-input active end_time form-control" type="date" placeholder="Select Start Time.." readonly="readonly">
+        </div>
+        
         <a onClick = "addOrders()" class = "btn btn-md btn-success">Add Orders</a>         
     </div>
-
-    <input class="flatpickr flatpickr-input active selector" type="text" placeholder="Select Date.." readonly="readonly">
-
 </div>
 
   
@@ -21,14 +28,25 @@
 
 <script type="text/javascript">
     
-    var test = document.getElementsByClassName("selector");
+    var start = document.getElementsByClassName("start_time");
     
-    test.flatpickr(
+    start.flatpickr(
         {
             enableTime : true,
-            dateFormat : "m/d/Y H:i:s", 
+            dateFormat : "m/d/Y H:i:S", 
             time_24hr :true 
         });
+        
+        
+        
+    var end = document.getElementsByClassName("end_time");
+    
+    end.flatpickr(
+        {
+            enableTime : true,
+            dateFormat : "m/d/Y H:i:S", 
+            time_24hr :true 
+        });    
     
     function addOrders()
     {
