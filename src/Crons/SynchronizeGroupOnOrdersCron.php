@@ -111,34 +111,23 @@ class SynchronizeGroupOnOrdersCron extends Cron
 
     public function getGroupOnOrders($configuration,$page)
     {
-        $configRepository = pluginApp(ConfigRepository::class);
-        
-        $start_time = $configRepository->get("Groupon.start_time");
-        
-        $end_time = $configRepository->get("Groupon.end_time");
-        
-        if (!$start_time || !$end_time) 
-        {
-            $time = time();
-            $end_time = date ( "m/d/Y+H:i",$time );
-            $start_time_timestamp = strtotime('-23 hours', $time);
-            $start_time = date ( "m/d/Y+H:i", $start_time_timestamp ); 
-        }
-        
-        $this->getLogger(__FUNCTION__)->error("Start Time",json_encode($start_time));
-        $this->getLogger(__FUNCTION__)->error("End Time",json_encode($end_time));   
-        
-        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime='.$start_time.'&end_datetime='.$end_time.'&page='.$page;
-        
-        $this->getLogger(__FUNCTION__)->error("Url",json_encode($url));   
+
+        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&page='.$page;
         
         $ch = curl_init();
+        
         curl_setopt($ch, CURLOPT_URL, $url);
+        
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
         $response = curl_exec($ch); 
+        
         curl_close($ch);      
+        
         $groupOnData = json_decode($response);
+        
         $this->getLogger(__FUNCTION__)->error("Groupon data",json_encode($groupOnData));   
+        
         return $groupOnData->data;
     }
     
@@ -312,9 +301,13 @@ class SynchronizeGroupOnOrdersCron extends Cron
     
     public function Procedure(EventProceduresTriggered $eventTriggered)
     {
+        
         $configRepository = pluginApp(ConfigRepository::class);
+        
         $order = $eventTriggered->getOrder();
+        
         $parameters = [];
+        
         foreach ($order->properties as $config) {
             if((int)$config->typeId == 2)
             {
@@ -342,17 +335,24 @@ class SynchronizeGroupOnOrdersCron extends Cron
         {
              
             $datatopost = $this->formateFeedBack($order,$carrier,$supplierID,$token);
+            
             $this->getLogger(__FUNCTION__)->error('Feedback',json_encode($datatopost)); 
-           /* if(!empty($datatopost))
+            
+            if(!empty($datatopost))
             {
                 $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
+                
                 curl_setopt ($ch, CURLOPT_POST, true);
+                
                 curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
+                
                 curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
+                
                 $response = curl_exec ($ch);
                 if($response) 
                 {
                   $response_json = json_decode( $response );
+                  
                   if( $response_json->success == true ) 
                   {
                     
@@ -363,7 +363,7 @@ class SynchronizeGroupOnOrdersCron extends Cron
                     $this->getLogger(__FUNCTION__)->error('Bad Response From Groupon',"Something was wrong\n.$response"); 
                   }
                 }        
-            }*/
+            }
         }
         
         else
@@ -375,42 +375,49 @@ class SynchronizeGroupOnOrdersCron extends Cron
     
     public function formateFeedBack($order,$carrier,$supplierID,$token)
     {
-        $orderRepositoryContract = pluginApp(OrderRepositoryContract::class);
-        
-        $lineItemIds = [];
         try 
         {
+            $orderRepositoryContract = pluginApp(OrderRepositoryContract::class);
+            
+            $lineItemIds = [];
+            
             $packageNumber = $orderRepositoryContract->getPackageNumbers($order->id);
+            
+            if ($carrier == "DHL") 
+            {
+                $carrier = "DHLG";
+            }
+            
+            
+            foreach($order->orderItems as $orderItems)
+            {
+                foreach($orderItems->properties as $properties)
+                {
+                    if((int)$properties->typeId == 17)
+                    {
+                        $lineItemIds[] = 
+                        [
+                            "ci_lineitem_id" => $properties->value,
+                            "carrier" => $carrier,
+                            "tracking" => $packageNumber[0],
+                            "quantity" => $orderItems->quantity
+                        ];
+                    }
+                }
+            }
+            
+            $datatopost = array (
+                "supplier_id" => $supplierID,
+                "token" => $token,
+                "tracking_info" => json_encode ($lineItemIds)
+            );
+            
+            return $datatopost;
         } 
         catch (\Exception $e) 
         {
             $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
         }
-        
-        foreach($order->orderItems as $orderItems)
-        {
-            foreach($orderItems->properties as $properties)
-            {
-                if((int)$properties->typeId == 17)
-                {
-                    $lineItemIds[] = 
-                    [
-                        "ci_lineitem_id" => $properties->value,
-                        "carrier" => $carrier,
-                        "tracking" => $packageNumber[0],
-                        "quantity" => $orderItems->quantity
-                    ];
-                }
-            }
-        }
-        
-        $datatopost = array (
-            "supplier_id" => $supplierID,
-            "token" => $token,
-            "tracking_info" => json_encode ($lineItemIds)
-        );
-        
-        return $datatopost;
     }
     
     
@@ -604,27 +611,20 @@ class SynchronizeGroupOnOrdersCron extends Cron
     
     public function getPageNumber($configuration)
     {
-        $configRepository = pluginApp(ConfigRepository::class);
+        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'];
         
-        $start_time = $configRepository->get("Groupon.start_time");
-        
-        $end_time = $configRepository->get("Groupon.end_time");
-        
-        if (!$start_time || !$end_time) 
-        {
-            $time = time();
-            $end_time = date ( "m/d/Y+H:i",$time );
-            $start_time_timestamp = strtotime('-23 hours', $time);
-            $start_time = date ( "m/d/Y+H:i", $start_time_timestamp ); 
-        }
-
-        $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime='.$start_time.'&end_datetime='.$end_time;
         $ch = curl_init();
+        
         curl_setopt($ch, CURLOPT_URL, $url);
+        
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
         $response = curl_exec($ch); 
+        
         curl_close($ch);      
+        
         $groupOnData = json_decode($response);
+        
         $page = $groupOnData->meta->no_of_pages;
         if ($page) 
         {

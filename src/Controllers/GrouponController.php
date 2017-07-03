@@ -365,9 +365,9 @@ class GrouponController extends Controller
              
             $datatopost = $this->formateFeedBack($order,$carrier,$supplierID,$token);
             $this->getLogger(__FUNCTION__)->error('Feedback',json_encode($datatopost)); 
-           /* if(!empty($datatopost))
+            if(!empty($datatopost))
             {
-                $ch = curl_init ("https://scm.commerceinterface.com/api/v2/tracking_notification");
+                $ch = curl_init ("https://scm.commerceinterface.com/api/v4/tracking_notification");
                 curl_setopt ($ch, CURLOPT_POST, true);
                 curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
                 curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
@@ -385,7 +385,7 @@ class GrouponController extends Controller
                     $this->getLogger(__FUNCTION__)->error('Bad Response From Groupon',"Something was wrong\n.$response"); 
                   }
                 }        
-            }*/
+            }
         }
         
         else
@@ -397,42 +397,48 @@ class GrouponController extends Controller
     
     public function formateFeedBack($order,$carrier,$supplierID,$token)
     {
-        $orderRepositoryContract = pluginApp(OrderRepositoryContract::class);
-        
-        $lineItemIds = [];
         try 
         {
+            $orderRepositoryContract = pluginApp(OrderRepositoryContract::class);
+            
+            $lineItemIds = [];
+            
             $packageNumber = $orderRepositoryContract->getPackageNumbers($order->id);
+            
+            if ($carrier == "DHL") 
+            {
+                $carrier = "DHLG";
+            }
+            
+            foreach($order->orderItems as $orderItems)
+            {
+                foreach($orderItems->properties as $properties)
+                {
+                    if((int)$properties->typeId == 17)
+                    {
+                        $lineItemIds[] = 
+                        [
+                            "ci_lineitem_id" => $properties->value,
+                            "carrier" => $carrier,
+                            "tracking" => $packageNumber[0],
+                            "quantity" => $orderItems->quantity
+                        ];
+                    }
+                }
+            }
+            
+            $datatopost = array (
+                "supplier_id" => $supplierID,
+                "token" => $token,
+                "tracking_info" => json_encode ($lineItemIds)
+            );
+            
+            return $datatopost;
         } 
         catch (\Exception $e) 
         {
             $this->getLogger(__FUNCTION__)->error("Something went wrong!",$e->getMessage());   
         }
-        
-        foreach($order->orderItems as $orderItems)
-        {
-            foreach($orderItems->properties as $properties)
-            {
-                if((int)$properties->typeId == 17)
-                {
-                    $lineItemIds[] = 
-                    [
-                        "ci_lineitem_id" => $properties->value,
-                        "carrier" => $carrier,
-                        "tracking" => $packageNumber[0],
-                        "quantity" => $orderItems->quantity
-                    ];
-                }
-            }
-        }
-        
-        $datatopost = array (
-            "supplier_id" => $supplierID,
-            "token" => $token,
-            "tracking_info" => json_encode ($lineItemIds)
-        );
-        
-        return $datatopost;
     }
     
     
