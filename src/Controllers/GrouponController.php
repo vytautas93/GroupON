@@ -40,8 +40,11 @@ class GrouponController extends Controller
     }
     
     
-    public function handle()
+    public function handle(Request $request)
     {
+         $this->getLogger(__FUNCTION__)->error("Request",json_encode($request->all()));
+        
+        /*
         $trial = $this->checkTrial();
        
         if ($trial) 
@@ -77,7 +80,7 @@ class GrouponController extends Controller
             {
                  $this->getLogger(__FUNCTION__)->error("Configurations","Please enter required configurations");
             }
-        }
+        }*/
     }
     
     public function markAsExported($groupOnOrder,$configuration)
