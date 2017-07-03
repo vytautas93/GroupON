@@ -20,8 +20,6 @@
             </div>
             
         </div>
-        
-        <a onClick = "addOrders()" class = "btn btn-md btn-success"></a>         
         <input type="submit" value= "Add Orders" class ="btn btn-success">
         </form>  
         
@@ -57,24 +55,29 @@
         });    
     
     
-    // this is the id of the form
-    document.getElementById("timeForm").onsubmit(function(e) 
-    {
-        var url = "https://" + window.location.hostname+"/groupon";
-        //var url = "path/to/your/script.php"; // the script where you handle the form input.
+       
+        
+        // this is the id of the form
+        $("#timeForm").submit(function(e) {
+            var url = "https://" + window.location.hostname+"/groupon";
+            //var url = "path/to/your/script.php"; // the script where you handle the form input.
+        
+            $.ajax({
+                   type: "POST",
+                   url: url,
+                   data: $("#timeForm").serialize(), // serializes the form's elements.
+                   success: function(data)
+                   {
+                       alert(data); // show response from the php script.
+                   }
+                 });
+        
+            e.preventDefault(); // avoid to execute the actual submit of the form.
+        });
     
-        $.ajax({
-               type: "POST",
-               url: url,
-               data: $("#timeForm").serialize(), // serializes the form's elements.
-               success: function(data)
-               {
-                   alert(data); // show response from the php script.
-               }
-             });
     
-        e.preventDefault(); // avoid to execute the actual submit of the form.
-    });
+    
+    
     
 </script>
   
