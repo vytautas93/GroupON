@@ -55,18 +55,16 @@
             time_24hr :true 
         });    
     
-    
-    var startTime = document.getElementsByClassName('start_time').value;
-    var endTime = document.getElementsByClassName('start_time').value;
-    var data = 
+    function addOrders()
+    {
+        var startTime = document.getElementsByClassName('start_time').value;
+        var endTime = document.getElementsByClassName('start_time').value;
+        var data = 
         {
             'start_time' : startTime,
             'end_time' : endTime
         };
-        
-    console.log(data);    
-    function addOrders()
-    {
+        console.log(data)
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) 
@@ -79,9 +77,11 @@
                 console.log(this.responseText);
             }
         };
+        
+        
         var url = "https://" + window.location.hostname+"/groupon";
         xhttp.open("GET", url, true);
-        xhttp.send();
+        xhttp.send(data);
     }
 </script>
   
