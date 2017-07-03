@@ -630,20 +630,25 @@ class GrouponController extends Controller
     public function getPageNumber($configuration,Request $request)
     {
      
+        $test = json_decode($request->get("start_time"));
+        $test2 = json_decode($request->get("end_time"));
+        
+        $this->getLogger(__FUNCTION__)->error("Request",json_encode($start_time));
+        
+        $this->getLogger(__FUNCTION__)->error("Request2",json_encode($end_time));   
+     
         $time = time();
         
-        $start_time = ($request->get("start_time") ? strtotime(json_decode($request->get("start_time"))) : strtotime('-24 hours', $time ));
+        $start_time = $test ? strtotime($test) : strtotime('-24 hours', $time );
         
-        $end_time = ($request->get("end_time") ? strtotime(json_decode($request->get("end_time"))) : $time );
-        
-        
-        $this->getLogger(__FUNCTION__)->error("Start Time",json_encode($start_time));
-        
-        $this->getLogger(__FUNCTION__)->error("End Time",json_encode($end_time));   
+        $end_time = $test2 ? strtotime($test2) : $time ;
         
         
+        $this->getLogger(__FUNCTION__)->error("Start Time1 ",json_encode($start_time));
         
-        
+        $this->getLogger(__FUNCTION__)->error("End Time 1",json_encode($end_time));   
+        //$end_time = ($request->get("end_time") ? strtotime(json_decode($request->get("end_time"))) : $time ;
+
             
         $limit = strtotime('-24 hours', $end_time);
         
@@ -664,9 +669,13 @@ class GrouponController extends Controller
             
         }
             
-        $this->getLogger(__FUNCTION__)->error("Start Time",json_encode($start_time));
+        $this->getLogger(__FUNCTION__)->error("Start Time 2",json_encode($start_time));
         
-        $this->getLogger(__FUNCTION__)->error("End Time",json_encode($end_time));   
+        $this->getLogger(__FUNCTION__)->error("End Time 2",json_encode($end_time));       
+            
+            
+            
+        
         
         $url = 'https://scm.commerceinterface.com/api/v4/get_orders?supplier_id='.$configuration['supplierID'].'&token='.$configuration['token'].'&start_datetime='.$start_time.'&end_datetime='.$end_time;
         
