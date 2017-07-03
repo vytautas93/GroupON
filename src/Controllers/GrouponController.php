@@ -633,9 +633,9 @@ class GrouponController extends Controller
         $test = json_decode($request->get("start_time"));
         $test2 = json_decode($request->get("end_time"));
         
-        $this->getLogger(__FUNCTION__)->error("Request",json_encode($start_time));
+        $this->getLogger(__FUNCTION__)->error("Request",json_encode($test));
         
-        $this->getLogger(__FUNCTION__)->error("Request2",json_encode($end_time));   
+        $this->getLogger(__FUNCTION__)->error("Request2",json_encode($test2));   
      
         $time = time();
         
