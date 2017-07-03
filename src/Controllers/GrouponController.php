@@ -43,7 +43,9 @@ class GrouponController extends Controller
     public function handle(Request $request)
     {
         
-        $this->getLogger(__FUNCTION__)->error("Request",json_encode($request->all()));
+        $this->getLogger(__FUNCTION__)->error("Start Time",json_encode($request->get("start_time")));
+        
+        $this->getLogger(__FUNCTION__)->error("End Time",json_encode($request->get("end_time")));
         
         /*
         $trial = $this->checkTrial();
