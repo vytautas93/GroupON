@@ -55,6 +55,16 @@
             time_24hr :true 
         });    
     
+    
+    var startTime = document.getElementsByClassName('start_time').value;
+    var endTime = document.getElementsByClassName('start_time').value;
+    var data = 
+        {
+            'start_time' : startTime,
+            'end_time' : endTime
+        };
+        
+    console.log(data);    
     function addOrders()
     {
         var xhttp = new XMLHttpRequest();
