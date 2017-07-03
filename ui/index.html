@@ -7,7 +7,7 @@
             <label for="start_time">Start Time</label>    
             <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></div>
-                <input class="flatpickr flatpickr-input active start_time form-control" type="date" placeholder="Select Start Time..">
+                <input class="flatpickr flatpickr-input active start_time form-control" type="date" placeholder="Select Start Time.." id ="start">
             </div>
         </div>
         
@@ -15,7 +15,7 @@
             <label for="end_time">End Time</label>
             <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></div>
-                <input class="flatpickr flatpickr-input active end_time form-control" type="date" placeholder="Select End Time..">
+                <input class="flatpickr flatpickr-input active end_time form-control" type="date" placeholder="Select End Time.." id = "end">
             </div>
             
         </div>
@@ -57,8 +57,8 @@
     
     function addOrders()
     {
-        var startTime = document.getElementsByClassName('start_time').value;
-        var endTime = document.getElementsByClassName('start_time').value;
+        var startTime = document.getElementById('start').value;
+        var endTime = document.getElementById('end').value;
         var data = 
         {
             'start_time' : startTime,
