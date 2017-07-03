@@ -53,7 +53,7 @@ class GrouponController extends Controller
                 foreach ($configurations as $country => $configuration) 
                 {
                     $pageNumber = $this->getPageNumber($configuration,$request);
-                    if((int)$pageNumber>0) 
+                    /*if((int)$pageNumber>0) 
                     {
                         for ($i = 1; $i <= (int)$pageNumber; $i++) 
                         {
@@ -71,7 +71,7 @@ class GrouponController extends Controller
                     else
                     {
                         $this->getLogger(__FUNCTION__)->error("Groupon Data","There are no orders for $country groupon");
-                    }
+                    }*/
                 }
             }
             else
@@ -635,6 +635,14 @@ class GrouponController extends Controller
         $start_time = ($request->get("start_time") ? strtotime(json_decode($request->get("start_time"))) : strtotime('-24 hours', $time ));
         
         $end_time = ($request->get("end_time") ? strtotime(json_decode($request->get("end_time"))) : $time );
+        
+        
+        $this->getLogger(__FUNCTION__)->error("Start Time",json_encode($start_time));
+        
+        $this->getLogger(__FUNCTION__)->error("End Time",json_encode($end_time));   
+        
+        
+        
         
             
         $limit = strtotime('-24 hours', $end_time);
