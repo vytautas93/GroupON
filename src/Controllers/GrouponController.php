@@ -127,9 +127,8 @@ class GrouponController extends Controller
         if ($start_time < $time && $end_time < $time && $start_time > $limit) 
         {
             $start_time = date ( "m/d/Y+H:i", $start_time); 
-            $this->getLogger(__FUNCTION__)->error("IF",json_encode($start_time));   
+            
             $end_time = date ( "m/d/Y+H:i",$end_time );
-            $this->getLogger(__FUNCTION__)->error("IF",json_encode($end_time));   
         }
         
         else
